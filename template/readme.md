@@ -5,7 +5,7 @@
 
 ## Member
 - 张三  github: xxx
-> 自我介绍&技术栈:  
+> 自我介绍&技术栈:
 
 - 李四  github: xxx
 > 自我介绍&技术栈:
