@@ -2,8 +2,13 @@ import  { useState } from 'react';
 import {useEffect } from 'react';
 import { Input, Button, Space, DatePicker } from 'antd';
 import dayjs, { Dayjs } from "dayjs";
-import {UserInfo } from './contract_types';
-const SpaceUI = (props : {user_info:UserInfo}) => {
+import { UserInfo } from './contract_types';
+import { BonusPeriodWrapper } from './contract_types';
+import { to_date_str ,sui_show} from './util';
+
+import { progressPropDefs } from '@radix-ui/themes/dist/esm/components/progress.props.js';
+
+const SpaceUI = (props : {user_info:UserInfo, change_period : (addr:string)=>void, periods : BonusPeriodWrapper[]|undefined}) => {
   let user_info = props.user_info;
   const [depositInput, setDepositInput] = useState('');
   // const [totalDeposit, setTotalDeposit] = useState(0);
@@ -29,13 +34,6 @@ const SpaceUI = (props : {user_info:UserInfo}) => {
     }
   };
 
-  const SUI_OVER_FROST = 1e9;
-  function sui_show( amount : number) : string{
-     return amount > SUI_OVER_FROST ?  String(amount/SUI_OVER_FROST) + " SUI"
-                             :  String(amount ) + "FROST";
-  }
-
-
   return (
     <div>
       <Space.Compact style={{ marginBottom: 20 }}>
@@ -55,11 +53,15 @@ const SpaceUI = (props : {user_info:UserInfo}) => {
           <div>你的利息: {sui_show(user_info.reward)} </div>
           <div>你的中奖: {sui_show(user_info.bonus)} </div>
         </div>
-        <DatePicker
-          style={{ marginBottom: 10 }}
-          value={dayjs(date, "YYYY-MM-DD")}
-          onChange={handleDateChange}
-        />
+        <select onChange={ (e) =>{console.log(e); props.change_period(e.target.value)  }}>
+            {
+              props.periods && props.periods!.map( (p,k)=>{
+                  console.log("period:", p);
+                  return <option value={p.id.id} key={p.id.id}>{to_date_str(Number(p.time_ms))}</option>
+              })
+
+            }
+        </select>
         <div>距离下次开奖还有23小时23分钟</div>
       </div>
     </div>

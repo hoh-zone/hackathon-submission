@@ -5,7 +5,7 @@
 import { Transaction } from "@mysten/sui/transactions";
 import { networkConfig,useNetworkVariable } from "./networkConfig";
 ///import { NetworkConsts } from "./consts";
-import { BonusPeriodWrapper,UserInfo} from './contract_types'
+import { BonusPeriodWrapper,UserInfo,StorageWrapper,BonusWrapper,BonusRecord} from './contract_types'
 import { devnet_consts as consts } from "./consts";
 console.log(networkConfig)
 console.log(useNetworkVariable);
@@ -26,10 +26,10 @@ export function get_user_info_tx() :Transaction {
 
 }
 
-export async function get_period(suiClient:SuiClient) {
+export async function get_records(suiClient:SuiClient,period_id : string) :Promise<BonusRecord[]> {
     
     let result = await suiClient.getObject({
-        id: consts.period_id,
+        id: period_id,
         options: {
             showContent: true,
             showBcs: true,
@@ -38,9 +38,14 @@ export async function get_period(suiClient:SuiClient) {
     console.log(result);
     let content = result.data!.content! as unknown as { fields: any };
     let period = content.fields as unknown as BonusPeriodWrapper;
-    console.log(period);
-    return period
+    let record_list : BonusRecord[]  = [];
+    for(let i = 0 ; i < period.bonus_list.length; ++ i){
+        record_list.push(period.bonus_list[i].fields);
+    }
+    console.log('get_records:',record_list);
+    return record_list
 }
+
 
 
 export async function get_storage(suiClient : SuiClient) {
@@ -49,20 +54,21 @@ export async function get_storage(suiClient : SuiClient) {
     console.log("storage :", ret);
 }
 
-export  async function get_bonus_record(suiClient:SuiClient){
+export  async function get_bonus_periods(suiClient:SuiClient) : Promise<BonusPeriodWrapper[]>{
 
     let result = await suiClient.getObject({ id: consts.bonus_history, options: { showContent: true } });
     let ret = result.data!.content as unknown as { fields: { periods:string[]} };
     console.log("history:",ret);
     let period_addrs = ret.fields.periods;
+    let periods : BonusPeriodWrapper[] = [];
     let len = period_addrs.length;
     for(let i = 0; i < len ; ++ i){
         let addr = period_addrs[i];
         console.log(addr)
         let r = await  suiClient.getObject({id : addr, options :{showContent:true}});
-        let period = r.data!.content! as unknown as { fields: BonusPeriodWrapper}
-        let b = period.fields.bonus_list[0];
-        console.log("BONUS ELMENT",b);
-        console.log("bonus :",period);
+        let data = r.data!.content! as unknown as { fields: BonusPeriodWrapper}
+        periods.push(data.fields);
+
     }
+    return periods;
 }

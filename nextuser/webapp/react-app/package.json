@@ -28,6 +28,7 @@
     "axios": "^1.7.9",
     "copy-to-clipboard": "^3.3.3",
     "csv-parse": "^5.6.0",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "fs": "0.0.1-security",

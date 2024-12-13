@@ -8,21 +8,21 @@ export type BonusRecord = {
 
 /** 
 type BonusPeriod = {
-    id: string,
+    id: {id:string},
     time_ms: number,
     epoch: number,
     bonus_list: BonusRecord[]
 }*/
 
 
-type BonusWrapper = {
+export type BonusWrapper = {
     type: string,
     fields: BonusRecord
 }
 
 
 export type BonusPeriodWrapper = {
-    id: string,
+    id: {id:string},
     time_ms: number,
     epoch: number,
     bonus_list: BonusWrapper[]
