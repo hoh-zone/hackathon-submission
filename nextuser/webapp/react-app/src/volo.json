@@ -1,0 +1,76 @@
+{
+    "data": {
+        "operatorBalance": "39.1086368",
+        "collectableFee": "132178.298660439",
+        "pendingStakes": "0.989407089",
+        "poolTotalRewards": "230589.04535101",
+        "unstakeTicketSupply": "1.009636323",
+        "totalStaked": "55304960.695156463",
+        "activeStake": "54015496.907838936",
+        "calcTotalRewards": "207530.140786069",
+        "currentEpoch": "605",
+        "validators": [
+            {
+                "address": "0xa92837bac51949cd6bac41dcec57d2a769f3c2cd2e8c0512f3eea0a2a2102b94",
+                "totalStaked": "3250493.012681884",
+                "priority": 6,
+                "apy": "0.025884798764423074",
+                "name": "P2P.ORG"
+            },
+            {
+                "address": "0x4fffd0005522be4bc029724c7f0f6ed7093a6bf3a09b90e62f61dc15181e1a3e",
+                "totalStaked": "2989145.296806902",
+                "priority": 7,
+                "apy": "0.028032384272411046",
+                "name": "Mysten-1"
+            },
+            {
+                "address": "0xd1d00bcc9661120fc6b0f233a2f6810f39e71b39fc637cb1b9e5635edb3b0c40",
+                "totalStaked": "0",
+                "priority": 1,
+                "apy": "0.026349013762334672",
+                "name": "stakefish"
+            },
+            {
+                "address": "0x00ae78d3e5ba5d6b8de32455474f52811b95617cbad39ebf4f9e2daf67187407",
+                "totalStaked": "34829821.087555163",
+                "priority": 5,
+                "apy": "0.029069367810778363",
+                "name": "OKXEarn"
+            },
+            {
+                "address": "0x184fbf9d6c2d2d3f27e27fe3ca2d3b4080bd406221e345e2d36633e638e988e1",
+                "totalStaked": "0",
+                "priority": 2,
+                "apy": "0.027456318893655948",
+                "name": "Cosmostation"
+            },
+            {
+                "address": "0xcb7efe4253a0fe58df608d8a2d3c0eea94b4b40a8738c8daae4eb77830c16cd7",
+                "totalStaked": "14235500.308705425",
+                "priority": 0,
+                "apy": "0.02802303125513852",
+                "name": "Mysten-2"
+            }
+        ],
+        "exchangeRate": 1.0355228498026963,
+        "totalSupply": "53608174.68864478",
+        "apy": 0.0271,
+        "sortedValidators": [
+            "0x4fffd0005522be4bc029724c7f0f6ed7093a6bf3a09b90e62f61dc15181e1a3e",
+            "0xa92837bac51949cd6bac41dcec57d2a769f3c2cd2e8c0512f3eea0a2a2102b94",
+            "0x00ae78d3e5ba5d6b8de32455474f52811b95617cbad39ebf4f9e2daf67187407",
+            "0x3047b5258a4ba6d7a6bea9ada69cb336ecfb24fe1c3cea83094396665eba0de5",
+            "0x184fbf9d6c2d2d3f27e27fe3ca2d3b4080bd406221e345e2d36633e638e988e1",
+            "0x00ae78d3e5a5d6b8de32455474f52811b95617cbad39ebf4f9e2daf671874007",
+            "0xd1d00bcc9661120fc6b0f233a2f6810f39e71b39fc637cb1b9e5635edb3b0c40",
+            "0xcb7efe4253a0fe58df608d8a2d3c0eea94b4b40a8738c8daae4eb77830c16cd7",
+            "0xa2bf32db91ad54684cfd8a4e1d85f7672875d62421d40a8d993f601cff9b61ff",
+            "0xc64e58562d424e248abce5b886b264209c23d05b7b75bc5a1a5e137700f0ddf8",
+            "0x752b18cfa44304b9bbb110ba95211556f79c62bc2916c23eeb7aea959f5b3463"
+        ],
+        "maxInstantUnstake": "54015496.887609704",
+        "maxNoFeeUnstake": "3328852.797426882"
+    },
+    "code": 0
+}

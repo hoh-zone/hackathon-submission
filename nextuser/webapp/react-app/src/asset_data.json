@@ -1,0 +1,218 @@
+{
+    "0": {
+        "coin_type": "0x2::sui::SUI",
+        "total_supply": "50595077.20389004",
+        "total_borrow": "31082945.65994021",
+        "price": "4.17999579",
+        "supply_rate": "3.71361571",
+        "borrow_rate": "7.03448145",
+        "boosted": "1.41491942",
+        "pool": "SUI-Sui",
+        "symbol": "SUI",
+        "rewardTokens": [
+            "549e8b69270defbfafd4f94e17ec44cdbdd99820b33bda2278dea3b9a32d3f55::cert::CERT",
+            "a99b8952d4f7d947ea77fe0ecdcc9e5fc0bcab2841d6e2a5aa00c3044e5544b5::navx::NAVX"
+        ],
+        "borrow_reward_apy": "6.23755465"
+    },
+    "1": {
+        "coin_type": "0x5d4b302506645c37ff133b98c4b50a5ae14841659738d6d733d59d0d217a93bf::coin::COIN",
+        "total_supply": "14293606.30782179",
+        "total_borrow": "9320502.75260419",
+        "price": "0.99982400",
+        "supply_rate": "5.02760524",
+        "borrow_rate": "8.86320099",
+        "boosted": "0.0",
+        "pool": "USDC-Sui",
+        "symbol": "USDC",
+        "rewardTokens": null,
+        "borrow_reward_apy": "0.0"
+    },
+    "10": {
+        "coin_type": "0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC",
+        "total_supply": "55244687.34059680",
+        "total_borrow": "45082398.10076105",
+        "price": "0.99982400",
+        "supply_rate": "13.79526122",
+        "borrow_rate": "20.97925424",
+        "boosted": "5.26418299",
+        "pool": "USDC-Sui",
+        "symbol": "USDC",
+        "rewardTokens": [
+            "549e8b69270defbfafd4f94e17ec44cdbdd99820b33bda2278dea3b9a32d3f55::cert::CERT"
+        ],
+        "borrow_reward_apy": "11.29632800"
+    },
+    "11": {
+        "coin_type": "0xd0e89b2af5e4910726fbcd8b8dd37bb79b29e5f83f7491bca830e94f7f226d29::eth::ETH",
+        "total_supply": "6102.79891691",
+        "total_borrow": "2560.02513961",
+        "price": "3947.53708927",
+        "supply_rate": "0.74891201",
+        "borrow_rate": "2.22745192",
+        "boosted": "0.57315527",
+        "pool": "ETH-Sui",
+        "symbol": "ETH",
+        "rewardTokens": [
+            "549e8b69270defbfafd4f94e17ec44cdbdd99820b33bda2278dea3b9a32d3f55::cert::CERT"
+        ],
+        "borrow_reward_apy": "5.46742037"
+    },
+    "12": {
+        "coin_type": "0x960b531667636f39e85867775f52f6b1f220a058c4de786905bdf761e06a56bb::usdy::USDY",
+        "total_supply": "1187252.67309455",
+        "total_borrow": "640442.05362533",
+        "price": "1.06689600",
+        "supply_rate": "3.81125635",
+        "borrow_rate": "8.79864448",
+        "boosted": "16.62197222",
+        "pool": "USDY-Sui",
+        "symbol": "USDY",
+        "rewardTokens": [
+            "549e8b69270defbfafd4f94e17ec44cdbdd99820b33bda2278dea3b9a32d3f55::cert::CERT"
+        ],
+        "borrow_reward_apy": "0.00000000"
+    },
+    "13": {
+        "coin_type": "0x5145494a5f5100e645e4b0aa950fa6b68f614e8c59e17bc5ded3495123a79178::ns::NS",
+        "total_supply": "26001327.35241344",
+        "total_borrow": "3927038.08349607",
+        "price": "0.37876300",
+        "supply_rate": "1.95826028",
+        "borrow_rate": "16.08661418",
+        "boosted": "49.24329087",
+        "pool": "NS-Sui",
+        "symbol": "NS",
+        "rewardTokens": [
+            "549e8b69270defbfafd4f94e17ec44cdbdd99820b33bda2278dea3b9a32d3f55::cert::CERT",
+            "5145494a5f5100e645e4b0aa950fa6b68f614e8c59e17bc5ded3495123a79178::ns::NS"
+        ],
+        "borrow_reward_apy": "0.00000000"
+    },
+    "14": {
+        "coin_type": "0x5f496ed5d9d045c5b788dc1bb85f54100f2ede11e46f6a232c29daada4c5bdb6::coin::COIN",
+        "total_supply": "550.11693445",
+        "total_borrow": "0.00000000",
+        "price": "99065.49391808",
+        "supply_rate": "0.00000000",
+        "borrow_rate": "0.00000000",
+        "boosted": "0.0",
+        "pool": "stBTC-Sui",
+        "symbol": "stBTC",
+        "rewardTokens": null,
+        "borrow_reward_apy": "0.0"
+    },
+    "2": {
+        "coin_type": "0xc060006111016b8a020ad5b33834984a437aaa7d3c74c18e09a95d48aceab08c::coin::COIN",
+        "total_supply": "16468773.75067651",
+        "total_borrow": "12782372.97836782",
+        "price": "1.00055200",
+        "supply_rate": "20.04016727",
+        "borrow_rate": "29.32768057",
+        "boosted": "1.45157885",
+        "pool": "USDT-Sui",
+        "symbol": "USDT",
+        "rewardTokens": [
+            "549e8b69270defbfafd4f94e17ec44cdbdd99820b33bda2278dea3b9a32d3f55::cert::CERT"
+        ],
+        "borrow_reward_apy": "7.48002260"
+    },
+    "3": {
+        "coin_type": "0xaf8cd5edc19c4512f4259f0bee101a40d41ebed738ade5874359610ef8eeced5::coin::COIN",
+        "total_supply": "1962.09568117",
+        "total_borrow": "68.80108738",
+        "price": "3947.53708927",
+        "supply_rate": "0.00545014",
+        "borrow_rate": "0.19055588",
+        "boosted": "0.0",
+        "pool": "WETH-Sui",
+        "symbol": "WETH",
+        "rewardTokens": null,
+        "borrow_reward_apy": "0.0"
+    },
+    "4": {
+        "coin_type": "0x06864a6f921804860930db6ddbe2e16acdf8504495ea7481637a1c8b9a8fe54b::cetus::CETUS",
+        "total_supply": "5928251.90326362",
+        "total_borrow": "850252.80736434",
+        "price": "0.42670735",
+        "supply_rate": "0.76634942",
+        "borrow_rate": "6.19011073",
+        "boosted": "0.0",
+        "pool": "CETUS-Sui",
+        "symbol": "CETUS",
+        "rewardTokens": null,
+        "borrow_reward_apy": "0.0"
+    },
+    "5": {
+        "coin_type": "0x549e8b69270defbfafd4f94e17ec44cdbdd99820b33bda2278dea3b9a32d3f55::cert::CERT",
+        "total_supply": "45710359.38881861",
+        "total_borrow": "1336708.44203211",
+        "price": "4.17999579",
+        "supply_rate": "0.01017812",
+        "borrow_rate": "0.41181660",
+        "boosted": "3.05976176",
+        "pool": "VoloSUi-Sui",
+        "symbol": "VoloSUi",
+        "rewardTokens": [
+            "549e8b69270defbfafd4f94e17ec44cdbdd99820b33bda2278dea3b9a32d3f55::cert::CERT",
+            "a99b8952d4f7d947ea77fe0ecdcc9e5fc0bcab2841d6e2a5aa00c3044e5544b5::navx::NAVX"
+        ],
+        "borrow_reward_apy": "0.00000000"
+    },
+    "6": {
+        "coin_type": "0xbde4ba4c2e274a60ce15c1cfff9e5c42e41654ac8b6d906a57efa4bd3c29f47d::hasui::HASUI",
+        "total_supply": "20849717.86077151",
+        "total_borrow": "401258.78849094",
+        "price": "4.17999579",
+        "supply_rate": "0.00442958",
+        "borrow_rate": "0.27167605",
+        "boosted": "3.79531110",
+        "pool": "HaedalSUi-Sui",
+        "symbol": "HaedalSUi",
+        "rewardTokens": [
+            "549e8b69270defbfafd4f94e17ec44cdbdd99820b33bda2278dea3b9a32d3f55::cert::CERT"
+        ],
+        "borrow_reward_apy": "0.00000000"
+    },
+    "7": {
+        "coin_type": "0xa99b8952d4f7d947ea77fe0ecdcc9e5fc0bcab2841d6e2a5aa00c3044e5544b5::navx::NAVX",
+        "total_supply": "86721000.09438729",
+        "total_borrow": "1159839.91546025",
+        "price": "0.15240303",
+        "supply_rate": "0.01226869",
+        "borrow_rate": "1.10764115",
+        "boosted": "31.16632051",
+        "pool": "NAVX-Sui",
+        "symbol": "NAVX",
+        "rewardTokens": [
+            "a99b8952d4f7d947ea77fe0ecdcc9e5fc0bcab2841d6e2a5aa00c3044e5544b5::navx::NAVX"
+        ],
+        "borrow_reward_apy": "0.00000000"
+    },
+    "8": {
+        "coin_type": "0x027792d9fed7f9844eb4839566001bb6f6cb4804f66aa2da6fe1ee242d896881::coin::COIN",
+        "total_supply": "4.17837783",
+        "total_borrow": "0.30130604",
+        "price": "99062.00000000",
+        "supply_rate": "0.03337559",
+        "borrow_rate": "0.57771607",
+        "boosted": "0.0",
+        "pool": "WBTC-Sui",
+        "symbol": "WBTC",
+        "rewardTokens": null,
+        "borrow_reward_apy": "0.0"
+    },
+    "9": {
+        "coin_type": "0x2053d08c1e2bd02791056171aab0fd12bd7cd7efad2ab8f6b9c8902f14df2ff2::ausd::AUSD",
+        "total_supply": "1091337.81228926",
+        "total_borrow": "872208.55997645",
+        "price": "0.99938200",
+        "supply_rate": "7.71539090",
+        "borrow_rate": "11.97835840",
+        "boosted": "0.0",
+        "pool": "AUSD-Sui",
+        "symbol": "AUSD",
+        "rewardTokens": null,
+        "borrow_reward_apy": "0.0"
+    }
+}
