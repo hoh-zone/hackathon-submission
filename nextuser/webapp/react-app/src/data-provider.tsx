@@ -41,7 +41,11 @@ export async function get_records(suiClient:SuiClient,period_id : string) :Promi
     let period = content.fields as unknown as BonusPeriodWrapper;
     let record_list : BonusRecord[]  = [];
     for(let i = 0 ; i < period.bonus_list.length; ++ i){
-        record_list.push(period.bonus_list[i].fields);
+        let record = period.bonus_list[i].fields
+        record.gain = record.gain / 1e9
+        record.pay = record.pay / 1e9
+        record.principal = record.principal/ 1e9
+        record_list.push(record);
     }
     console.log('get_records:',record_list);
     return record_list
