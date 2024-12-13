@@ -2,7 +2,6 @@ import { format } from 'date-fns';
 
 export function to_date_str(time_ms : number) : string{
   let d = new Date(time_ms);
-  console.log("date",d,"time_ms",time_ms)
   return format(d,'yyyy-MM-dd HH:mm');
 }
 

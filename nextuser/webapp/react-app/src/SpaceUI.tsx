@@ -5,20 +5,16 @@ import dayjs, { Dayjs } from "dayjs";
 import { UserInfo } from './contract_types';
 import { BonusPeriodWrapper } from './contract_types';
 import { to_date_str ,sui_show} from './util';
-
 import { progressPropDefs } from '@radix-ui/themes/dist/esm/components/progress.props.js';
+import { useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 
-const SpaceUI = (props : {user_info:UserInfo, change_period : (addr:string)=>void, periods : BonusPeriodWrapper[]|undefined}) => {
+const SpaceUI = (props : {user_info:UserInfo, 
+                          balance:number,
+                          deposit : (str:string) => void,
+                          change_period : (addr:string)=>void,
+                          periods : BonusPeriodWrapper[]|undefined}) => {
   let user_info = props.user_info;
-  const [depositInput, setDepositInput] = useState('');
-  // const [totalDeposit, setTotalDeposit] = useState(0);
-  // const [interest, setInterest] = useState(0);
-  // const [prize, setPrize] = useState(0);
-  const [date, setDate] = useState<string>(dayjs().format("YYYY-MM-DD"));
 
-  useEffect(()=>{
-
-  },[])
 
   const handleAddDeposit = () => {
     // 假设这里是添加存款的逻辑
@@ -26,37 +22,36 @@ const SpaceUI = (props : {user_info:UserInfo, change_period : (addr:string)=>voi
     // 你可以根据需要更新利息和中奖金额
   };
 
-  const handleDateChange = (date: Dayjs | null, dateString: string | string[]) => {
-    if (date) {
-      // 如果 dateString 是字符串数组，取数组的第一个元素，或者其他适合的处理方式
-      const dateToSet = Array.isArray(dateString) ? dateString[0] : dateString;
-      setDate(dateToSet); // 更新日期为字符串格式
-    }
-  };
+  let [deposit_value, set_deposit_value ] = useState<string>("");
 
   return (
     <div>
+      <div>MAX：{sui_show(props.balance)}</div>
       <Space.Compact style={{ marginBottom: 20 }}>
         <Input
           style={{ width: "60%", marginRight: 10 }}
           placeholder="输入存款金额"
-          value={depositInput}
-          onChange={(e) => setDepositInput(e.target.value)}
+          value={deposit_value}
+          onChange={ (e)=>{set_deposit_value(e.target.value)}}
         />
-        <Button type="primary" onClick={handleAddDeposit}>
+        <Button type="primary" onClick={(e) =>props.deposit && props.deposit(deposit_value)}>
           增加存款
         </Button>
+        
       </Space.Compact>
+      
+      
+      
       <div style={{ marginBottom: 20 }}>
         <div style={{ marginBottom: 10 }}>
           <div>你的存款: {sui_show(user_info.orignal_amount)} </div>
           <div>你的利息: {sui_show(user_info.reward)} </div>
           <div>你的中奖: {sui_show(user_info.bonus)} </div>
         </div>
-        <select onChange={ (e) =>{console.log(e); props.change_period(e.target.value)  }}>
+        <select onChange={ (e) =>{console.log(e);  props.change_period(e.target.value)  }}>
             {
               props.periods && props.periods!.map( (p,k)=>{
-                  console.log("period:", p);
+                  //console.log("period:", p);
                   return <option value={p.id.id} key={p.id.id}>{to_date_str(Number(p.time_ms))}</option>
               })
 

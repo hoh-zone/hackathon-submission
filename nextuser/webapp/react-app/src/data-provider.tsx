@@ -22,6 +22,7 @@ export function get_user_info_tx() :Transaction {
         arguments: [tx.object(consts.storge)],
 
     });
+    tx.setGasBudget(1e7);
     return tx;
 
 }
@@ -45,6 +46,31 @@ export async function get_records(suiClient:SuiClient,period_id : string) :Promi
     console.log('get_records:',record_list);
     return record_list
 }
+//@$CLOCK @$STORAGE @$SYSTEM_STATE @$VALIDATOR new_coin \
+export  function get_deposit_tx(amount :number ) :Transaction{
+    amount = amount * 1e9
+    console.log("deposit amount" + amount);
+    let tx = new Transaction();
+    let [coin] = tx.splitCoins(tx.gas ,[amount]);
+    tx.moveCall({
+        target : `${consts.package_id}::deposit_bonus::deposit`,
+        arguments:[ tx.object(consts.CLOCK),tx.object(consts.storge),tx.object(consts.SYSTEM_STATE),
+                    tx.object(consts.VALIDATOR),coin]
+    })
+
+    tx.moveCall({
+        target: `${consts.package_id}::deposit_bonus::entry_query_user_info`,
+        arguments: [tx.object(consts.storge)],
+
+    });
+    tx.setGasBudget(1e8);
+    return tx;
+}
+
+export async function get_balance(suiClient: SuiClient, owner:string) : Promise<number>{
+    let b = await suiClient.getBalance({ coinType : "0x2::sui::SUI",owner : owner});
+    return Number(b.totalBalance)
+}  
 
 
 
@@ -58,7 +84,7 @@ export  async function get_bonus_periods(suiClient:SuiClient) : Promise<BonusPer
 
     let result = await suiClient.getObject({ id: consts.bonus_history, options: { showContent: true } });
     let ret = result.data!.content as unknown as { fields: { periods:string[]} };
-    console.log("history:",ret);
+    ///console.log("history:",ret);
     let period_addrs = ret.fields.periods;
     let periods : BonusPeriodWrapper[] = [];
     let len = period_addrs.length;

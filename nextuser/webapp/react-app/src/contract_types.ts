@@ -14,7 +14,12 @@ type BonusPeriod = {
     bonus_list: BonusRecord[]
 }*/
 
-
+export type DepositEvent ={
+    user : string,
+    share_amount : number,
+    amount : number,
+    update_time_ms : number,
+}
 export type BonusWrapper = {
     type: string,
     fields: BonusRecord

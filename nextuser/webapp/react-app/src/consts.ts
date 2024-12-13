@@ -12,6 +12,10 @@ export type NetworkConsts ={
         USER_1:string;
         USER_2:string;
         USER_3:string;
+        VALIDATOR:string,
+        CLOCK:string,
+        RND:string,
+        SYSTEM_STATE:string,
 }
 export const devnet_consts : NetworkConsts = {   
         package_id: '0x48a8cf93186bf68b5209c85eaff44d2af8c18ab2086d2962ce72c9eae0bdef8',
@@ -25,7 +29,10 @@ export const devnet_consts : NetworkConsts = {
         USER_1:"0x5e23b1067c479185a2d6f3e358e4c82086032a171916f85dc9783226d7d504de",
         USER_2:"0x16781b5507cafe0150fe3265357cccd96ff0e9e22e8ef9373edd5e3b4a808884",
         USER_3:"0xa23b00a9eb52d57b04e80b493385488b3b86b317e875f78e0252dfd1793496bb",
-   
+        VALIDATOR:"0x94beb782ccfa172ea8752123e73768757a1f58cfca53928e9ba918a2c44a695b",
+        CLOCK:"0x6",
+        RND:"0x8",
+        SYSTEM_STATE:"0x5",
 }
 
 
@@ -42,7 +49,10 @@ export const mainnet_consts : NetworkConsts = {
         USER_1:"",
         USER_2:"",
         USER_3:"",
-   
+        VALIDATOR:"0x94beb782ccfa172ea8752123e73768757a1f58cfca53928e9ba918a2c44a695b",
+        CLOCK:"0x6",
+        RND:"0x8",
+        SYSTEM_STATE:"0x5", 
 }
 
 
@@ -59,7 +69,11 @@ export const testnet_consts : NetworkConsts = {
         USER_1:"",
         USER_2:"",
         USER_3:"",
-   
+        VALIDATOR:"0x94beb782ccfa172ea8752123e73768757a1f58cfca53928e9ba918a2c44a695b",
+        CLOCK:"0x6",
+        RND:"0x8",
+        SYSTEM_STATE:"0x5",
+        
 }
 
 
