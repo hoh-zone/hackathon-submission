@@ -13,6 +13,8 @@ public struct BonusPeriod has key,store{
     id : UID,
     time_ms : u64,
     epoch : u64,
+    seed : u256,
+    percent : u32,
     bonus_list : vector<BonusRecord>,
 }
 
@@ -44,20 +46,26 @@ public fun get_user_principal(record : &BonusRecord) :(address,u64){
 
 
 public  fun create_bonus_period(time_ms : u64,
+                                seed : u256,
+                                percent : u32,
                                 ctx : &mut TxContext) :BonusPeriod {
     BonusPeriod{
         id : object::new(ctx),
         time_ms : time_ms,
         epoch : ctx.epoch(),
+        seed : seed,
+        percent : percent,
         bonus_list : vector[],
     }
 }
 
-entry  fun create_period(clock : &Clock,
-                         ctx : &mut TxContext)  {
-    let p = create_bonus_period(clock.timestamp_ms(), ctx);
-    transfer::transfer(p,ctx.sender());
-}
+// entry  fun create_period(clock : &Clock,
+//                          seed : u256,
+//                          percent : u32,
+//                          ctx : &mut TxContext)  {
+//     let p = create_bonus_period(clock.timestamp_ms(),seed,percent, ctx);
+//     transfer::transfer(p,ctx.sender());
+// }
 
 public(package) fun add_record(period : &mut BonusPeriod, 
                           bonus : BonusRecord)

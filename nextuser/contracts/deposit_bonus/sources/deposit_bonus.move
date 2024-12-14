@@ -467,7 +467,8 @@ public(package) fun allocate_bonus(storage : &mut Storage,
     //log(b"total hit:", &total);
     //log(b"total balance" , &balance_amount);
 
-    let mut bonus_period :BonusPeriod = bonus::create_bonus_period(time_ms,ctx);
+    let mut bonus_period :BonusPeriod = bonus::create_bonus_period(time_ms,storage.seed,
+                                                                    storage.bonus_percent,ctx);
 
     node = linked_table::front(shares);
     while(!option::is_none(node)){
@@ -483,7 +484,7 @@ public(package) fun allocate_bonus(storage : &mut Storage,
         let record = bonus::create_bonus_record(addr ,  gain as u64,
                                                         pay as u64, user_share.original_money) ;
         bonus_period.add_record( record);
-        user_share.bonus = gain as u64;
+        user_share.bonus = user_share.bonus + ( gain as u64);
         vector::push_back(&mut allocate_event.users, Share{
             id : addr,
             amount :  user_share.bonus
