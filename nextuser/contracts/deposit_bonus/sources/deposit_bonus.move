@@ -19,12 +19,15 @@ use deposit_bonus::bonus::{Self,BonusPeriod,BonusRecord};
 use sui::linked_table::{Self,LinkedTable};
 use std::debug::print;
 use deposit_bonus::utils::log;
-
+use deposit_bonus::user_list::{Self,UserList};
 const PERCENT_MAX:u32 = 10000; //100%
 const FeeLimit : u32 = 1000; // 10%
 const BonusLimit : u32 = 10000; // 100%  
 public struct AdminCap has key { id : UID}
 public struct OperatorCap has key{id : UID}
+
+
+
 
 public struct DepositEvent has copy,drop{
     user : address,
@@ -57,7 +60,7 @@ public(package) fun  user_share_bonus(us : &UserShare) : u64{
     us.bonus
 }
 
-
+#[allow(unused_function)]
 fun destroy_user_share(share : UserShare){
     let UserShare{id:_,original_money:_,share_amount :_,update_time_ms :_, bonus : _} = share;
 }
@@ -74,7 +77,7 @@ public struct AllocateEvent has copy,drop{
 
 public struct Storage has key,store{
     id : UID,
-    user_shares : LinkedTable<address,UserShare>,
+    user_shares : UserList<UserShare>,
     total_shares : u64,
     total_staked : u64,
     staked_suis : vector<StakedSui>,
@@ -108,8 +111,6 @@ public fun get_recent_period(bh : &BonusHistory) : address {
     assert!(len > 0);
     * bh.periods.borrow(len -1 )
 }
-
-
 
 public struct UserInfo has copy,drop{
     id : address,
@@ -159,7 +160,7 @@ fun new_storage(ctx : &mut TxContext) : Storage{
     let seed = id.to_address().to_u256();
     Storage{
         id : id,
-        user_shares : linked_table::new<address,UserShare>(ctx),
+        user_shares :user_list::new<UserShare>(ctx),
         total_shares : 0,
         total_staked : 0,
         staked_suis : vector[],
@@ -228,7 +229,7 @@ fun add_user_share(storage :&mut Storage, original_money :u64,share_amount:u64,t
             update_time_ms : time_ms,
             bonus : 0
         };
-        user_shares.push_back(sender, user_share);
+        storage.user_shares.add(sender, user_share);
     };
 
 }
@@ -273,17 +274,17 @@ entry fun deposit(clock: &Clock,storage: & mut Storage,
 
 fun reduce_share_after_withdraw(storage : &mut Storage, withdraw_stake : u64,withdraw_share : u64, sender : address)
 {
-    let user_share = linked_table::borrow_mut(&mut storage.user_shares, sender);  
+    let user_share = storage.user_shares.borrow_mut(sender);  
     assert!(user_share.share_amount >= withdraw_share,err_consts::withdraw_share_not_enough!());
     
     user_share.share_amount = user_share.share_amount - withdraw_share;
     user_share.original_money = user_share.original_money - withdraw_stake;
     storage.total_shares = storage.total_shares - withdraw_share;
-    //remove zero share
-    if(user_share.share_amount == 0){
-        let s = linked_table::remove(&mut storage.user_shares,sender);
-        destroy_user_share(s);
-    };
+    //do not remove ,because keys and values ,count in user_list is related.
+    // if(user_share.share_amount == 0){
+    //     let s = table::remove(&mut storage.user_shares.values,sender);
+    //     destroy_user_share(s);
+    // };
 }
 
 /**
@@ -294,10 +295,10 @@ one user  to withdraw his staked sui
 public  fun withdraw(clock: &Clock,storage: & mut Storage,wrapper: &mut SuiSystemState,
                     amount : u64,ctx : &mut TxContext) : Balance<SUI>{
     let sender = ctx.sender();
-    assert!( linked_table::contains(&storage.user_shares,sender),err_consts::account_not_exists!() );
+    assert!( storage.user_shares.contains(sender),err_consts::account_not_exists!() );
     
 
-    let user_share = linked_table::borrow(&storage.user_shares, sender);
+    let user_share = storage.user_shares.borrow(sender);
     let bonus_amount = user_share.bonus;
     let share_amount = user_share.share_amount ;
     if(bonus_amount >= amount){
@@ -579,20 +580,20 @@ public(package) fun get_hit_users(storage : &mut Storage,
 {
     let hit_ranges = get_hit_range(storage, random,time_ms, ctx);
     let user_shares = &storage.user_shares;
-    let mut node = linked_table::front(&storage.user_shares);
+    let mut i  = 0;
     let mut hit_user_shares = linked_table::new<address,u256>(ctx);
     log(b"---hit--ranges----:",&deposit_bonus::range::encode_ranges(&hit_ranges).to_ascii_string());
-    while(!option::is_none(node)){
-        let addr = node.borrow();
-        let user_share = linked_table::borrow(user_shares,*addr);
+    while(i < user_shares.size()){
+       
+        let user_share = user_shares.at(i);
         let user_range = deposit_bonus::range::get_address_ranges(user_share.id, user_share.share_amount as u256 );
         log(b"---user_range----",&user_range);
         let overlap_len = deposit_bonus::range::get_overlap_length(&user_range, &hit_ranges);
         log(b"overlapped len ",&overlap_len);
         if(overlap_len > 0) {
-            linked_table::push_back(&mut hit_user_shares, *addr, overlap_len);
+            linked_table::push_back(&mut hit_user_shares, user_share.id, overlap_len);
         };
-        node  = linked_table::next(user_shares, *addr);
+        i  = i + 1;
     };
 
     hit_user_shares 
@@ -647,14 +648,14 @@ public fun get_share_amount (storage: & Storage,user : address) : u64{
 // }
 
 public(package) fun get_share(storage: & Storage,user : address) : &UserShare{
-    linked_table::borrow(&storage.user_shares,user)
+    storage.user_shares.borrow(user)
 }
 
 public fun  query_user_by_addr(storage : &Storage, sender : address) : UserInfo
 {
-    assert!(linked_table::contains(&storage.user_shares,sender),err_consts::account_not_exists!());
+    assert!(storage.user_shares.contains(sender),err_consts::account_not_exists!());
     
-    let share = linked_table::borrow(&storage.user_shares, sender);
+    let share = storage.user_shares.borrow( sender);
     let share_money = (share.share_amount as u128) * (storage.total_staked as u128) / (storage.total_shares as u128);
     let share_money = share_money as u64;
     assert!(share_money >= share.original_money);
