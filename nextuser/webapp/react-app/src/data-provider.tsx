@@ -1,5 +1,5 @@
 // import * as dotenv from 'dotenv';
-// import { bcs } from "@mysten/sui/bcs";
+import { bcs } from "@mysten/sui/bcs";
 // import { fromBase64 } from '@mysten/bcs';
 // import { SuiClient, type SuiObjectData } from "@mysten/sui/client";
 import { Transaction } from "@mysten/sui/transactions";
@@ -63,7 +63,7 @@ export async function get_records(suiClient:SuiClient,period_id : string) :Promi
 }
 //@$CLOCK @$STORAGE @$SYSTEM_STATE @$VALIDATOR new_coin \
 export  function get_deposit_tx(amount :number ) :Transaction{
-    amount = amount * 1e9
+    amount = amount 
     console.log("deposit amount" + amount);
     let tx = new Transaction();
     let [coin] = tx.splitCoins(tx.gas ,[amount]);
@@ -78,6 +78,22 @@ export  function get_deposit_tx(amount :number ) :Transaction{
     //     arguments: [tx.object(consts.storge)],
 
     // });
+    tx.setGasBudget(1e8);
+    return tx;
+}
+/** 
+entry fun entry_withdraw(clock: &Clock,storage: & mut Storage,wrapper: &mut SuiSystemState,
+    amount : u64,ctx : &mut TxContext)*/
+export  function get_withdraw_tx(amount :number ) :Transaction{
+    amount = amount 
+    console.log("withdraw amount" + amount);
+    let tx = new Transaction();
+    tx.moveCall({
+        target : `${consts.package_id}::deposit_bonus::entry_withdraw`,
+        arguments:[ tx.object(consts.CLOCK),tx.object(consts.storge),
+                    tx.object(consts.SYSTEM_STATE),tx.pure.u64(amount) ]
+    })
+
     tx.setGasBudget(1e8);
     return tx;
 }

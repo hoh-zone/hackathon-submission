@@ -8,12 +8,13 @@ import { to_date_str ,sui_show} from './util';
 import { progressPropDefs } from '@radix-ui/themes/dist/esm/components/progress.props.js';
 import { useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 
-const SpaceUI = (props : {user_info:UserShare, 
+const DepositUI = (props : {user_info:UserShare, 
                           balance:number,
-                          deposit : (str:string) => void,
+                          deposit : (str:string,max:number) => void,
                           change_period : (addr:string)=>void,
                           periods : BonusPeriodWrapper[]|undefined}) => {
   let user_info = props.user_info;
+  let max = Number(props.balance);
 
 
   const handleAddDeposit = () => {
@@ -26,7 +27,7 @@ const SpaceUI = (props : {user_info:UserShare,
 
   return (
     <div>
-      <div>MAX：{sui_show(props.balance)}</div>
+      <div>MAX：{sui_show(max)}</div>
       <Space.Compact style={{ marginBottom: 20 }}>
         <Input
           style={{ width: "60%", marginRight: 10 }}
@@ -34,7 +35,7 @@ const SpaceUI = (props : {user_info:UserShare,
           value={deposit_value}
           onChange={ (e)=>{set_deposit_value(e.target.value)}}
         />
-        <Button type="primary" onClick={(e) =>props.deposit && props.deposit(deposit_value)}>
+        <Button type="primary" onClick={(e) =>props.deposit && props.deposit(deposit_value,max/1e9)}>
           增加存款
         </Button>
         
@@ -63,4 +64,4 @@ const SpaceUI = (props : {user_info:UserShare,
   );
 };
 
-export default SpaceUI;
+export default DepositUI;

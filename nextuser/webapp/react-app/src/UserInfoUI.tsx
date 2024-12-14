@@ -1,8 +1,9 @@
-import {useState} from 'react';
-import { useEffect} from 'react'
+import {useState,useEffect} from 'react';
+import * as Tabs from "@radix-ui/react-tabs";
 import {BonusPeriodWrapper, UserShare,DepositEvent} from './contract_types'
-import SpaceUI from './SpaceUI';
-import {get_user_share , get_bonus_periods ,
+import DepositUI from './DepositUI';
+import WithdrawUI from './WithdrawUI';
+import {get_user_share , get_bonus_periods ,get_withdraw_tx,
         get_deposit_tx,get_balance,get_zero_share} from './data-provider';
 
 import {
@@ -12,6 +13,18 @@ import {
     // useSuiClientQuery,
   } from "@mysten/dapp-kit";
 
+
+  function check_max(value :string, max : number) :number{
+    if(!value ||value.trim().length == 0) return 9;
+    let amount = Number(value.trim());
+    if(amount == 0) return 0;
+    
+    if(amount  > max) {
+      alert(`输入金额需要小于${max}` );
+      return 0;
+    }
+    return Math.round(amount * 1e9);
+  }
   const UserInfoUI = ( props : {onSelectPeriod: (address:string)=>void}) =>{
 
   let account = useCurrentAccount();
@@ -30,13 +43,18 @@ import {
         setBalance(value);
     })
   }
-  let deposit =function ( value :string )
+  let query_user_info = () =>{
+    if(!account) return;
+    get_user_share(suiClient,account!.address).then((share : UserShare)=>{
+      set_user_info(share);
+    });
+  }
+
+
+  let deposit =function ( value :string ,max : number)
   {
-    if(value.length == 0) return;
-    let amount = Number(value);
-    if(amount == 0) return;
-    if(amount > balance) {
-      alert("max amount is:" + balance);
+    let amount = check_max(value,max);
+    if(amount == 0 ){
       return;
     }
     let tx =  get_deposit_tx(amount);
@@ -49,18 +67,15 @@ import {
         onSuccess: (tx ) => {
           suiClient.waitForTransaction({ digest: tx.digest, options: {showEvents: true} })
                    .then((response)=>{
-                if(response.events){
-                  console.log("deposit events",response.events,"tx digest",tx.digest);
-                  for(let i = 0 ; i < response.events.length; ++i ){
-                    console.log(response.events[i]);
-                  }
-                  //let events = response.events;
-                  get_user_share(suiClient,account!.address).then((share : UserShare)=>{
-                    set_user_info(share);
-                  });
-                  //show the user max balance                  
-                  query_balance()
-                }
+                        if(response.events){
+                          // for(let i = 0 ; i < response.events.length; ++i ){
+                          //   console.log(response.events[i]);
+                          // }
+                          //let events = response.events;
+                          query_user_info();
+                          //show the user max balance                  
+                          query_balance()
+                        }
           });
         },
         onError:(err)=>{
@@ -68,6 +83,34 @@ import {
         }
       });
   }
+
+    let withdraw = function(value : string , max : number){
+    let amount = check_max(value,max);
+    if(amount == 0 ){
+      return;
+    }
+
+    let tx =  get_withdraw_tx(amount);
+    signAndExecute( {transaction: tx},
+      {
+        onSuccess: (tx ) => {
+          console.log("succ! digest:",tx.digest);
+          suiClient.waitForTransaction({ digest: tx.digest, options: {showEvents: true} })
+                   .then((response)=>{
+
+                  query_user_info();
+                  //show the user max balance                  
+                  query_balance()
+                });
+        },
+        onError:(err)=>{
+          console.error("deposit fail",err," digest:",tx.digest);
+        }
+      });
+  }
+
+
+  
 
     let initial_value :UserShare = get_zero_share(account!.address || "");
     
@@ -90,7 +133,24 @@ import {
         }
        });
     },[]    );
-    return (<SpaceUI user_info={user_info} balance={balance} deposit={deposit} change_period={props.onSelectPeriod} periods={periods}></SpaceUI>)   
+    return (
+    	<Tabs.Root className="TabsRoot" defaultValue="tab1">
+        <Tabs.List className="TabsList" aria-label="Manage your account">
+          <Tabs.Trigger className="TabsTrigger" value="tab1">
+            存款
+          </Tabs.Trigger>
+          <Tabs.Trigger className="TabsTrigger" value="tab2">
+            取款
+          </Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content className="TabsContent" value="tab1">
+          <DepositUI user_info={user_info} balance={balance} deposit={deposit} change_period={props.onSelectPeriod} periods={periods}></DepositUI>
+        </Tabs.Content>
+        <Tabs.Content className="TabsContent" value="tab2">
+          <WithdrawUI user_info={user_info} balance={balance} withdraw={withdraw} change_period={props.onSelectPeriod} periods={periods}></WithdrawUI>
+        </Tabs.Content>
+    </Tabs.Root>
+    )   
 }
 
 export default UserInfoUI;
