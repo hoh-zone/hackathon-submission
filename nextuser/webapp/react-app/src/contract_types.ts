@@ -45,9 +45,10 @@ type Balance = {
 type StakedSui = {
     principal: Balance,
 }
-type Storage = {
+export type StorageData = {
     total_shares: number,
     total_staked: number,
+    user_shares : { type:string, fields: UserList},
     staked_suis: StakedSui[],
     left_balance: Balance,
     bonus_balance: Balance,
@@ -61,8 +62,68 @@ type Storage = {
 export type StorageWrapper = {
     data: {
         content: {
-            fields: Storage
+            fields: StorageData
         }
     }
 }
+
+
+
+export type UserList = {
+    count : number,
+    keys : {type :string, fields : {id : string}},
+    values : {type : string ,fields:{id:string}},
+}
+
+export type UserShare ={
+    id : string;
+    original_money : number;
+    share_amount : number;
+    bonus : number;
+    update_time_ms:number;
+    asset : number;
+
+};
+
+
+export type Field_address_UserShare={
+    dataType : string,
+    fields:{
+        id : {id : string},
+        name : string,
+        value :{
+            type:string,
+            fields:unknown
+        } ,
+    }
+}
+
+export type FieldData = {
+    type : string,
+    fields : { id : {id :string}, size : number},
+}
+
+export type Field_u32_address={
+    dataType : string,
+    fields:{
+        id : {id : string},
+        name : number,
+        value :string,
+    }
+}
+
+ 
+
+
+export type FieldObject ={
+    data : {
+        objectId:string,
+        content:{
+            dataType:string,
+            fields:Field_u32_address,
+        }
+    }
+
+}
+
 

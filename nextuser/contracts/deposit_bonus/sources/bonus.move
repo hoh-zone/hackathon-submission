@@ -16,8 +16,12 @@ public struct BonusPeriod has key,store{
     bonus_list : vector<BonusRecord>,
 }
 
-public fun get_bonus_list(bp : & BonusPeriod) : vector<BonusRecord>{
-    bp.bonus_list
+public fun get_bonus_list(bp : & BonusPeriod) : &vector<BonusRecord>{
+    &bp.bonus_list
+}
+
+public fun count(bp : &BonusPeriod) : u64{
+    bp.bonus_list.length()
 }
 
 public fun create_bonus_record(user :address , 
@@ -31,6 +35,10 @@ public fun create_bonus_record(user :address ,
         pay,
         principal
     }
+}
+
+public fun get_user_principal(record : &BonusRecord) :(address,u64){
+    (record.id,record.principal)
 }
 
 

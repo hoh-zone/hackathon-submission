@@ -2,7 +2,6 @@
 //PERIOD,"0x67592e2825b318fa3254d50502744dccb790f1cb97861da5f799423410f44338
 export type NetworkConsts ={
         package_id: string;
-        period_id: string;
         admin_cap:string;
         operator_cap:string;
         bonus_history:string;
@@ -17,13 +16,14 @@ export type NetworkConsts ={
         RND:string,
         SYSTEM_STATE:string,
 }
+
 export const devnet_consts : NetworkConsts = {   
-        package_id: '0x48a8cf93186bf68b5209c85eaff44d2af8c18ab2086d2962ce72c9eae0bdef8',
-        period_id: '0x67592e2825b318fa3254d50502744dccb790f1cb97861da5f799423410f44338',
-        admin_cap:"0x6d23438d113ea13cdcb4e6b68b83908e2ea4eec37b01e796382d8d39e321e86c",
-        operator_cap:"0x1c2537af4af20c29e851434a3d59882cb676940c2eabf77c1b54325e75106ba2",
-        bonus_history:"0x46d8d542ccd917e677d9cc75c008cef9c4a4b32fb3cf4e47606b0dda849e1843",
-        storge:"0x5d21e1cbfc51e4ca478318f30dabe0d454305ae498815a023fa08393fe2b0a1b",
+        package_id: '0x55bb0baf5ab61a92ade583c784ae1a4663ea485d08574729b34402dc4fe85882',
+        //period_id: '0x67592e2825b318fa3254d50502744dccb790f1cb97861da5f799423410f44338',
+        admin_cap:"0x8f893ed929a0d25875f39ce7b62d1735c2b3d8117f13755a6e42d87764dcd10c",
+        operator_cap:"0x3c8cc4a90cff805adf33b0d30a5eff1bdc91d937330be14d39e8cb278864559e",
+        bonus_history:"0x4a8a3c9a58df3925148396640f3341193c9d46780345e01f612c0e39637a28a8",
+        storge:"0xccc05e1ad6436afdc742fc3e0af8abd889063812c4dfc8c4d59b73d01f3be06e",
         ADMIN : "0x42a27bbee48b8c97b05540e823e118fe6629bd5d83caf19ef8e9051bf3addf9e",
         OPERATOR:"0x8f6bd80bca6fb0ac57c0754870b80f2f47d3c4f4e815719b4cda8102cd1bc5b0",
         USER_1:"0x5e23b1067c479185a2d6f3e358e4c82086032a171916f85dc9783226d7d504de",
@@ -39,7 +39,6 @@ export const devnet_consts : NetworkConsts = {
 
 export const mainnet_consts : NetworkConsts = {   
         package_id: '',
-        period_id: '',
         admin_cap:"",
         operator_cap:"",
         bonus_history:"",
@@ -59,7 +58,6 @@ export const mainnet_consts : NetworkConsts = {
 
 export const testnet_consts : NetworkConsts = {   
         package_id: '',
-        period_id: '',
         admin_cap:"",
         operator_cap:"",
         bonus_history:"",

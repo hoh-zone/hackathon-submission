@@ -447,7 +447,7 @@ public(package) fun allocate_bonus(storage : &mut Storage,
                     shares : &LinkedTable<address,u256>,
                     time_ms : u64,
                     bonus_history :&mut BonusHistory,
-                    ctx :&mut TxContext){
+                    ctx :&mut TxContext) : u64{
     let mut total = 0;
     
 
@@ -460,12 +460,12 @@ public(package) fun allocate_bonus(storage : &mut Storage,
         let addr = * node.borrow();
         let amount = shares.borrow(addr);
         total = total + *amount;
-        log(b"user:",&addr);
-        log(b"overlapped:",amount);
+        //log(b"user:",&addr);
+        //log(b"overlapped:",amount);
         node = shares.next(addr);
     };
-    log(b"total hit:", &total);
-    log(b"total balance" , &balance_amount);
+    //log(b"total hit:", &total);
+    //log(b"total balance" , &balance_amount);
 
     let mut bonus_period :BonusPeriod = bonus::create_bonus_period(time_ms,ctx);
 
@@ -491,10 +491,11 @@ public(package) fun allocate_bonus(storage : &mut Storage,
         
         node = linked_table::next(shares,addr);
     };
-
+    let count = bonus_period.count();
     bonus_history.periods.push_back(object::id(&bonus_period).to_address());
     transfer::public_freeze_object(bonus_period);
     sui::event::emit(allocate_event);
+    count
 }
 
 fun bonus_calc(storage :&mut Storage,
@@ -502,7 +503,7 @@ fun bonus_calc(storage :&mut Storage,
                 total_rewards : u64,
                 time_ms : u64,
                 bonus_history :&mut BonusHistory,
-                ctx: &mut TxContext){
+                ctx: &mut TxContext) : u64{
 
     let percent = storage.bonus_percent as u128;
     let  bonus_amount = ((total_rewards as u128) * percent / (PERCENT_MAX as u128)) as u64;
@@ -515,8 +516,9 @@ fun bonus_calc(storage :&mut Storage,
     log(b"--------total bonus------- ",&total_bonus);
 
     let shares =  get_hit_users(storage,random,time_ms, ctx);
-    allocate_bonus(storage,total_bonus,&shares,time_ms,bonus_history,ctx);
+    let count = allocate_bonus(storage,total_bonus,&shares,time_ms,bonus_history,ctx);
     linked_table::drop(shares);
+    count
 }
 
 /**
@@ -530,7 +532,7 @@ public(package) entry fun withdraw_and_allocate_bonus(_ : &OperatorCap,
                                     random : &Random,
                                     validator_address:address ,  
                                     bonus_history :&mut BonusHistory,
-                                    ctx : &mut TxContext){
+                                    ctx : &mut TxContext) : u64{
     let time_ms = clock::timestamp_ms(clock);
     let (old,new ) = withdraw_all_from_stake(storage, wrapper, ctx);
     assert!(old <= new);
@@ -538,8 +540,9 @@ public(package) entry fun withdraw_and_allocate_bonus(_ : &OperatorCap,
     log(b"new",&new);
     
     let total_rewards = new - old;
-    bonus_calc(storage, random,total_rewards,time_ms,bonus_history, ctx);
-    stake_left_balance(storage, wrapper,  validator_address, ctx)
+    let count = bonus_calc(storage, random,total_rewards,time_ms,bonus_history, ctx);
+    stake_left_balance(storage, wrapper,  validator_address, ctx);
+    count
 }
 
 public(package) fun create_random_point(storage : &mut Storage,random :&Random ,time_ms : u64, ctx : &mut TxContext) : u256{

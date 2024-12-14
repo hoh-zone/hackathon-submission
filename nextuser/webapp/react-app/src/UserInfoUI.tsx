@@ -1,9 +1,9 @@
 import {useState} from 'react';
 import { useEffect} from 'react'
-import {BonusPeriodWrapper, UserInfo,DepositEvent} from './contract_types'
+import {BonusPeriodWrapper, UserShare,DepositEvent} from './contract_types'
 import SpaceUI from './SpaceUI';
-import {get_user_info_tx , get_bonus_periods ,
-        get_deposit_tx,get_balance} from './data-provider';
+import {get_user_share , get_bonus_periods ,
+        get_deposit_tx,get_balance,get_zero_share} from './data-provider';
 
 import {
     useCurrentAccount,
@@ -54,17 +54,10 @@ import {
                   for(let i = 0 ; i < response.events.length; ++i ){
                     console.log(response.events[i]);
                   }
-                  let events = response.events;
-                  if(events && events.length){
-                    for(let i = 0;  i < events.length; ++ i){
-                      if(events[i].type.endsWith('deposit_bonus::UserInfo')){
-                        let  user_info =  events[i].parsedJson as unknown as UserInfo
-                        //show use stake info
-                        set_user_info(user_info);
-                        break;
-                      }
-                    }
-                  }
+                  //let events = response.events;
+                  get_user_share(suiClient,account!.address).then((share : UserShare)=>{
+                    set_user_info(share);
+                  });
                   //show the user max balance                  
                   query_balance()
                 }
@@ -76,40 +69,17 @@ import {
       });
   }
 
-    let initial_value :UserInfo = {
-        id : account ? account.address : "",
-        orignal_amount : 0,
-        reward :0,
-        bonus : 0,
-    };
+    let initial_value :UserShare = get_zero_share(account!.address || "");
     
-    let [user_info , set_user_info] = useState<UserInfo>(initial_value);
+    let [user_info , set_user_info] = useState<UserShare>(initial_value);
     let [periods ,set_periods] = useState<BonusPeriodWrapper[]>()
-
-
-    let query_ue_info = ( setter:(info:UserInfo)=>void)=>{
-
-      signAndExecute(
-        {
-          transaction: get_user_info_tx(),
-        },
-        {
-          onSuccess: (tx ) => {
-            suiClient.waitForTransaction({ digest: tx.digest, options: {showEvents: true} }).then((response)=>{
-                let  user_info =  response.events![0].parsedJson as unknown as UserInfo;
-                console.log("wait result :", response);
-                setter(user_info);
-            })
-          },
-          onError:(err)=>{
-            console.error(err);
-          }
-        });
-    }
 
     useEffect(()=>{
             query_balance();
-            query_ue_info(set_user_info);
+            get_user_share(suiClient,account!.address).then((share : UserShare)=>{
+              set_user_info(share);
+            });
+            
     },[]);
 
     useEffect(()=>{

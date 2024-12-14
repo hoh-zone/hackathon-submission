@@ -1,6 +1,22 @@
 # publish package
+```bash
+./pub-devnet.sh
+```
 
-配置多个用户
+```bash
+cat pub-dev.sh 
+sui client switch --address admin
+sui client publish |tee ./log/publish-devnet.logc
+``
+
+##  缺省环境变量设置
+```bash
+export CLOCK=0x6
+export RND=0x8
+export SYSTEM_STATE=0x5
+
+```
+## 对照 log/publish-devnet.log 设置环境变量
 ```bash
 export ADMIN=0x42a27bbee48b8c97b05540e823e118fe6629bd5d83caf19ef8e9051bf3addf9e
 export OPERATOR=0x8f6bd80bca6fb0ac57c0754870b80f2f47d3c4f4e815719b4cda8102cd1bc5b0
@@ -9,40 +25,23 @@ export USER_2=0x16781b5507cafe0150fe3265357cccd96ff0e9e22e8ef9373edd5e3b4a808884
 export USER_3=0xa23b00a9eb52d57b04e80b493385488b3b86b317e875f78e0252dfd1793496bb
 export USER_4=0xafe36044ef56d22494bfe6231e78dd128f097693f2d974761ee4d649e61f5fa2
 
-#devnet 特有
+#devnet
 export VALIDATOR=0x94beb782ccfa172ea8752123e73768757a1f58cfca53928e9ba918a2c44a695b
 ```
 
+### devnet 特有
 ```bash
-./pub-devnet.sh
-```
-
-```bash
-cat pub-dev.sh 
-sui client switch --address $ADMIN
-sui client publish |tee ./log/publish-devnet.log
-``
-
-##  缺省环境变量设置
-```bash
-export CLOCK=0x6
-export RND=0x8
-export SYSTEM_STATE=0x5
-#devnet 特有
 export VALIDATOR=0x94beb782ccfa172ea8752123e73768757a1f58cfca53928e9ba918a2c44a695b
-
 ```
-
-
-### 发布后设置环境变量,对照 log/publish-devnet.log 设置环境变量,
+### 发布后设置环境变量
 
 
 ```bash
-export STORAGE=0xccc05e1ad6436afdc742fc3e0af8abd889063812c4dfc8c4d59b73d01f3be06e
-export ADMIN_CAP=0x8f893ed929a0d25875f39ce7b62d1735c2b3d8117f13755a6e42d87764dcd10c
-export OPERATOR_CAP=0x3c8cc4a90cff805adf33b0d30a5eff1bdc91d937330be14d39e8cb278864559e
-export HISTORY=0x4a8a3c9a58df3925148396640f3341193c9d46780345e01f612c0e39637a28a8
-export PKG=0x55bb0baf5ab61a92ade583c784ae1a4663ea485d08574729b34402dc4fe85882
+export STORAGE=0x5d21e1cbfc51e4ca478318f30dabe0d454305ae498815a023fa08393fe2b0a1b
+export ADMIN_CAP=0x6d23438d113ea13cdcb4e6b68b83908e2ea4eec37b01e796382d8d39e321e86c
+export OPERATOR_CAP=0x1c2537af4af20c29e851434a3d59882cb676940c2eabf77c1b54325e75106ba2
+export HISTORY=0x46d8d542ccd917e677d9cc75c008cef9c4a4b32fb3cf4e47606b0dda849e1843
+export PKG=0x48a8cf93186bf68b5209c85eaff44d2af8c18ab2086d2962ce72c9eae0bdef8
 
 ```
 
@@ -54,7 +53,7 @@ export PKG=0x55bb0baf5ab61a92ade583c784ae1a4663ea485d08574729b34402dc4fe85882
 
 sui client switch --address $ADMIN
 sui client ptb --move-call $PKG::deposit_bonus::assign_operator \
-@$ADMIN_CAP @$OPERATOR_CAP @$OPERATOR 
+@$ADMIN_CAP @$OPERATOR_CAP @$OPERATOR
 ```
 
 

@@ -2,13 +2,13 @@ import  { useState } from 'react';
 import {useEffect } from 'react';
 import { Input, Button, Space, DatePicker } from 'antd';
 import dayjs, { Dayjs } from "dayjs";
-import { UserInfo } from './contract_types';
+import { UserShare } from './contract_types';
 import { BonusPeriodWrapper } from './contract_types';
 import { to_date_str ,sui_show} from './util';
 import { progressPropDefs } from '@radix-ui/themes/dist/esm/components/progress.props.js';
 import { useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 
-const SpaceUI = (props : {user_info:UserInfo, 
+const SpaceUI = (props : {user_info:UserShare, 
                           balance:number,
                           deposit : (str:string) => void,
                           change_period : (addr:string)=>void,
@@ -44,8 +44,8 @@ const SpaceUI = (props : {user_info:UserInfo,
       
       <div style={{ marginBottom: 20 }}>
         <div style={{ marginBottom: 10 }}>
-          <div>你的存款: {sui_show(user_info.orignal_amount)} </div>
-          <div>你的利息: {sui_show(user_info.reward)} </div>
+          <div>你的存款: {sui_show(user_info.original_money)} </div>
+          <div>你的利息: {sui_show( (user_info.asset - user_info.original_money))} </div>
           <div>你的中奖: {sui_show(user_info.bonus)} </div>
         </div>
         <select onChange={ (e) =>{console.log(e);  props.change_period(e.target.value)  }}>

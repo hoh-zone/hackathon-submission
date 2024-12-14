@@ -12,6 +12,7 @@ use sui::test_scenario::{Self as tests, Scenario};
 use sui::test_utils;
 use sui_system::governance_test_utils::{add_validator_full_flow, advance_epoch, remove_validator, set_up_sui_system_state, create_sui_system_state_for_testing, stake_with, unstake};
 use deposit_bonus::utils::log;
+use deposit_bonus::bonus::{BonusPeriod,Self,BonusRecord};
 use deposit_bonus::deposit_bonus::{Self as db,Storage,UserInfo,UserShare,query_user_info,
                                     AdminCap,OperatorCap,assign_operator,deposit,get_share_amount,
                                     create_random_point,};
@@ -78,12 +79,15 @@ fun test_finish(clock : Clock,
 
 
 #[test]
-fun test_deposit(){
+fun test_deposit_multi(){
     let  (clock,random,mut sc,mut storage) = test_init();
     let mut system_state = sc.take_shared<SuiSystemState>();
     let amount = 50_000_000_000;
+    let amount1 = 6_000_000_000;
     let amount2 = 5_000_000_000;
-    tests::next_tx(&mut sc, USER1_ADDR);
+
+
+        tests::next_tx(&mut sc, USER1_ADDR);
     {
     
         let coin = coin::mint_for_testing(amount, sc.ctx());
@@ -105,6 +109,7 @@ fun test_deposit(){
     };
 
 
+
     tests::next_tx(&mut sc, USER2_ADDR);
     {
         let coin = coin::mint_for_testing(amount2, sc.ctx());
@@ -123,6 +128,28 @@ fun test_deposit(){
         assert_eq(share , amount2 );
     };
     
+    tests::next_tx(&mut sc, USER1_ADDR);
+    {
+    
+        let coin = coin::mint_for_testing(amount1, sc.ctx());
+        deposit(&clock, &mut storage, &mut system_state,
+                VALIDATOR1_ADDR, coin, sc.ctx());
+
+   
+        assert_eq(storage.total_staked_amount() ,amount1 + amount2 + amount);
+        assert_eq(storage.total_share_amount(),amount1 + amount2 + amount);
+        
+        let user_info = query_user_info(&storage,sc.ctx());
+        assert_eq(user_info.user_id() , USER1_ADDR);
+        assert_eq(user_info.user_orignal_amount(), amount + amount1);
+        assert_eq(user_info.user_reward(), 0);
+        let share = db::get_share_amount(&storage, USER1_ADDR);
+        assert_eq(share, amount1 + amount);
+        tests::next_tx(&mut sc,USER1_ADDR);
+        
+        let share_amount = db::get_share_amount(&storage, USER1_ADDR);
+        assert_eq(share_amount , amount + amount1);
+    };
 
     tests::next_tx(&mut sc, USER1_ADDR);
     {
@@ -132,9 +159,9 @@ fun test_deposit(){
 
        
         let share = db::get_share_amount(&storage, USER1_ADDR);
-        assert_eq(share, amount - withdraw_amount);
+        assert_eq(share, amount + amount1 - withdraw_amount);
 
-        assert_eq(storage.total_staked_amount() ,amount + amount2 - withdraw_amount);
+        assert_eq(storage.total_staked_amount() ,amount + amount2 + amount1 - withdraw_amount);
 
         let user_info = db::query_user_by_addr(&storage, USER2_ADDR);
         assert_eq(user_info.user_id() , USER2_ADDR);
@@ -143,12 +170,15 @@ fun test_deposit(){
 
         let user_info = query_user_info(&storage,sc.ctx());
         assert_eq(user_info.user_id() , USER1_ADDR);
-        assert_eq(user_info.user_orignal_amount(), amount - withdraw_amount);
+        assert_eq(user_info.user_orignal_amount(), amount + amount1 - withdraw_amount);
         assert_eq(user_info.user_reward(), 0);
 
         let share = db::get_share_amount(&storage, USER2_ADDR);
         assert_eq(share , amount2 );
     };
+
+
+
     let time_ms  = clock.timestamp_ms();
     let hit_users = db::get_hit_users(&mut storage, &random,time_ms, sc.ctx());
     log(b"--------------hit users------------------\n",&db::convert_to_vector(&hit_users));
@@ -202,7 +232,7 @@ fun print_recent_period(sc : &mut Scenario){
 
         tests::next_tx(sc,@0xb);
         // shared object can be take after the transaction
-        let mut bh = tests::take_shared<db::BonusHistory>(sc);
+        let bh = tests::take_shared<db::BonusHistory>(sc);
         let addr = bh.get_recent_period();
         let p = tests::take_immutable_by_id<BonusPeriod>(sc, addr.to_id());
         log(b"bonus period 1", &p);
@@ -210,7 +240,7 @@ fun print_recent_period(sc : &mut Scenario){
         tests::return_shared(bh);
        
 }
-use deposit_bonus::bonus::BonusPeriod;
+
 #[test]
 fun test_deposit_donate_allocate(){
     let  (mut clock,random,mut sc,mut storage) = test_init();
@@ -286,20 +316,39 @@ fun test_deposit_donate_allocate(){
     
     //分配奖金
     clock.increment_for_testing(3600000);
+    let mut count = 0;
     tests::next_tx(&mut sc, OPERATOR_ADDR);
     {
         let operator_cap = tests::take_from_sender<OperatorCap>(&sc);
         let mut history = tests::take_shared<db::BonusHistory>(&sc);
-        db::withdraw_and_allocate_bonus(&operator_cap,&clock,&mut storage,
+        count = db::withdraw_and_allocate_bonus(&operator_cap,&clock,&mut storage,
                                         &mut system_state,&random,VALIDATOR1_ADDR,
                                         &mut history,sc.ctx());
                     
+
         
         tests::return_shared(history);
         tests::return_to_sender(&sc, operator_cap);
        
     };
     print_recent_period(&mut sc);
+    //validate the record
+    tests::next_tx(&mut sc, OPERATOR_ADDR);
+    {
+        if(count > 0){
+            let mut history = tests::take_shared<db::BonusHistory>(&sc);
+            let period_addr = db::get_recent_period(&history);
+            let period = tests::take_immutable_by_id<bonus::BonusPeriod>(&sc, period_addr.to_id());
+            let records = bonus::get_bonus_list(&period);
+            let (addr,principal ) = records[0].get_user_principal();
+
+            let share = db::get_share(&storage, addr);
+            assert_eq(share.user_original_money(),principal );
+            tests::return_immutable(period);
+            tests::return_shared(history);
+        };
+    };
+    
 
 
     //第二次捐款
