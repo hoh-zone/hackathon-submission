@@ -9,6 +9,9 @@ public struct BonusRecord has store,copy{
     principal : u64, //本金
 }
 
+public(package) fun get_gain(r :&BonusRecord) : u64{
+    r.gain
+}
 public struct BonusPeriod has key,store{
     id : UID,
     time_ms : u64,
@@ -16,6 +19,10 @@ public struct BonusPeriod has key,store{
     seed : u256,
     percent : u32,
     bonus_list : vector<BonusRecord>,
+}
+
+public(package) fun period_time(p : &BonusPeriod) : u64{
+    p.time_ms
 }
 
 public fun get_bonus_list(bp : & BonusPeriod) : &vector<BonusRecord>{

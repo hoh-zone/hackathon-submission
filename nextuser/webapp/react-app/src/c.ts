@@ -2,6 +2,7 @@ import { devnet_consts as consts } from './consts';
 import * as dotenv from 'dotenv';
 import { bcs } from "@mysten/sui/bcs";
 import { SuiClient, getFullnodeUrl } from '@mysten/sui/client';
+import {ObjectOwner} from '@mysten/sui/client'
 import { useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
 import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { Transaction } from '@mysten/sui/transactions';
@@ -20,7 +21,7 @@ const signer = Ed25519Keypair.fromSecretKey(secretKeyBytes); // 生成签名者
 
 async  function get_user_shares(){
     let result = await suiClient.getObject({
-        id: consts.storge,
+        id: consts.storage,
         options: {
             showContent: true,
         }
@@ -68,9 +69,9 @@ async  function get_user_shares(){
 
 }
 
-async  function get_user_share( addr : string){
-    let result = await suiClient.getObject({
-        id: consts.storge,
+async  function get_user_share(client :SuiClient, addr : string){
+    let result = await client.getObject({
+        id: consts.storage,
         options: {
             showContent: true,
         }
@@ -88,7 +89,7 @@ async  function get_user_share( addr : string){
     let values = new_storage.user_shares.fields.values;
     let values_id = ( values as unknown as FieldData).fields.id.id;
         
-    let obj = await suiClient.getDynamicFieldObject({parentId: values_id, name : {type:'address', value:addr}})
+    let obj = await client.getDynamicFieldObject({parentId: values_id, name : {type:'address', value:addr}})
     
     let field = obj.data!.content as unknown as Field_address_UserShare;
     let share = field.fields.value.fields as UserShare;
@@ -97,6 +98,49 @@ async  function get_user_share( addr : string){
     return share;
 }
 
+export async  function get_owner( client:SuiClient,addr :string ) :Promise<string>{
+    let result = await client.getObject({
+        id: addr,
+        options: {
+            showOwner: true,
+        }
+    });
+    let owner  = result.data!.owner;
+    if(owner){
+        let data = owner! as unknown as {AddressOwner:string};
+        console.log(addr,' owner is ',data.AddressOwner);
+        return data.AddressOwner
+    }
+    return "";
+
+    
+}
 
 
-get_user_share(consts.USER_1);
+type OperatorCap ={
+    fields:{
+        id : { id : string}
+        operators : string[]
+    }
+}
+export async  function get_operators(client : SuiClient) : Promise<string[]>{
+    let result = await client.getObject({
+        id: consts.operator_cap,
+        options: {
+            showContent: true,
+        }
+    });
+    let content  = result.data!.content as unknown as OperatorCap;
+    console.log('-----------get operators : ' ,content);
+    return content.fields.operators
+}
+
+
+
+export async  function get_admin(client : SuiClient ){
+    return await get_owner(client,consts.admin_cap);
+}
+
+//get_user_share(consts.USER_1);
+//get_admin(suiClient).then(console.log);
+get_operators(suiClient).then(console.log);

@@ -98,7 +98,7 @@ const signer = Ed25519Keypair.fromSecretKey(secretKeyBytes); // 生成签名者
 
 async  function get_user_share( addr : string){
     let result = await suiClient.getObject({
-        id: consts.storge,
+        id: consts.storage,
         options: {
             showContent: true,
         }
@@ -132,7 +132,7 @@ async function get_user_info() {
     let target = `${consts.package_id}::deposit_bonus::entry_query_user_info`;
     tx.moveCall({
         target: target,
-        arguments: [tx.object(consts.storge)],
+        arguments: [tx.object(consts.storage)],
 
     });
     console.log(`ready call:target `);
@@ -157,7 +157,7 @@ async function get_user_info() {
 
 async function get_storage() {
 
-    let result = await suiClient.getObject({ id: consts.storge, options: { showContent: true } });
+    let result = await suiClient.getObject({ id: consts.storage, options: { showContent: true } });
     let ret = result.data!.content as unknown as { fields: Storage };
     console.log("storage :", ret);
 }

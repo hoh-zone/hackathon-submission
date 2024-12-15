@@ -34,3 +34,7 @@ public macro fun fee_percent_out_of_range() : u64{
 public macro fun withdraw_share_not_enough() : u64{
     8
 }
+
+public macro fun not_operator() : u64{
+    9
+}

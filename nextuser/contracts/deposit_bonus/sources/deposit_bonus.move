@@ -24,7 +24,10 @@ const PERCENT_MAX:u32 = 10000; //100%
 const FeeLimit : u32 = 1000; // 10%
 const BonusLimit : u32 = 10000; // 100%  
 public struct AdminCap has key { id : UID}
-public struct OperatorCap has key{id : UID}
+public struct OperatorCap has key{
+    id : UID,
+    operators : vector<address>    
+}
 
 
 
@@ -44,6 +47,10 @@ public struct UserShare  has store{
     bonus : u64,
 }
 
+public(package) fun time_ms(share : &UserShare) : u64{
+    share.update_time_ms
+}
+
 public(package) fun  user_original_money(us : &UserShare) : u64{
     us.original_money
 }
@@ -51,6 +58,15 @@ public(package) fun  user_original_money(us : &UserShare) : u64{
 public (package) fun get_seed(storage : &Storage) : u256{
     storage.seed
 }
+
+public (package) fun fee(storage : &Storage) : u64{
+    storage.fee_balance.value()
+}
+
+public (package) fun bonus(storage : &Storage) : u64{
+    storage.bonus_balance.value()
+}
+
 
 public(package) fun  user_share_amount(us : &UserShare) : u64{
     us.share_amount
@@ -84,6 +100,7 @@ public struct Storage has key,store{
     left_balance : Balance<SUI>,
     bonus_balance : Balance<SUI>,
     bonus_donated : Balance<SUI>,
+    fee_balance : Balance<SUI>,
     bonus_percent : u32,
     fee_percent : u32,
     seed : u256,
@@ -167,8 +184,9 @@ fun new_storage(ctx : &mut TxContext) : Storage{
         left_balance : balance::zero<SUI>(),
         bonus_balance :  balance::zero<SUI>(),
         bonus_donated : balance::zero<SUI>(),
+        fee_balance : balance::zero<SUI>(),
         bonus_percent : 5000 ,//50%
-        fee_percent : 500, //base point , 5%
+        fee_percent : 1000, //base point , 5%
         seed : seed,
         
     }
@@ -182,15 +200,14 @@ fun init(ctx : &mut TxContext){
 
     transfer::transfer(admin_cap,ctx.sender());
 
-    let operator_cap = OperatorCap{id : object::new(ctx)};
-    transfer::transfer(operator_cap,ctx.sender());
+    let operator_cap = OperatorCap{id : object::new(ctx), operators : vector[]};
+    transfer::share_object(operator_cap);
 
     let h = BonusHistory{
         id : object::new(ctx),
         // history : linked_table::new<u64,BonusPeriod>(ctx),
         periods : vector[],
-        // times : vector[]
-        
+       
     };
     transfer::share_object(h);
 }
@@ -255,13 +272,13 @@ fun update_share_after_stake(storage :&mut Storage , original_money : u64,time_m
 }
 
 entry fun deposit(clock: &Clock,storage: & mut Storage,
-                  wrapper: &mut SuiSystemState,validator_address: address,
+                  system_state: &mut SuiSystemState,validator_address: address,
                   coin: Coin<SUI>, ctx: &mut TxContext) {
     
     let sender = ctx.sender();
     let update_time_ms = clock::timestamp_ms(clock);
     let value = coin::value(&coin);
-    deposit_to_stake(storage, wrapper, coin, validator_address,ctx);
+    deposit_to_stake(storage, system_state, coin, validator_address,ctx);
     let share = update_share_after_stake(storage, value, update_time_ms, sender);
 
     emit(DepositEvent{
@@ -272,13 +289,14 @@ entry fun deposit(clock: &Clock,storage: & mut Storage,
     });
 }
 
-fun reduce_share_after_withdraw(storage : &mut Storage, withdraw_stake : u64,withdraw_share : u64, sender : address)
+fun reduce_share_after_withdraw(storage : &mut Storage,time_ms : u64, withdraw_stake : u64,withdraw_share : u64, sender : address)
 {
     let user_share = storage.user_shares.borrow_mut(sender);  
     assert!(user_share.share_amount >= withdraw_share,err_consts::withdraw_share_not_enough!());
     
     user_share.share_amount = user_share.share_amount - withdraw_share;
     user_share.original_money = user_share.original_money - withdraw_stake;
+    user_share.update_time_ms = time_ms;
     storage.total_shares = storage.total_shares - withdraw_share;
     //do not remove ,because keys and values ,count in user_list is related.
     // if(user_share.share_amount == 0){
@@ -292,7 +310,7 @@ one user  to withdraw his staked sui
 1  take bonus first ,if meet the amount ,return
 2  take the staked sui to meet amount
 */
-public  fun withdraw(clock: &Clock,storage: & mut Storage,wrapper: &mut SuiSystemState,
+public  fun withdraw(clock: &Clock,storage: & mut Storage,system_state: &mut SuiSystemState,
                     amount : u64,ctx : &mut TxContext) : Balance<SUI>{
     let sender = ctx.sender();
     assert!( storage.user_shares.contains(sender),err_consts::account_not_exists!() );
@@ -314,22 +332,22 @@ public  fun withdraw(clock: &Clock,storage: & mut Storage,wrapper: &mut SuiSyste
     //calcualte share before withdraw stake ( total_staked will change when)
     let withdraw_share = money_to_share(storage, need);
     assert!(user_money  >= need ,err_consts::share_not_enough!() );
-    let mut balance = withdraw_from_stake(storage, wrapper, need, ctx);
+    let mut balance = withdraw_from_stake(storage, system_state, need, ctx);
     let withdraw_stake = balance.value();
     balance.join(bonus);
     
-    reduce_share_after_withdraw(storage,withdraw_stake, withdraw_share,sender);
+    reduce_share_after_withdraw(storage,clock.timestamp_ms(),withdraw_stake, withdraw_share,sender);
     balance
 }
 
 fun deposit_to_stake(storage :&mut Storage,
-        wrapper: &mut SuiSystemState,
+        system_state: &mut SuiSystemState,
         coin: Coin<SUI>,
         validator_address: address,
         ctx : &mut TxContext)
 {
     let coin_value = coin.value();
-    let s = request_add_stake_non_entry(wrapper,coin,
+    let s = request_add_stake_non_entry(system_state,coin,
                                                     validator_address,ctx);
     assert!(s.amount() == coin_value);
     add_staked_sui(storage, s) ;   
@@ -339,14 +357,14 @@ fun deposit_to_stake(storage :&mut Storage,
 before to call this function,  call withdraw_all_from_stake at first ,
 */
 fun stake_left_balance(storage :&mut Storage,
-        wrapper: &mut SuiSystemState,
+        system_state: &mut SuiSystemState,
         validator_address: address,
         ctx : &mut TxContext)
 {
     let amount = balance::value(&storage.left_balance);
     let balance = balance::split(&mut storage.left_balance, amount );
     let coin = coin::from_balance(balance, ctx);
-    let s = request_add_stake_non_entry(wrapper,coin,
+    let s = request_add_stake_non_entry(system_state,coin,
                                                     validator_address,ctx);
     
     storage.total_staked =  staking_pool::staked_sui_amount(&s);   
@@ -385,7 +403,7 @@ fun split_exact_balance(storage :&mut Storage, mut merge_balance :Balance<SUI>,a
 when one user withdraw his share
 */
 fun withdraw_from_stake(storage :&mut Storage, 
-                        wrapper: &mut SuiSystemState,
+                        system_state: &mut SuiSystemState,
                         amount : u64,
                         ctx: &mut TxContext) :Balance<SUI>{
 
@@ -398,7 +416,7 @@ fun withdraw_from_stake(storage :&mut Storage,
         let curr_amount = staking_pool::staked_sui_amount(&staked_sui) ;
         if( curr_amount >= need  ){
             let split = staked_sui.split(need, ctx);
-            let balance = request_withdraw_stake_non_entry(wrapper,split,ctx);
+            let balance = request_withdraw_stake_non_entry(system_state,split,ctx);
             assert!(balance.value() >= need, err_consts::balance_less_than_staked!());
             merge_balance.join(balance);
             storage.staked_suis.push_back(staked_sui);
@@ -407,7 +425,7 @@ fun withdraw_from_stake(storage :&mut Storage,
             
         }
         else{
-              let balance = request_withdraw_stake_non_entry(wrapper,staked_sui,ctx); 
+              let balance = request_withdraw_stake_non_entry(system_state,staked_sui,ctx); 
               merge_balance.join(balance);
               storage.total_staked = storage.total_staked - curr_amount;
         };
@@ -424,14 +442,14 @@ fun withdraw_from_stake(storage :&mut Storage,
 take the reward  after a period
 */
 fun withdraw_all_from_stake(storage :&mut Storage, 
-                        wrapper: &mut SuiSystemState,
+                        system_state: &mut SuiSystemState,
                         ctx: &mut TxContext) :(u64,u64) {
 
     let count = vector::length(&storage.staked_suis);
     let mut merge_balance = balance::zero<SUI>();
     while(!vector::is_empty<StakedSui>(&storage.staked_suis)){
         let staked_sui  = vector::pop_back(&mut storage.staked_suis);
-        let b = request_withdraw_stake_non_entry(wrapper,staked_sui,ctx); 
+        let b = request_withdraw_stake_non_entry(system_state,staked_sui,ctx); 
         merge_balance.join(b);
     };
     storage.left_balance.join(merge_balance);
@@ -485,6 +503,7 @@ public(package) fun allocate_bonus(storage : &mut Storage,
                                                         pay as u64, user_share.original_money) ;
         bonus_period.add_record( record);
         user_share.bonus = user_share.bonus + ( gain as u64);
+        user_share.update_time_ms = time_ms;
         vector::push_back(&mut allocate_event.users, Share{
             id : addr,
             amount :  user_share.bonus
@@ -499,19 +518,30 @@ public(package) fun allocate_bonus(storage : &mut Storage,
     count
 }
 
-fun bonus_calc(storage :&mut Storage,
+fun get_percent_value( amount : u64, percent : u32) : u64 {
+    let percent = percent as u128;
+    let amount = amount as u128;
+    let max = PERCENT_MAX as u128;
+    ((amount * percent)/max) as u64
+}
+fun alloc_rewards(storage :&mut Storage,
                 random : &Random,
                 total_rewards : u64,
                 time_ms : u64,
                 bonus_history :&mut BonusHistory,
                 ctx: &mut TxContext) : u64{
 
-    let percent = storage.bonus_percent as u128;
-    let  bonus_amount = ((total_rewards as u128) * percent / (PERCENT_MAX as u128)) as u64;
+    //let percent = storage.bonus_percent as u128;
+    let  bonus_amount = get_percent_value(total_rewards, storage.bonus_percent);
+    // ((total_rewards as u128) * percent / (PERCENT_MAX as u128)) as u64;
     let mut bonus = balance::split(&mut storage.left_balance, bonus_amount);
     let donated_amount = storage.bonus_donated.value();
     bonus.join(storage.bonus_donated.split(donated_amount));
-    let total_bonus  = bonus_amount + donated_amount;
+    let mut total_bonus  = bonus_amount + donated_amount;
+
+    let fee_amount = get_percent_value(total_bonus, storage.fee_percent);
+    storage.fee_balance.join( bonus.split(fee_amount));
+    total_bonus = total_bonus - fee_amount;
 
     storage.bonus_balance.join(bonus);    
     log(b"--------total bonus------- ",&total_bonus);
@@ -526,23 +556,24 @@ fun bonus_calc(storage :&mut Storage,
 dapp call this function periodically ,
 the OperatorCap owner key will be deplayed in server
 */
-public(package) entry fun withdraw_and_allocate_bonus(_ : &OperatorCap,
+public(package) entry fun withdraw_and_allocate_bonus(op : &OperatorCap,
                                     clock : &Clock,
                                     storage :&mut Storage,
-                                    wrapper : &mut SuiSystemState,
+                                    system_state : &mut SuiSystemState,
                                     random : &Random,
                                     validator_address:address ,  
                                     bonus_history :&mut BonusHistory,
                                     ctx : &mut TxContext) : u64{
+    assert!(op.operators.contains(&ctx.sender()),err_consts::not_operator!());
     let time_ms = clock::timestamp_ms(clock);
-    let (old,new ) = withdraw_all_from_stake(storage, wrapper, ctx);
+    let (old,new ) = withdraw_all_from_stake(storage, system_state, ctx);
     assert!(old <= new);
     log(b"old",&old);
     log(b"new",&new);
     
     let total_rewards = new - old;
-    let count = bonus_calc(storage, random,total_rewards,time_ms,bonus_history, ctx);
-    stake_left_balance(storage, wrapper,  validator_address, ctx);
+    let count = alloc_rewards(storage, random,total_rewards,time_ms,bonus_history, ctx);
+    stake_left_balance(storage, system_state,  validator_address, ctx);
     count
 }
 
@@ -619,16 +650,19 @@ public(package) fun convert_to_vector(t : &LinkedTable<address,u256>) :vector<Sh
     ret
 }
 
-entry fun entry_withdraw(clock: &Clock,storage: & mut Storage,wrapper: &mut SuiSystemState,
+entry fun entry_withdraw(clock: &Clock,storage: & mut Storage,system_state: &mut SuiSystemState,
                         amount : u64,ctx : &mut TxContext){
-    let balance = withdraw(clock, storage, wrapper,
+    let balance = withdraw(clock, storage, system_state,
                             amount, ctx);
     let coin = coin::from_balance<SUI>(balance,ctx);
     transfer::public_transfer(coin, ctx.sender());
 }
 
-entry fun assign_operator(_ :&AdminCap , operator_cap : OperatorCap, to :address){
-    transfer::transfer(operator_cap, to);
+//operatorCap owner transfer operatoerCap to other 
+entry fun assign_operator( _ : &AdminCap,operator_cap : &mut OperatorCap, to :address){
+    if(!operator_cap.operators.contains(&to)){
+        operator_cap.operators.push_back(to);
+    }
 }
 
 entry fun change_bonus_percent(_ :&AdminCap,storage : &mut Storage, percent : u32){
@@ -719,6 +753,12 @@ public struct WithdrawEvent has copy,drop{
     receive_amount : u64,
 }
 
+entry fun withdraw_fee(_:&AdminCap,storage : &mut Storage,amount : u64 ,ctx : &mut TxContext){
+    assert!(amount <= storage.fee_balance.value());
+    let balance = storage.fee_balance.split(amount);
+    let coin = coin::from_balance(balance, ctx);
+    transfer::public_transfer(coin, ctx.sender());
+}
 
 entry fun entry_withdraw_bonus(storage : &mut Storage, amount : u64 ,ctx : &mut TxContext){
     let sender = ctx.sender();

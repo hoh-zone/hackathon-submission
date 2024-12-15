@@ -41,8 +41,9 @@ fun test_init() : (Clock,Random,Scenario,Storage)
     tests::next_tx(&mut sc,@0xa);
     
     let admin_cap = tests::take_from_address<AdminCap>(&sc, ADMIN_ADDR);
-    let operator_cap = tests::take_from_address<OperatorCap>(&sc, ADMIN_ADDR);
-    assign_operator(&admin_cap,operator_cap, OPERATOR_ADDR);
+    let mut operator_cap = tests::take_shared<OperatorCap>(&sc);
+    assign_operator(&admin_cap,&mut operator_cap, OPERATOR_ADDR);
+    tests::return_shared(operator_cap);
     tests::return_to_address(ADMIN_ADDR,admin_cap);
 
     set_up_sui_system_state(vector[@0x1, @0x2]);
@@ -241,6 +242,33 @@ fun print_recent_period(sc : &mut Scenario){
        
 }
 
+fun  validate_records(sc :&mut Scenario,storage :&Storage,count : u64, acc_donation :  u64){
+    tests::next_tx(sc, OPERATOR_ADDR);
+    {
+        if(count > 0){
+            let mut history = tests::take_shared<db::BonusHistory>(sc);
+            let period_addr = db::get_recent_period(&history);
+            let period = tests::take_immutable_by_id<bonus::BonusPeriod>(sc, period_addr.to_id());
+            let records = bonus::get_bonus_list(&period);
+            let mut i = 0;
+            while(i < count){
+                let record = &records[0];
+                let (addr,principal ) = record.get_user_principal();
+                let share = db::get_share(storage, addr);
+                assert_eq(share.time_ms() ,period.period_time());
+                assert!(share.user_share_bonus() >= record.get_gain());
+                
+                assert_eq(share.user_original_money(),principal );
+                i = i + 1;
+            };
+            assert!(storage.fee() > 0);
+            assert_eq(storage.fee() + storage.bonus() ,acc_donation );
+            tests::return_immutable(period);
+            tests::return_shared(history);
+        }
+    }
+}
+
 #[test]
 fun test_deposit_donate_allocate(){
     let  (mut clock,random,mut sc,mut storage) = test_init();
@@ -249,6 +277,8 @@ fun test_deposit_donate_allocate(){
     let amount2 = 4000000000;
     let amount3  = 2000000000;
     let donation_amount = 280000000;
+    let mut acc_donation  = 0;//累计奖金
+    //user_1 deposit 
     tests::next_tx(&mut sc, USER1_ADDR);
     {
     
@@ -311,7 +341,8 @@ fun test_deposit_donate_allocate(){
     tests::next_tx(&mut sc, OPERATOR_ADDR);
     {
         let coin = coin::mint_for_testing(donation_amount, sc.ctx());
-        db::donate_bonus(&mut storage, coin)
+        db::donate_bonus(&mut storage, coin);
+        acc_donation = acc_donation + donation_amount;
     };
     
     //分配奖金
@@ -319,7 +350,7 @@ fun test_deposit_donate_allocate(){
     let mut count = 0;
     tests::next_tx(&mut sc, OPERATOR_ADDR);
     {
-        let operator_cap = tests::take_from_sender<OperatorCap>(&sc);
+        let operator_cap = tests::take_shared<OperatorCap>(&sc);
         let mut history = tests::take_shared<db::BonusHistory>(&sc);
         count = db::withdraw_and_allocate_bonus(&operator_cap,&clock,&mut storage,
                                         &mut system_state,&random,VALIDATOR1_ADDR,
@@ -328,78 +359,71 @@ fun test_deposit_donate_allocate(){
 
         
         tests::return_shared(history);
-        tests::return_to_sender(&sc, operator_cap);
+        tests::return_shared( operator_cap);
        
     };
     print_recent_period(&mut sc);
     //validate the record
-    tests::next_tx(&mut sc, OPERATOR_ADDR);
-    {
-        if(count > 0){
-            let mut history = tests::take_shared<db::BonusHistory>(&sc);
-            let period_addr = db::get_recent_period(&history);
-            let period = tests::take_immutable_by_id<bonus::BonusPeriod>(&sc, period_addr.to_id());
-            let records = bonus::get_bonus_list(&period);
-            let (addr,principal ) = records[0].get_user_principal();
 
-            let share = db::get_share(&storage, addr);
-            assert_eq(share.user_original_money(),principal );
-            tests::return_immutable(period);
-            tests::return_shared(history);
-        };
-    };
-    
-
+    validate_records(&mut sc,&storage,count, acc_donation);
 
     //第二次捐款
     tests::next_tx(&mut sc, OPERATOR_ADDR);
     {
         let coin = coin::mint_for_testing(donation_amount, sc.ctx());
-        db::donate_bonus(&mut storage, coin)
+        db::donate_bonus(&mut storage, coin);
+        acc_donation = acc_donation + donation_amount;
     };
 
     //第二次抽奖
     //分配奖金
     clock.increment_for_testing(3600000);
     {
-        let operator_cap = tests::take_from_sender<OperatorCap>(&sc);
+        let operator_cap = tests::take_shared<OperatorCap>(&sc);
         let mut history = tests::take_shared<db::BonusHistory>(&sc);
-        db::withdraw_and_allocate_bonus(&operator_cap,&clock,&mut storage,
+        count = db::withdraw_and_allocate_bonus(&operator_cap,&clock,&mut storage,
                                         &mut system_state,&random,VALIDATOR1_ADDR,
                                         &mut history,sc.ctx());
         
        
         tests::return_shared(history);
-        tests::return_to_sender(&sc, operator_cap);
+        tests::return_shared(operator_cap);
        
     };
 
-     print_recent_period(&mut sc);
+    // print_recent_period(&mut sc);
+
+    validate_records(&mut sc,&storage,count, acc_donation);
 
 
     //第三次捐款
     tests::next_tx(&mut sc, OPERATOR_ADDR);
     {
         let coin = coin::mint_for_testing(2_000_000_000, sc.ctx());
-        db::donate_bonus(&mut storage, coin)
+        db::donate_bonus(&mut storage, coin);
+        acc_donation = acc_donation + 2_000_000_000;
     };
 
     //第三次抽奖
     //分配奖金
     clock.increment_for_testing(3600000);
     {
-        let operator_cap = tests::take_from_sender<OperatorCap>(&sc);
+        let operator_cap = tests::take_shared<OperatorCap>(&sc);
         let mut history = tests::take_shared<db::BonusHistory>(&sc);
         db::withdraw_and_allocate_bonus(&operator_cap,&clock,&mut storage,
                                         &mut system_state,&random,VALIDATOR1_ADDR,
                                         &mut history,sc.ctx());
         
         tests::return_shared(history);
-        tests::return_to_sender(&sc, operator_cap);
+        tests::return_shared(operator_cap);
        
     };
-
+    
     print_recent_period(&mut sc);
+    validate_records(&mut sc,&storage,count, acc_donation);
+    
+    
+    
 
     let time_ms  = clock.timestamp_ms();
     let hit_users = db::get_hit_users(&mut storage, &random,time_ms, sc.ctx());

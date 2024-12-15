@@ -1,21 +1,30 @@
-# Deposit to win Bonus
+## project
+- Deposit to win bonus:
+> Description:
+>1. Use the deposit pledge to the validator, part of the >interest is used for the draw, a few people get the prize.
+>2. The user's deposit principal will not be lost
+>3. The operator can invest bonuses to encourage savings at the beginning.
 
-## document)
+### document)
 
 - [presentation](./deposit-bonus-show-english.pdf)
 
-## code
+### code
 
 - [contract](./) (./contracts/deposit_bonus/sources)
   - [unitest code](./contracts/deposit_bonus/tests/deposit_bonus_tests.move)
   - [sui client debug step by step ](./contracts/deposit_bonus/log/client-devnet.md)
 - [dapp](./webapp/react-app)
 
-## Participant：
 
-*   [lose_weight](https://www.github.com/nextuser/deposit-bonus)
-  * contract code/tests
-  * integration test
-* [goofy(MrHu9702)](https://gitee.com/hu-gaofei/react-sui-app)
-  * ui component
+## Member
 
+-  github:[nextuser](https://www.github.com/nextuser/deposit-bonus)
+
+> c/c++: 10 more than years
+> java: 10 more than years
+> move: 6 months
+> web/javascript : 3 years
+
+- goofy(MrHu9702) [hu-aofei](https://gitee.com/hu-gaofei/react-sui-app)
+> react/javascript: 1 years

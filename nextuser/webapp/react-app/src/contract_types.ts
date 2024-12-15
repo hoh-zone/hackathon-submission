@@ -40,7 +40,9 @@ export type UserInfo ={
     bonus : number,
 }
 type Balance = {
-    value: number
+    fields:{
+        value: number
+    }
 }
 type StakedSui = {
     principal: Balance,
@@ -50,14 +52,14 @@ export type StorageData = {
     total_staked: number,
     user_shares : { type:string, fields: UserList},
     staked_suis: StakedSui[],
-    left_balance: Balance,
-    bonus_balance: Balance,
-    bonus_donated: Balance,
+    left_balance: string,
+    bonus_balance: string,
+    bonus_donated: number,
+    fee_balance:string,
     bonus_percent: number,
     fee_percent: number,
     seed: bigint,
 }
-
 
 export type StorageWrapper = {
     data: {
@@ -66,8 +68,6 @@ export type StorageWrapper = {
         }
     }
 }
-
-
 
 export type UserList = {
     count : number,
