@@ -29,9 +29,6 @@ public struct OperatorCap has key{
     operators : vector<address>    
 }
 
-
-
-
 public struct DepositEvent has copy,drop{
     user : address,
     share_amount : u64,
@@ -200,7 +197,9 @@ fun init(ctx : &mut TxContext){
 
     transfer::transfer(admin_cap,ctx.sender());
 
-    let operator_cap = OperatorCap{id : object::new(ctx), operators : vector[]};
+    let mut operator_cap = OperatorCap{id : object::new(ctx), operators : vector[]};
+    operator_cap.operators.push_back(ctx.sender());
+
     transfer::share_object(operator_cap);
 
     let h = BonusHistory{
