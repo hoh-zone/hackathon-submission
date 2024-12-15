@@ -21,10 +21,10 @@
 
 ### 代码(code)
 
-- [合约代码]() (./contracts/deposit_bonus/sources)
-- [单元测试代码](./contracts/deposit_bonus/tests/deposit_bonus_tests.move)
-- [sui client 调试步骤 ](./contracts/deposit_bonus/log/client-devnet.md)
-- [web界面](./webapp/react-app)
+- [合约代码]() (./code/deposit_bonus/sources)
+- [单元测试代码](./code/deposit_bonus/tests/deposit_bonus_tests.move)
+- [sui client 调试步骤 ](./code/deposit_bonus/log/client-devnet.md)
+- [web界面](./demo/react-app)
 
 
 ## Member

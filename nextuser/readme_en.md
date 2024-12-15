@@ -11,9 +11,9 @@
 
 ### code
 
-- [contract](./) (./contracts/deposit_bonus/sources)
-  - [unitest code](./contracts/deposit_bonus/tests/deposit_bonus_tests.move)
-  - [sui client debug step by step ](./contracts/deposit_bonus/log/client-devnet.md)
+- [contract](./) (./code/deposit_bonus/sources)
+  - [unitest code](./code/deposit_bonus/tests/deposit_bonus_tests.move)
+  - [sui client debug step by step ](./code/deposit_bonus/log/client-devnet.md)
 - [dapp](./webapp/react-app)
 
 
