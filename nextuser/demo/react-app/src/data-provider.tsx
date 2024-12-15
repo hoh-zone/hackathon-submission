@@ -6,7 +6,7 @@ import { Transaction } from "@mysten/sui/transactions";
 import { networkConfig,useNetworkVariable } from "./networkConfig";
 ///import { NetworkConsts } from "./consts";
 import { BonusPeriodWrapper,UserInfo,StorageWrapper,BonusWrapper,BonusRecord,StorageData} from './contract_types'
-import {UserList,Field_address_UserShare,FieldObject,FieldData,UserShare} from './contract_types'
+import {UserList,Field_address_UserShare,FieldObject,FieldData,UserShare,OperatorCap} from './contract_types'
 import { devnet_consts as consts } from "./consts";
 console.log(networkConfig)
 console.log(useNetworkVariable);

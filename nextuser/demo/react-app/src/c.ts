@@ -8,7 +8,7 @@ import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 import { Transaction } from '@mysten/sui/transactions';
 import { fromBase64 } from '@mysten/bcs';
 import { get_key } from './local_key';
-import {StorageWrapper,UserList,Field_u32_address,Field_address_UserShare,FieldObject,FieldData,UserShare} from './contract_types'
+import {StorageWrapper,UserList,Field_u32_address,Field_address_UserShare,FieldObject,FieldData,UserShare,OperatorCap} from './contract_types'
 
 dotenv.config();
 // 初始化SUI Client, 用于和主网(mainnet)交互
@@ -116,13 +116,6 @@ export async  function get_owner( client:SuiClient,addr :string ) :Promise<strin
     
 }
 
-
-type OperatorCap ={
-    fields:{
-        id : { id : string}
-        operators : string[]
-    }
-}
 export async  function get_operators(client : SuiClient) : Promise<string[]>{
     let result = await client.getObject({
         id: consts.operator_cap,

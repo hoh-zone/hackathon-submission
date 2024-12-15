@@ -6,6 +6,13 @@ export type BonusRecord = {
     principal: number,
 }
 
+export type OperatorCap ={
+    fields:{
+        id : { id : string}
+        operators : string[]
+    }
+}
+
 /** 
 type BonusPeriod = {
     id: {id:string},

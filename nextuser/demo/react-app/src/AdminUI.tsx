@@ -22,19 +22,22 @@ const AdminUI = (props : {user_info : UserShare,
   let [to, set_to ] = useState<string>("");
   return (
     <div>
-      <div>MAX：{sui_show(max_value)}</div>
-      <Space.Compact style={{ marginBottom: 20 }}>
-        <Input
-          style={{ width: "60%", marginRight: 10 }}
-          placeholder="提取费用"
-          value={fee}
-          onChange={ (e)=>{set_fee(e.target.value)}}
-        />
-        <Button type="primary" onClick={(e) =>props.withdraw_fee && props.withdraw_fee(fee,max_value/1e9)}>
-          取款
-        </Button>
-        
-      </Space.Compact>
+      <div>
+        <div>MAX：{sui_show(max_value)}</div>
+        <Space.Compact style={{ marginBottom: 20 }}>
+          <Input
+            style={{ width: "60%", marginRight: 10 }}
+            placeholder="提取费用"
+            value={fee}
+            onChange={ (e)=>{set_fee(e.target.value)}}
+          />
+          <Button type="primary" onClick={(e) =>props.withdraw_fee && props.withdraw_fee(fee,max_value/1e9)}>
+            取款
+          </Button>
+          
+        </Space.Compact>
+      <div>
+      </div>
       <Space.Compact style={{ marginBottom: 20 }}>
         <Input
           style={{ width: "60%", marginRight: 10 }}
@@ -46,7 +49,8 @@ const AdminUI = (props : {user_info : UserShare,
           增加运营
         </Button>
         
-      </Space.Compact>    
+      </Space.Compact>  
+      </div>  
       <div style={{ marginBottom: 20 }}>
         <div style={{ marginBottom: 10 }}>
           <div>你的钱包余额: {sui_show(props.balance)} </div>

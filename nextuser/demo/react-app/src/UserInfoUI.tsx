@@ -125,7 +125,6 @@ const UserInfoUI = (props: { onSelectPeriod: (address: string) => void }) => {
             });
         },
         onError: (err) => {
-          console.log('fail transaction diget:',tx.digest);
           console.error("signAndExecute transaction fail", err.message);
         }
       });
