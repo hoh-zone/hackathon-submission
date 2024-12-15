@@ -38,11 +38,11 @@ export VALIDATOR=0x94beb782ccfa172ea8752123e73768757a1f58cfca53928e9ba918a2c44a6
 
 
 ```bash
-export STORAGE=0xc8e97322d950523fba1469bc9fedbfeb5baa99aaff603f572ab07cdc9c2cbd07
-export ADMIN_CAP=0xe1d7c6ac4bfce46dbcf14dce25889ae555bca5d265cedaa3da46f3cee1565581
-export OPERATOR_CAP=0x5f5da3305ebfb70ecf8e759bdd2790451b341916e83652f1c81ab4fafdec1b24
-export HISTORY=0xe82717a6e4fd65e834d2b578e5b5d23e4f6025a66f66e9b2a0ccadd99fbcd7b1
-export PKG=0x2999411df007eba89714b6d4161d13a548ba2fd527230e3f14f0923bd35267dd
+export STORAGE=0x45951d2df97d4157fc078e692f3b768f55f20bc9cf922ba755435c00a882e206
+export ADMIN_CAP=0x4e1465a4b512eb7ffea9fbfec6cbffbf36775f9a27829dbb648da6c3d9e90ad6
+export OPERATOR_CAP=0xc817ed4dce069bf0f1655fc2c153c7d414bab419a6c19848c6363047fd78eb2f
+export HISTORY=0xb766bf842ed30fc0a692702e60e28614fa27b23afeb56f82e70f780a081db2ef
+export PKG=0x847fa8f44626965ea60da104cb516e23f07295368638349732c32e40121ab9c3
 
 ```
 
@@ -84,7 +84,7 @@ sui client ptb --split-coins gas [4000000000] --assign new_coin \
 ```bash
 sui client switch --address $USER_3
 sui client faucet 
-sui client ptb --split-coins gas [2000000000] --assign new_coin \
+sui client ptb --split-coins gas [6000000000] --assign new_coin \
   --move-call $PKG::deposit_bonus::deposit \
 @$CLOCK @$STORAGE @$SYSTEM_STATE @$VALIDATOR new_coin \
 --gas-budget 1000000000
@@ -106,7 +106,7 @@ sui client switch --address $OPERATOR
 sui client faucet
 sui client faucet
 sui client faucet
-sui client ptb --split-coins gas [30000000] --assign new_coin \
+sui client ptb --split-coins gas [400000000] --assign new_coin \
  --move-call $PKG::deposit_bonus::donate_bonus @$STORAGE new_coin
 
 ```
