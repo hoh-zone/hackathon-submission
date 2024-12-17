@@ -1,0 +1,31 @@
+diff --git a/node_modules/suiue/lib/suiue.js b/node_modules/suiue/lib/suiue.js
+index c0acba3..9765216 100644
+--- a/node_modules/suiue/lib/suiue.js
++++ b/node_modules/suiue/lib/suiue.js
+@@ -3385,7 +3385,9 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+           }
+         }
+       });
+-      autoConnectCmp.effect.run();
++      if (autoConnectCmp.effect){
++        console.log(autoConnectCmp.effect)
++      }
+     });
+     return (_ctx, _cache) => {
+       return renderSlot(_ctx.$slots, "default");
+diff --git a/node_modules/suiue/src/components/SuiueProvider.vue b/node_modules/suiue/src/components/SuiueProvider.vue
+index 2469918..40ca6f0 100644
+--- a/node_modules/suiue/src/components/SuiueProvider.vue
++++ b/node_modules/suiue/src/components/SuiueProvider.vue
+@@ -212,8 +212,10 @@ onMounted(() => {
+             }
+         }
+     })
++    if (autoConnectCmp.effect){
++      autoConnectCmp.effect.run()
++    }
+ 
+-    autoConnectCmp.effect.run()
+ })
+ 
+ 
