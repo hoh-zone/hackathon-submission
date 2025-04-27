@@ -1,0 +1,39 @@
+====
+literal_value
+====
+
+1u8;
+2u64;
+3u128;
+4;
+
+0x00;
+0x1;
+0xa1232;
+
+true;
+false;
+
+b"";
+b"Libra";
+b"Libra\n\tNetwork";
+x"";
+x"abc";
+
+---
+
+(source_file
+  (num_literal)
+  (num_literal)
+  (num_literal)
+  (num_literal)
+  (address_literal)
+  (address_literal)
+  (address_literal)
+  (bool_literal)
+  (bool_literal)
+  (byte_string_literal)
+  (byte_string_literal)
+  (byte_string_literal)
+  (hex_string_literal)
+  (hex_string_literal))

@@ -1,0 +1,27 @@
+====
+simple expression_term
+====
+
+break;
+continue;
+();
+(a, 1);
+(a: A);
+
+---
+(source_file
+  (break_expression)
+  (continue_expression)
+  (unit_expression)
+  (expression_list
+    (name_expression
+      access: (module_access
+        member: (identifier)))
+    (num_literal))
+  (annotate_expression
+    exp: (name_expression
+      access: (module_access
+        member: (identifier)))
+    ty: (apply_type
+      (module_access
+        member: (identifier)))))

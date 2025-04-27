@@ -1,0 +1,64 @@
+====
+if_expression with block
+====
+
+if (proposer == 0x0) {
+} else {
+};
+
+if (i >= len) abort 10;
+
+
+if (i >= len)
+  abort 10
+else if (i == len)
+  return 1
+else {};
+
+----
+
+
+(source_file
+  (if_expression
+    eb: (binary_expression
+      lhs: (name_expression
+        access: (module_access
+          member: (identifier)))
+      operator: (binary_operator)
+      rhs: (address_literal))
+    et: (block)
+    ef: (block))
+  (if_expression
+    eb: (binary_expression
+      lhs: (name_expression
+        access: (module_access
+          member: (identifier)))
+      operator: (binary_operator)
+      rhs: (name_expression
+        access: (module_access
+          member: (identifier))))
+    et: (abort_expression
+      abort: (num_literal)))
+  (if_expression
+    eb: (binary_expression
+      lhs: (name_expression
+        access: (module_access
+          member: (identifier)))
+      operator: (binary_operator)
+      rhs: (name_expression
+        access: (module_access
+          member: (identifier))))
+    et: (abort_expression
+      abort: (num_literal))
+    ef: (if_expression
+      eb: (binary_expression
+        lhs: (name_expression
+          access: (module_access
+            member: (identifier)))
+        operator: (binary_operator)
+        rhs: (name_expression
+          access: (module_access
+            member: (identifier))))
+      et: (return_expression
+        return: (num_literal))
+      ef: (block))))
