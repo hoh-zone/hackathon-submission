@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+    --animate-rotate: rotate 4s infinite alternate ease-in-out;
+    @keyframes rotate {
+        0% {
+            rotate: 0deg;
+        }
+        100% {
+            rotate: 360deg;
+        }
+    }
+
+    --animate-move: move 5s infinite alternate ease-in-out;
+    @keyframes move {
+        0% {
+            left: calc(1/2 * 100%);
+        }
+        100% {
+            left: calc(calc(1/2 * 100%) * -1);
+        }
+    }
+}

@@ -1,0 +1,133 @@
+{
+  "ver": "2.3.13",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "005e9e07-b32d-4967-b5a4-c69294a0a027",
+  "files": [],
+  "subMetas": {
+    "466fd": {
+      "importer": "gltf-mesh",
+      "uuid": "005e9e07-b32d-4967-b5a4-c69294a0a027@466fd",
+      "displayName": "",
+      "id": "466fd",
+      "name": "buttonSquare.mesh",
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 60
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "6d69c": {
+      "importer": "gltf-mesh",
+      "uuid": "005e9e07-b32d-4967-b5a4-c69294a0a027@6d69c",
+      "displayName": "",
+      "id": "6d69c",
+      "name": "knob.mesh",
+      "userData": {
+        "gltfIndex": 1,
+        "triangleCount": 20
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "16ef1": {
+      "importer": "gltf-material",
+      "uuid": "005e9e07-b32d-4967-b5a4-c69294a0a027@16ef1",
+      "displayName": "",
+      "id": "16ef1",
+      "name": "metal.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "4e300": {
+      "importer": "gltf-material",
+      "uuid": "005e9e07-b32d-4967-b5a4-c69294a0a027@4e300",
+      "displayName": "",
+      "id": "4e300",
+      "name": "heart.material",
+      "userData": {
+        "gltfIndex": 1
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f31d9": {
+      "importer": "gltf-scene",
+      "uuid": "005e9e07-b32d-4967-b5a4-c69294a0a027@f31d9",
+      "displayName": "",
+      "id": "f31d9",
+      "name": "buttonSquare.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true,
+      "matchMeshNames": false
+    },
+    "assetFinder": {
+      "meshes": [
+        "005e9e07-b32d-4967-b5a4-c69294a0a027@466fd",
+        "005e9e07-b32d-4967-b5a4-c69294a0a027@6d69c"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "005e9e07-b32d-4967-b5a4-c69294a0a027@16ef1",
+        "005e9e07-b32d-4967-b5a4-c69294a0a027@4e300"
+      ],
+      "scenes": [
+        "005e9e07-b32d-4967-b5a4-c69294a0a027@f31d9"
+      ]
+    },
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    }
+  }
+}

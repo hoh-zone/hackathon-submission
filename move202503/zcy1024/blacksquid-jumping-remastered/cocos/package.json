@@ -1,0 +1,10 @@
+{
+  "name": "cocos",
+  "uuid": "80abf16d-22de-4996-98bd-1962ae43f0fc",
+  "creator": {
+    "version": "3.8.6"
+  },
+  "devDependencies": {
+    "tsrpc-browser": "^3.4.16"
+  }
+}

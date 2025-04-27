@@ -1,0 +1,42 @@
+{
+  "__version__": "1.0.6",
+  "layer": [
+    {
+      "name": "GAME",
+      "value": 1
+    }
+  ],
+  "custom_joint_texture_layouts": [],
+  "physics": {
+    "collisionGroups": [
+      {
+        "index": 1,
+        "name": "PLAYER"
+      },
+      {
+        "index": 2,
+        "name": "ENEMY"
+      },
+      {
+        "index": 3,
+        "name": "GROUND"
+      },
+      {
+        "index": 4,
+        "name": "WALL"
+      },
+      {
+        "index": 5,
+        "name": "WEAPON"
+      }
+    ],
+    "collisionMatrix": {
+      "0": 9,
+      "1": 28,
+      "2": 42,
+      "3": 7,
+      "4": 2,
+      "5": 4
+    }
+  }
+}

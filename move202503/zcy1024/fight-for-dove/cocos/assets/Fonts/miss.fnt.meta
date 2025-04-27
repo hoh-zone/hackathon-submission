@@ -1,0 +1,55 @@
+{
+  "ver": "1.0.6",
+  "importer": "bitmap-font",
+  "imported": true,
+  "uuid": "0f1568f8-db27-4d64-94f2-4e16b650434d",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {},
+  "userData": {
+    "_fntConfig": {
+      "commonHeight": 60,
+      "fontSize": 60,
+      "atlasName": "miss_0.png",
+      "fontDefDictionary": {
+        "105": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 25,
+            "height": 51
+          },
+          "xOffset": -4,
+          "yOffset": 8,
+          "xAdvance": 16
+        },
+        "109": {
+          "rect": {
+            "x": 58,
+            "y": 0,
+            "width": 50,
+            "height": 41
+          },
+          "xOffset": -4,
+          "yOffset": 19,
+          "xAdvance": 41
+        },
+        "115": {
+          "rect": {
+            "x": 25,
+            "y": 0,
+            "width": 33,
+            "height": 42
+          },
+          "xOffset": -3,
+          "yOffset": 17,
+          "xAdvance": 25
+        }
+      },
+      "kerningDict": {}
+    },
+    "fontSize": 60,
+    "textureUuid": "ca520a6a-6912-4de0-bae2-0994a0add9ad"
+  }
+}
