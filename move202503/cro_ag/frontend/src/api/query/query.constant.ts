@@ -1,0 +1,19 @@
+export const QUERY_USER_LIST = 'user/list';
+export const QUERY_COINS_SHOW = 'coinsShow';
+export const QUERY_SUI_TO_CSUI_BALANCE = 'suiTocSuiBalance';
+export const QUERY_CSUI_TO_SUI_BALANCE = 'cSuiToSuiBalance';
+export const QUERY_COIN_SHOW_BY_TYPE = 'coinByType';
+export const QUERY_COIN_SHOW_BY_TYPE_1 = 'coinByType1';
+export const QUERY_BALANCE_BY_TYPE = 'balanceByType';
+export const QUERY_SWAP_ROUTERS = 'swapRouters';
+export const QUERY_SWAP_ROUTERS_CRO = 'swapRoutersCro';
+export const QUERY_PORTFOLIOS = 'portfolios';
+export const QUERY_APY_LIST = 'apyList';
+export const QUERY_DEPOSIT_TX = 'depositTx';
+export const QUERY_WITHDRAW_TX = 'withdrawTx';
+export const QUERY_APY_BY_PLATFORM_AND_COIN_TYPE =
+  'fetchApyByPlatformAndCoinType';
+export const QUERY_ZERO_OBJ = 'zeroObj';
+export const QUERY_GET_OWNED_NFT = 'getOwnedNft';
+export const QUERY_NFT_ADD_POINTS = 'addPoints';
+export const QUERY_NFT_TOP = 'getTop';

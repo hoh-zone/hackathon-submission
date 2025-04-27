@@ -1,0 +1,12 @@
+[package]
+name = "points"
+edition = "2024.beta"
+version = "0.0.1"
+published-at = "0xc892551155735e7b7aa7ab4b9dc45908e985f0723289cb63277ea1ccaabb8fea"
+
+[dependencies]
+# Sui
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "mainnet-v1.35.1", override = true }
+
+[addresses]
+points = "0xc892551155735e7b7aa7ab4b9dc45908e985f0723289cb63277ea1ccaabb8fea"

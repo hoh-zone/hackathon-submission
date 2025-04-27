@@ -1,0 +1,12 @@
+[package]
+name = "cro"
+edition = "2024.beta"
+version = "0.0.1"
+published-at = "0x0d801d9150facf2e763df8fc674a96253ea785adbae1c86deb03c98444bf4ef4"
+
+[dependencies]
+# Sui
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "mainnet-v1.35.1", override = true }
+
+[addresses]
+cro = "0x0d801d9150facf2e763df8fc674a96253ea785adbae1c86deb03c98444bf4ef4"
