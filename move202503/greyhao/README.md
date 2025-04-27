@@ -1,0 +1,8 @@
+## project
+- 项目名称: OnChain dApp Store（链上应用商店）
+- 描述: 链上应用商店，带有审核机制，确保人人可以访问到安全的协议。任何地址都可以提交应用到系统，但是只有经过大部分管理员审核过的应用才会展示给所有用户。
+
+
+## Member
+- greyhao  github: https://github.com/greyhao
+> 自我介绍&技术栈: 多年前端/移动端开发经验，开发过多链钱包，技术栈涉及：React、Android等。目前在深入学习 Move 合约中。希望可以在 Sui 上 build 出一些有意思的东西。
