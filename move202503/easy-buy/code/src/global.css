@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.chain-active {
+  border-color: #3b82f6;
+}
+
+.buy-button, .connect-btn {
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
+  line-height: inherit;
+  box-sizing: border-box;
+  border-style: solid;
+  text-decoration: inherit;
+  min-width: 100px;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(124 58 237 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(124 58 237 / var(--tw-bg-opacity));
+  text-align: center;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  font-weight: bold;
+  font-size: 14px;
+  height: 32px;
+}
+
+.connect-btn {
+
+}
+
+/* Fix for PurchaseModal styles */
+.purchase-modal {
+  font-family: ui-sans-serif, system-ui, sans-serif !important;
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  right: 0px;
+  width: 360px;
+  height: 480px;
+  background-color: rgba(245,245,245);
+}
+
+.purchase-modal button,
+.purchase-modal div,
+.purchase-modal h3,
+.purchase-modal h4,
+.purchase-modal p,
+.purchase-modal span {
+  font-family: inherit !important;
+}
+
+.purchase-modal .rounded-lg {
+  border-radius: 0.5rem !important;
+}
+
+.purchase-modal .rounded-xl {
+  border-radius: 0.75rem !important;
+}
+
+.purchase-modal .text-gray-500 {
+  color: #6b7280 !important;
+}
+
+.purchase-modal .text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.purchase-modal .text-gray-700 {
+  color: #374151 !important;
+}
+
+.purchase-modal .text-gray-800 {
+  color: #1f2937 !important;
+}

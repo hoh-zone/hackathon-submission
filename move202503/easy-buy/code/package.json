@@ -1,0 +1,35 @@
+{
+  "name": "sui-easy-buy",
+  "private": true,
+  "version": "0.0.89",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mysten/sui": "^1.27.0",
+    "@rainbow-me/rainbowkit": "2.2.4",
+    "@solana/web3.js": "^1.98.2",
+    "@suiet/wallet-kit": "^0.3.4",
+    "@tanstack/react-query": "^5.55.3",
+    "axios": "^1.9.0",
+    "ethers": "^6.13.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.1.4",
+    "viem": "2.23.12",
+    "wagmi": "^2.14.16"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.4",
+    "@types/react": "^19.0.6",
+    "@types/react-dom": "^19.0.3",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.47",
+    "typescript": "5.5.4",
+    "vite": "^5.4.16"
+  }
+}
