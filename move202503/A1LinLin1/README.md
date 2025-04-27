@@ -89,7 +89,7 @@ npm start -- scan ./src
 
 ## 前端展示
 
-在浏览器中访问 `http://localhost:5173` 后，你将看到如下界面：
+在浏览器中访问 [http:ch1001.xyz:5173](http://ch1001.xyz:5173 "Sui Move 安全审计平台") 后，你将看到如下界面：
 
 ![前端审计报告页面](https://raw.githubusercontent.com/A1LinLin1/blog-images/main/hackathon.png)
 
@@ -101,6 +101,7 @@ npm start -- scan ./src
 - **静态分析**：TypeScript, tree-sitter-move, Node.js CLI
 - **合约**：Move (Sui)
 
+---
 
-#成员
+# 成员
 - **A1LinLin1**: 擅长python、熟悉C++、Java。有github两年开发经验，爱好网络空间安全相关领域，对区块链的分布式、去中心化特性感兴趣，想通过对sui生态move语言的学习深入区块链技术。
