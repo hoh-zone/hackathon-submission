@@ -1,0 +1,134 @@
+{
+  "ver": "1.0.27",
+  "importer": "image",
+  "imported": true,
+  "uuid": "44ddbe25-cb8f-4ad5-bc60-8ca829537c36",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "44ddbe25-cb8f-4ad5-bc60-8ca829537c36@6c48a",
+      "displayName": "adventurer-air-attack1-03",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+        "imageUuidOrDatabaseUri": "44ddbe25-cb8f-4ad5-bc60-8ca829537c36",
+        "isUuid": true,
+        "visible": false,
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "44ddbe25-cb8f-4ad5-bc60-8ca829537c36@f9941",
+      "displayName": "adventurer-air-attack1-03",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": -6.5,
+        "offsetY": 1,
+        "trimX": 5,
+        "trimY": 2,
+        "width": 27,
+        "height": 31,
+        "rawWidth": 50,
+        "rawHeight": 37,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [
+            -13.5,
+            -15.5,
+            0,
+            13.5,
+            -15.5,
+            0,
+            -13.5,
+            15.5,
+            0,
+            13.5,
+            15.5,
+            0
+          ],
+          "indexes": [
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          "uv": [
+            5,
+            35,
+            32,
+            35,
+            5,
+            4,
+            32,
+            4
+          ],
+          "nuv": [
+            0.1,
+            0.10810810810810811,
+            0.64,
+            0.10810810810810811,
+            0.1,
+            0.9459459459459459,
+            0.64,
+            0.9459459459459459
+          ],
+          "minPos": [
+            -13.5,
+            -15.5,
+            0
+          ],
+          "maxPos": [
+            13.5,
+            15.5,
+            0
+          ]
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "44ddbe25-cb8f-4ad5-bc60-8ca829537c36@6c48a",
+        "atlasUuid": ""
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "fixAlphaTransparencyArtifacts": true,
+    "hasAlpha": true,
+    "redirect": "44ddbe25-cb8f-4ad5-bc60-8ca829537c36@6c48a"
+  }
+}

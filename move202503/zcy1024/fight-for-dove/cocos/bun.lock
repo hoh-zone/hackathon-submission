@@ -1,0 +1,36 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "cocos",
+      "devDependencies": {
+        "tsrpc-browser": "^3.4.16",
+      },
+    },
+  },
+  "packages": {
+    "core-js": ["core-js@3.41.0", "", {}, "sha512-SJ4/EHwS36QMJd6h/Rg+GyR4A5xE0FSI3eZ+iBVpfqf1x0eTSg1smWLHrA+2jQThZSh97fmSgFSU8B61nxosxA=="],
+
+    "k8w-extend-native": ["k8w-extend-native@1.4.6", "", { "dependencies": { "k8w-linq-array": "*", "k8w-super-date": "*", "k8w-super-object": "*" } }, "sha512-AHTCyFshldMme0s9FKD+QKG+QZdBkHXzl+8kYfNhsSDhcdQ5TYWQwphjecSJjxNdGd78TIbO0fHiOvM+Ei22YA=="],
+
+    "k8w-linq-array": ["k8w-linq-array@0.2.8", "", {}, "sha512-4IAkQN8UJdk804tQi++wuwSZvFWk/Wcl1uG5PR/0c0YvB5hUd2f8tJm3OgOMOxjV9UVByNLvnPYGIwrFQPpjlA=="],
+
+    "k8w-super-date": ["k8w-super-date@0.1.3", "", {}, "sha512-IBqKOAMAXR/bgzu+rYI30tEMP/Y6Q8HQuqJiTkE2mLJg11yok9guoi8uZTynTahviVBndcfBpOgi1H/zhihv7w=="],
+
+    "k8w-super-object": ["k8w-super-object@0.3.0", "", {}, "sha512-u2jfh4goYXKZmSucaLaOTaNbLRatjv0CSRpzE0KU0732+9XtYZFd5vrdw/mzJfK5fPHb/zyikOSHDX5mJrav+g=="],
+
+    "tsbuffer": ["tsbuffer@2.2.9", "", { "dependencies": { "k8w-extend-native": "^1.4.6", "tsbuffer-validator": "^2.1.2", "tslib": "*" } }, "sha512-PZtbjmtMDziIi1/RPn1LMuMTmNUsZajB+Ziz+HxonAxswXeam0ukTwjQ2eYR6J1JOffz7E8z5ip+NrYZ7wGnBQ=="],
+
+    "tsbuffer-schema": ["tsbuffer-schema@2.2.0", "", {}, "sha512-I4+5Xfk7G+D++kXdNnYTeY26WQTaf14C84XQwPKteNmrwxRY3CQCkMqASRiCUqtpOuDn43qmoxuXpT+Vo8Wltg=="],
+
+    "tsbuffer-validator": ["tsbuffer-validator@2.1.2", "", { "dependencies": { "k8w-extend-native": "^1.4.6", "tsbuffer-schema": "^2.2.0", "tslib": "*" } }, "sha512-PrqIYy7aANY7ssr92HJN8ZM+eGc4Qmpvu7nNBv+T2DOAb+eqblKjlDZEhNnzxjs/ddqu9PqPe4Aa+fqYdzo98g=="],
+
+    "tslib": ["tslib@2.8.1", "", {}, "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="],
+
+    "tsrpc-base-client": ["tsrpc-base-client@2.1.15", "", { "dependencies": { "k8w-extend-native": "^1.4.6", "tsbuffer": "^2.2.9", "tslib": "*", "tsrpc-proto": "^1.4.3" } }, "sha512-ejIsGKF1MtcS2Mqpv1JYjoOmFbkOMaubb0FYglA52Sfl0glnq2UAqbCu5embQISzuIF9DiDeg1Rui9EyOc2hdA=="],
+
+    "tsrpc-browser": ["tsrpc-browser@3.4.16", "", { "dependencies": { "core-js": "*", "tsrpc-base-client": "^2.1.15" } }, "sha512-qitOxgVi8oj6SG4MyQeaOuvhuV3MFvVoF+hqIoTWr0xoD1/wBFieboVoXo54ykChDi9BQ8LSIdquaFqdTznf3A=="],
+
+    "tsrpc-proto": ["tsrpc-proto@1.4.3", "", { "dependencies": { "tsbuffer-schema": "^2.2.0", "tslib": "*" } }, "sha512-qtkk5i34m9/K1258EdyXAEikU/ADPELHCCXN/oFJ4XwH+kN3kXnKYmwCDblUuMA73V2+A/EwkgUGyAgPa335Hw=="],
+  }
+}

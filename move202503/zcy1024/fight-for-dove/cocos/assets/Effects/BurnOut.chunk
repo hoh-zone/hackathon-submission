@@ -1,0 +1,33 @@
+
+float fr(vec2 c, float seed) 
+{
+return fract(43.0 * sin(c.x + 7.0 * c.y) * seed);
+}
+
+float fn(vec2 p, float seed)
+{
+    vec2 i = floor(p), w = p - i, j = vec2(1.0, 0.0);
+    w = w * w * (3.0 - w - w);
+    return mix(mix(fr(i, seed), fr(i + j, seed), w.x), mix(fr(i + j.yx, seed), fr(i + 1.0, seed), w.x), w.y);
+}
+
+float fa(vec2 p, float seed) 
+{
+    float m = 0.0, f = 2.0;
+    for (int i = 0; i < 6; i++) {
+    m += fn(f * p, seed) / f; 
+    f += f;
+    }
+    return m;
+}
+vec4 BurnOut(vec4 MainColor, vec2 uv, float progression) 
+{
+    float t = fract(progression * 0.9999);
+    float cc = smoothstep(t / 1.2, t + 0.1, fa(3.5 * uv, 1.));
+    vec4 c = vec4(cc);
+    c = MainColor * c;
+    c.r = mix(c.r, c.r * 15.0 * (1.0 - c.a) * 8.0, progression);
+    c.g = mix(c.g, c.g * 10.0 * (1.0 - c.a) * 4.0, progression);
+    c.b = mix(c.b, c.b * 5.0 * (1.0 - c.a), progression);
+    return vec4(c.rgb, c.a);
+}
