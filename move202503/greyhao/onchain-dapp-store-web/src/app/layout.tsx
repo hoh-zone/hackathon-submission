@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Onchain dApp Store",
-  description: "The first Onchain dApp Store.",
+  title: "链上应用商店",
+  description: "基于 Sui 的链上应用商店.",
 };
 
 export default function RootLayout({

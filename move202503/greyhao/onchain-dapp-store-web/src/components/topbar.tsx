@@ -6,7 +6,7 @@ export default function Topbar() {
     <header className="flex flex-row justify-between w-full">
       <div>
         <Link href="/">
-          <p className="text-2xl font-medium">OnChain dApp Store</p>
+          <p className="text-2xl font-medium">链上应用商店</p>
         </Link>
       </div>
       <ConnectButton />
