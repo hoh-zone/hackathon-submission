@@ -1,0 +1,3 @@
+export const DEVNET_NFT_PACKAGE_ID = "0x0";
+export const TESTNET_NFT_PACKAGE_ID = "0x5d6c2c0ac61a963e54783d88ae1340943bd853ecccf2a9ab8522f4ea3658e167";
+export const MAINNET_NFT_PACKAGE_ID = "0x0";
