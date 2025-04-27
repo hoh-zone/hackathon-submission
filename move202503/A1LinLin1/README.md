@@ -103,4 +103,4 @@ npm start -- scan ./src
 
 
 #成员
-- A1LinLin1: 擅长python、熟悉C++、Java。有github两年开发经验，爱好网络空间安全相关领域，对区块链的分布式、去中心化特性感兴趣，想通过对sui生态move语言的学习深入区块链技术。
+- **A1LinLin1**: 擅长python、熟悉C++、Java。有github两年开发经验，爱好网络空间安全相关领域，对区块链的分布式、去中心化特性感兴趣，想通过对sui生态move语言的学习深入区块链技术。
