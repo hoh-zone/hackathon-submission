@@ -1,6 +1,6 @@
 ## project
 - 项目名称:
-> 描述: 描述这个项目是做什么
+> 描述: 一个golang实现的mcp server, 用于操作sui client, 辅助开发者开发move应用. 将AI代入到move的世界中, 确保AI在sui上发生. 
 
 
 ## Member
