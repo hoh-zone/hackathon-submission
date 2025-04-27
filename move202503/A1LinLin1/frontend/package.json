@@ -1,0 +1,28 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mysten/sui": "^1.28.2",
+    "@mysten/wallet-adapter-react": "^11.0.0",
+    "@mysten/wallet-adapter-sui-wallet": "^0.3.0",
+    "@suiet/wallet-kit": "^0.3.4",
+    "axios": "^1.3.0",
+    "bech32": "^2.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@vitejs/plugin-react": "^3.1.0",
+    "typescript": "^5.0.0",
+    "vite": "^4.3.0",
+    "vite-plugin-commonjs": "^0.10.4"
+  }
+}

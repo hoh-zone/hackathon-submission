@@ -1,0 +1,47 @@
+{
+  "name": "@movei/tree-sitter-move",
+  "version": "0.2.4",
+  "description": "move grammar in tree-sitter",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "tree-sitter generate",
+    "test": "tree-sitter test",
+    "parse-examples": "tree-sitter parse -q examples/**/*.move",
+    "release": "standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/move-hub/tree-sitter-move.git"
+  },
+  "keywords": [
+    "parser",
+    "move",
+    "libra"
+  ],
+  "author": "nonsense1984 <nonsense0202@pm.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/move-hub/tree-sitter-move/issues"
+  },
+  "homepage": "https://github.com/move-hub/tree-sitter-move",
+  "dependencies": {
+    "nan": "^2.14.0"
+  },
+  "devDependencies": {
+    "standard-version": "^8.0.0",
+    "tree-sitter-cli": "^0.16.5"
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.move",
+      "injection-regex": "move",
+      "file-types": [
+        "move"
+      ]
+    }
+  ]
+}

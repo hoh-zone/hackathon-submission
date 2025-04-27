@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "@mysten/sui": "^1.15.0",
+    "@types/node": "^22.14.1",
+    "sui": "^1.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "dev": "ts-node src/cli.ts"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.25.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

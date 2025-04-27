@@ -1,0 +1,55 @@
+====
+block
+====
+
+{
+  let a = 1;
+  a = a+ 1;
+  a
+};
+
+{
+  let a = 1;
+  let (a,b) = (1,3);
+  a;
+};
+
+----
+(source_file
+  (block
+    (let_statement
+      binds: (bind_list
+        (bind_var
+          (variable_identifier)))
+      exp: (num_literal))
+    (assign_expression
+      lhs: (name_expression
+        access: (module_access
+          member: (identifier)))
+      rhs: (binary_expression
+        lhs: (name_expression
+          access: (module_access
+            member: (identifier)))
+        operator: (binary_operator)
+        rhs: (num_literal)))
+    (name_expression
+      access: (module_access
+        member: (identifier))))
+  (block
+    (let_statement
+      binds: (bind_list
+        (bind_var
+          (variable_identifier)))
+      exp: (num_literal))
+    (let_statement
+      binds: (bind_list
+        (bind_var
+          (variable_identifier))
+        (bind_var
+          (variable_identifier)))
+      exp: (expression_list
+        (num_literal)
+        (num_literal)))
+    (name_expression
+      access: (module_access
+        member: (identifier)))))
