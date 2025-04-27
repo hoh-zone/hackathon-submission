@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HashCAT - Web3保险平台</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1E88E5;
+            --success-color: #34D399;
+            --warning-color: #EF4444;
+            --bg-color: #F9FAFB;
+            --text-color: #1F2937;
+            --spacing-unit: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* 布局结构 */
+        .app-container {
+            display: grid;
+            grid-template-areas:
+                "header header"
+                "sidebar main"
+                "footer footer";
+            grid-template-rows: 60px 1fr auto;
+            min-height: 100vh;
+            padding-top: 60px; /* 为固定的顶部导航栏留出空间 */
+        }
+
+        /* 头部样式 */
+        .header {
+            grid-area: header;
+            background-color: white;
+            padding: 0 calc(var(--spacing-unit) * 2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--spacing-unit) * 2);
+        }
+
+        .toggle-sidebar {
+            width: 32px;
+            height: 32px;
+            background-color: var(--bg-color);
+            border: 1px solid #E5E7EB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-sidebar:hover {
+            background-color: #E5E7EB;
+        }
+
+        .toggle-sidebar i {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed .toggle-sidebar i {
+            transform: rotate(180deg);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* 顶部导航栏右侧样式 */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--spacing-unit) * 3);
+        }
+
+        .stats-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            padding: 0 calc(var(--spacing-unit) * 2);
+            border-right: 1px solid #E5E7EB;
+        }
+
+        .stats-item:last-child {
+            border-right: none;
+        }
+
+        .stats-label {
+            font-size: 0.75rem;
+            color: #6B7280;
+            margin-bottom: calc(var(--spacing-unit) * 0.5);
+        }
+
+        .stats-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .stats-value.tvl {
+            color: var(--primary-color);
+        }
+
+        .stats-value.apy {
+            color: var(--success-color);
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            grid-area: sidebar;
+            background-color: white;
+            width: 200px;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+            transition: width 0.3s ease;
+            position: fixed;
+            top: 60px; /* 头部高度 */
+            left: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar.collapsed .nav-item span {
+            display: none;
+        }
+
+        .sidebar.collapsed .deposit-button span {
+            display: none;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: calc(var(--spacing-unit) * 2);
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .deposit-button-container {
+            padding: calc(var(--spacing-unit) * 2);
+            background: white;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .deposit-button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .deposit-button i {
+            display: none;
+        }
+
+        .sidebar.collapsed .deposit-button {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 50%;
+            margin: 0 auto;
+            background: #1E88E5;
+            border: 1px solid #1E88E5;
+            position: relative;
+        }
+
+        .sidebar.collapsed .deposit-button::after {
+            content: '⤓';
+            font-size: 20px;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .sidebar.collapsed .deposit-button span {
+            display: none;
+        }
+
+        .nav-item {
+            padding: calc(var(--spacing-unit) * 1.5);
+            margin-bottom: var(--spacing-unit);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: calc(var(--spacing-unit) * 1.5);
+            color: #6B7280;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #1E88E5;
+        }
+
+        .nav-item.active {
+            background-color: rgba(30, 136, 229, 0.1);
+            color: #1E88E5;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .nav-item span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* 主内容区域样式调整 */
+        .main-content {
+            grid-area: main;
+            padding: calc(var(--spacing-unit) * 3);
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 200px; /* 侧边栏宽度 */
+        }
+
+        .main-content > div {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 当侧边栏收起时的主内容区域调整 */
+        .sidebar.collapsed + .main-content {
+            margin-left: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        /* 内容区域通用样式 */
+        .dashboard-content,
+        .insurance-products,
+        .bond-pool,
+        .user-content {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 calc(var(--spacing-unit) * 2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 产品页面样式 */
+        .products-header,
+        .filter-section,
+        .products-grid {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 债券池页面样式 */
+        .bond-overview,
+        .bond-actions,
+        .calculator,
+        .bond-history {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 用户页面样式 */
+        .user-header,
+        .user-tabs,
+        .tab-content {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 卡片网格布局调整 */
+        .dashboard-grid,
+        .products-grid,
+        .bond-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: calc(var(--spacing-unit) * 2);
+            margin-bottom: calc(var(--spacing-unit) * 3);
+            width: 100%;
+        }
+
+        /* 图表容器调整 */
+        .chart-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto calc(var(--spacing-unit) * 3);
+        }
+
+        /* 表格容器调整 */
+        .table-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
+        /* 债券操作区域调整 */
+        .bond-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: calc(var(--spacing-unit) * 2);
+            margin-bottom: calc(var(--spacing-unit) * 3);
+            width: 100%;
+        }
+
+        /* 用户内容区域调整 */
+        .user-content .card-list {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 数据卡片样式 */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: calc(var(--spacing-unit) * 2);
+            margin-bottom: calc(var(--spacing-unit) * 3);
+        }
+
+        .card {
+            background-color: white;
+            padding: calc(var(--spacing-unit) * 2);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* 图表区域样式 */
+        .chart-container {
+            background-color: white;
+            padding: calc(var(--spacing-unit) * 2);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: calc(var(--spacing-unit) * 3);
+            height: 400px;
+            position: relative;
+        }
+
+        #hashrate-chart {
+            width: 100%;
+            height: 350px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: calc(var(--spacing-unit) * 2);
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: calc(var(--spacing-unit) * 1);
+        }
+
+        .chart-control-btn {
+            padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1);
+            border: 1px solid var(--primary-color);
+            border-radius: 4px;
+            background: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chart-control-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .chart-control-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* 表格样式 */
+        .table-container {
+            background-color: white;
+            padding: calc(var(--spacing-unit) * 2);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: calc(var(--spacing-unit) * 1.5);
+            text-align: left;
+            border-bottom: 1px solid var(--bg-color);
+        }
+
+        /* 页脚样式 */
+        .footer {
+            grid-area: footer;
+            background-color: white;
+            padding: calc(var(--spacing-unit) * 2);
+            text-align: center;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* 添加数据更新状态样式 */
+        .update-status {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--spacing-unit) * 0.5);
+            font-size: 0.875rem;
+            color: var(--text-color);
+        }
+
+        .update-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--success-color);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 添加数据更新动画样式 */
+        .data-update {
+            animation: highlight 0.5s ease-out;
+        }
+
+        @keyframes highlight {
+            0% {
+                background-color: rgba(30, 136, 229, 0.2);
+            }
+            100% {
+                background-color: transparent;
+            }
+        }
+
+        /* 保险产品页面样式 */
+        .insurance-products {
+            display: none;
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: calc(var(--spacing-unit) * 3);
+        }
+
+        .filter-section {
+            background-color: white;
+            padding: calc(var(--spacing-unit) * 2);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: calc(var(--spacing-unit) * 3);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: calc(var(--spacing-unit) * 2);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: calc(var(--spacing-unit) * 1);
+        }
+
+        .filter-label {
+            font-size: 0.875rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .filter-input {
+            padding: calc(var(--spacing-unit) * 1);
+            border: 1px solid #E5E7EB;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 160px;
+            background-color: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .product-content {
+            padding: calc(var(--spacing-unit) * 2);
+        }
+
+        .product-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: calc(var(--spacing-unit) * 1);
+        }
+
+        .product-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: calc(var(--spacing-unit) * 1);
+            margin-bottom: calc(var(--spacing-unit) * 2);
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: calc(var(--spacing-unit) * 0.5);
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            color: #6B7280;
+        }
+
+        .info-value {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: calc(var(--spacing-unit) * 1);
+        }
+
+        .btn-primary {
+            flex: 1;
+            padding: calc(var(--spacing-unit) * 1);
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #1976D2;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            padding: calc(var(--spacing-unit) * 1);
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* 产品详情弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 5% auto;
+            padding: calc(var(--spacing-unit) * 3);
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: calc(var(--spacing-unit) * 2);
+            right: calc(var(--spacing-unit) * 2);
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6B7280;
+        }
+
+        .modal-header {
+            margin-bottom: calc(var(--spacing-unit) * 2);
+        }
+
+        .modal-body {
+            margin-bottom: calc(var(--spacing-unit) * 2);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: calc(var(--spacing-unit) * 1);
+        }
+
+        /* 债券池页面样式 */
+        .bond-pool {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .bond-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            color: #1A1B1E;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .bond-header {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .bond-tab {
+            color: #6B7280;
+            padding: 8px 16px;
+            cursor: pointer;
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 16px;
+        }
+
+        .bond-tab.active {
+            color: #1A1B1E;
+        }
+
+        .time-filter {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .time-btn {
+            padding: 4px 12px;
+            border-radius: 4px;
+            background: none;
+            border: none;
+            color: #6B7280;
+            cursor: pointer;
+        }
+
+        .time-btn.active {
+            background: rgba(0, 0, 0, 0.05);
+            color: #1A1B1E;
+        }
+
+        .bond-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            width: 100%;
+        }
+
+        .bond-chart {
+            height: 400px;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .bond-form {
+            background: #F9FAFB;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .form-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            color: #4B5563;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #E5E7EB;
+            border-radius: 4px;
+            color: #1A1B1E;
+        }
+
+        .form-input::placeholder {
+            color: #6B7280;
+        }
+
+        .form-summary {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .summary-label {
+            color: #4B5563;
+        }
+
+        .summary-value {
+            color: #1A1B1E;
+            font-weight: 500;
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 12px;
+            background: #1E88E5;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .form-button:hover {
+            background: #1976D2;
+        }
+
+        /* 用户页面样式 */
+        .user-content {
+            display: none;
+        }
+
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: calc(var(--spacing-unit) * 3);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--spacing-unit) * 2);
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .user-details h3 {
+            margin-bottom: calc(var(--spacing-unit) * 0.5);
+        }
+
+        .user-details p {
+            color: #6B7280;
+            font-size: 0.875rem;
+        }
+
+        .user-tabs {
+            display: flex;
+            gap: calc(var(--spacing-unit) * 1);
+            margin-bottom: calc(var(--spacing-unit) * 3);
+            border-bottom: 1px solid #E5E7EB;
+            padding-bottom: calc(var(--spacing-unit) * 1);
+        }
+
+        .tab-btn {
+            padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 2);
+            border: none;
+            background: none;
+            color: #6B7280;
+            cursor: pointer;
+            font-size: 0.875rem;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: calc(var(--spacing-unit) * -1);
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card-list {
+            display: grid;
+            gap: calc(var(--spacing-unit) * 2);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: calc(var(--spacing-unit) * 2);
+        }
+
+        .card-body {
+            margin-bottom: calc(var(--spacing-unit) * 2);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: calc(var(--spacing-unit) * 2);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: calc(var(--spacing-unit) * 1);
+        }
+
+        /* 连接钱包按钮样式 */
+        .connect-wallet {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            min-width: 140px;
+            height: 36px;
+            justify-content: center;
+        }
+
+        .connect-wallet:hover {
+            background-color: #1976D2;
+        }
+
+        .connect-wallet.connected {
+            background-color: var(--primary-color);
+        }
+
+        .wallet-icon {
+            width: 20px;
+            height: 20px;
+            display: none;
+            font-size: 1.25rem;
+        }
+
+        .connect-wallet.connected .wallet-icon {
+            display: block;
+        }
+
+        .connect-wallet.connected .connect-text {
+            display: none;
+        }
+
+        .connect-text {
+            display: block;
+            white-space: nowrap;
+        }
+
+        /* 添加存取按钮组样式 */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px 16px;
+            border-radius: 4px;
+            background: transparent;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn.deposit {
+            border: 1px solid #34D399;
+            color: #34D399;
+        }
+
+        .action-btn.deposit.active {
+            background: #34D399;
+            color: white;
+        }
+
+        .action-btn.withdrawal {
+            border: 1px solid #EF4444;
+            color: #EF4444;
+        }
+
+        .action-btn.withdrawal.active {
+            background: #EF4444;
+            color: white;
+        }
+
+        /* Swap 页面样式 */
+        .swap-content {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .swap-container {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 480px;
+            color: #1A1B1E;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .swap-header {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .swap-tabs {
+            display: flex;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .swap-tab {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #6B7280;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .swap-tab.active {
+            color: #1A1B1E;
+            background: rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+        }
+
+        .swap-input-container {
+            background: #F9FAFB;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 8px;
+        }
+
+        .swap-label {
+            color: #6B7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .swap-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .token-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            min-width: 140px;
+            transition: all 0.2s ease;
+        }
+
+        .token-selector:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .token-selector.active {
+            background: rgba(30, 136, 229, 0.1);
+        }
+
+        .token-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+
+        .token-symbol {
+            font-weight: 500;
+            color: #1A1B1E;
+        }
+
+        .token-network {
+            color: #6B7280;
+            font-size: 12px;
+        }
+
+        .dropdown-icon {
+            color: #6B7280;
+            font-size: 12px;
+            margin-left: auto;
+        }
+
+        .swap-input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #1A1B1E;
+            font-size: 20px;
+            text-align: right;
+            outline: none;
+            padding-right: 80px;
+        }
+
+        .swap-input::placeholder {
+            color: #6B7280;
+        }
+
+        .input-balance {
+            position: absolute;
+            right: 0;
+            top: -24px;
+            color: #6B7280;
+            font-size: 12px;
+        }
+
+        .swap-arrow {
+            display: flex;
+            justify-content: center;
+            margin: 16px 0;
+        }
+
+        .swap-direction-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #F9FAFB;
+            border: none;
+            color: #6B7280;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .swap-direction-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #1A1B1E;
+        }
+
+        .swap-button {
+            width: 100%;
+            padding: 16px;
+            background: #1E88E5;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+
+        .swap-button:hover {
+            background: #1976D2;
+        }
+
+        /* 代币选择器下拉列表样式 */
+        .token-dropdown {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            width: 100%;
+            max-width: 240px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: none;
+            border: 1px solid #E5E7EB;
+        }
+
+        .token-dropdown.show {
+            display: block;
+        }
+
+        .token-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .token-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .token-item:hover {
+            background-color: #F9FAFB;
+        }
+
+        .token-item.selected {
+            background-color: rgba(30, 136, 229, 0.1);
+        }
+
+        .token-selector {
+            position: relative;
+            user-select: none;
+        }
+
+        /* 修改现有的 token-selector 样式 */
+        .token-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            min-width: 140px;
+            transition: all 0.2s ease;
+        }
+
+        .token-selector:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .token-selector.active {
+            background: rgba(30, 136, 229, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-left">
+                <div class="toggle-sidebar">
+                    <i>◀</i>
+                </div>
+                <div class="logo">HashCAT</div>
+            </div>
+            <div class="header-right">
+                <div class="stats-item">
+                    <span class="stats-label">TVL</span>
+                    <span class="stats-value tvl">$2,345,678</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">APY</span>
+                    <span class="stats-value apy">8.5%</span>
+                </div>
+                <button class="connect-wallet">
+                    <span class="connect-text">Connect Wallet</span>
+                    <span class="wallet-icon">👛</span>
+                </button>
+            </div>
+        </header>
+
+        <aside class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <i>◈</i>
+                    <span>Bond Pool</span>
+                </li>
+                <li class="nav-item">
+                    <i>⟐</i>
+                    <span>Swap</span>
+                </li>
+            </ul>
+            <div class="deposit-button-container">
+                <button class="deposit-button">
+                    <span>Deposit</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <!-- 债券池内容 -->
+            <div class="bond-pool" style="display: none;">
+                <div class="bond-container">
+                    <div class="bond-header">
+                        <button class="bond-tab active">Pricing</button>
+                        <div class="time-filter">
+                            <button class="time-btn active">1d</button>
+                            <button class="time-btn">1w</button>
+                            <button class="time-btn">1m</button>
+                            <button class="time-btn">6m</button>
+                        </div>
+                    </div>
+                    <div class="bond-content">
+                        <div class="bond-chart" id="yield-chart"></div>
+                        <div class="bond-form">
+                            <div class="action-buttons">
+                                <button class="action-btn deposit active">Buy</button>
+                                <button class="action-btn withdrawal">Sell</button>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Amount (USDT)</label>
+                                <input type="number" class="form-input" placeholder="Enter amount" value="1000">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Lock Period</label>
+                                <select class="form-select">
+                                    <option value="1">1 Month</option>
+                                    <option value="3" selected>3 Months</option>
+                                    <option value="6">6 Months</option>
+                                    <option value="12">12 Months</option>
+                                </select>
+                            </div>
+                            <div class="form-summary">
+                                <div class="summary-item">
+                                    <span class="summary-label">Expected Return</span>
+                                    <span class="summary-value">$85.00</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">APY</span>
+                                    <span class="summary-value">8.5%</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Total at Maturity</span>
+                                    <span class="summary-value">$1,085.00</span>
+                                </div>
+                            </div>
+                            <button class="form-button">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Swap 内容 -->
+            <div class="swap-content" style="display: none;">
+                <div class="swap-container">
+                    <div class="swap-header">
+                        <div class="swap-tabs">
+                            <button class="swap-tab active" data-mode="swap">Swap</button>
+                            <button class="swap-tab" data-mode="bridge">Bridge</button>
+                        </div>
+                    </div>
+                    <div class="swap-form">
+                        <div class="swap-input-container">
+                            <div class="swap-label">From</div>
+                            <div class="swap-input-wrapper">
+                                <div class="token-selector" data-token="from">
+                                    <img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" alt="BTC" class="token-icon">
+                                    <span class="token-symbol">sBTC</span>
+                                    <span class="token-network">Sui</span>
+                                    <i class="dropdown-icon">▼</i>
+                                    <div class="token-dropdown">
+                                        <div class="token-list">
+                                            <!-- 代币列表将由 JavaScript 动态生成 -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="number" class="swap-input" placeholder="0.0">
+                                <div class="input-balance">Balance: 0.0</div>
+                            </div>
+                        </div>
+                        <div class="swap-arrow">
+                            <button class="swap-direction-btn">↓</button>
+                        </div>
+                        <div class="swap-input-container">
+                            <div class="swap-label">To</div>
+                            <div class="swap-input-wrapper">
+                                <div class="token-selector" data-token="to">
+                                    <img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" alt="SUI" class="token-icon">
+                                    <span class="token-symbol">SUI</span>
+                                    <span class="token-network">Sui</span>
+                                    <i class="dropdown-icon">▼</i>
+                                    <div class="token-dropdown">
+                                        <div class="token-list">
+                                            <!-- 代币列表将由 JavaScript 动态生成 -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="number" class="swap-input" placeholder="0.0">
+                                <div class="input-balance">Balance: 0.0</div>
+                            </div>
+                        </div>
+                        <button class="swap-button">Swap</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 产品详情弹窗 -->
+        <div class="modal" id="productModal">
+            <div class="modal-content">
+                <span class="modal-close" onclick="closeProductDetails()">&times;</span>
+                <div class="modal-header">
+                    <h2>Product Details</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="product-info">
+                        <div class="info-item">
+                            <span class="info-label">Product Name</span>
+                            <span class="info-value">Mining Hashrate Insurance</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Product Type</span>
+                            <span class="info-value">Mining Insurance</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Coverage Amount</span>
+                            <span class="info-value">$10,000 - $100,000</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Coverage Period</span>
+                            <span class="info-value">3 Months</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Premium Rate</span>
+                            <span class="info-value">2.5%</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Claim Rate</span>
+                            <span class="info-value">98%</span>
+                        </div>
+                    </div>
+                    <div class="product-description">
+                        <h3>Product Description</h3>
+                        <p>This product provides coverage for mining hashrate, and you can get corresponding compensation when the hashrate fluctuates beyond the agreed range.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="closeProductDetails()">Close</button>
+                    <button class="btn-primary">Purchase Now</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer" style="display: none;">
+            <p>© 2024 HashCAT. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化图表
+            const chartDom = document.getElementById('hashrate-chart');
+            const myChart = echarts.init(chartDom);
+
+            // 数据管理
+            let currentData = [];
+            let updateInterval;
+            let isUpdating = true;
+
+            // 模拟数据生成
+            const generateData = (hours) => {
+                const data = [];
+                const now = new Date();
+                for (let i = hours; i >= 0; i--) {
+                    const time = new Date(now - i * 3600 * 1000);
+                    data.push({
+                        time: time.toLocaleTimeString(),
+                        value: Math.random() * 100 + 50
+                    });
+                }
+                return data;
+            };
+
+            // 更新图表数据
+            const updateChartData = (newData) => {
+                const option = {
+                    xAxis: {
+                        data: newData.map(item => item.time)
+                    },
+                    series: [{
+                        data: newData.map(item => item.value)
+                    }]
+                };
+                myChart.setOption(option);
+            };
+
+            // 实时数据更新
+            const startRealTimeUpdate = () => {
+                if (updateInterval) {
+                    clearInterval(updateInterval);
+                }
+
+                updateInterval = setInterval(() => {
+                    if (!isUpdating) return;
+
+                    // 获取当前时间范围
+                    const activeButton = document.querySelector('.chart-control-btn.active');
+                    const hours = parseInt(activeButton.dataset.time);
+                    
+                    // 更新数据
+                    currentData = generateData(hours);
+                    updateChartData(currentData);
+
+                    // 添加更新动画
+                    const chartContainer = document.querySelector('.chart-container');
+                    chartContainer.classList.add('data-update');
+                    setTimeout(() => {
+                        chartContainer.classList.remove('data-update');
+                    }, 500);
+                }, 5000); // 每5秒更新一次
+            };
+
+            // 图表配置
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function(params) {
+                        return `${params[0].name}<br/>算力: ${params[0].value.toFixed(2)} TH/s`;
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: generateData(24).map(item => item.time),
+                    axisLabel: {
+                        formatter: function(value) {
+                            return value.split(' ')[0];
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'TH/s',
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                },
+                series: [{
+                    name: '算力',
+                    type: 'line',
+                    smooth: true,
+                    data: generateData(24).map(item => item.value),
+                    areaStyle: {
+                        opacity: 0.1
+                    },
+                    lineStyle: {
+                        width: 2
+                    },
+                    itemStyle: {
+                        color: '#1E88E5'
+                    }
+                }]
+            };
+
+            // 使用配置项显示图表
+            myChart.setOption(option);
+
+            // 响应式调整
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+
+            // 时间范围切换
+            const timeButtons = document.querySelectorAll('.chart-control-btn');
+            timeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 更新按钮状态
+                    timeButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 获取时间范围
+                    const hours = parseInt(this.dataset.time);
+                    currentData = generateData(hours);
+                    updateChartData(currentData);
+                });
+            });
+
+            // 启动实时更新
+            startRealTimeUpdate();
+
+            // 页面可见性变化处理
+            document.addEventListener('visibilitychange', function() {
+                isUpdating = !document.hidden;
+                if (isUpdating) {
+                    startRealTimeUpdate();
+                }
+            });
+        });
+
+        // 页面切换功能
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const content = this.querySelector('span').textContent.trim();
+                // 隐藏所有内容
+                document.querySelector('.bond-pool').style.display = 'none';
+                document.querySelector('.swap-content').style.display = 'none';
+                
+                // 显示选中的内容
+                switch(content) {
+                    case 'Bond Pool':
+                        document.querySelector('.bond-pool').style.display = 'block';
+                        break;
+                    case 'Swap':
+                        document.querySelector('.swap-content').style.display = 'block';
+                        break;
+                }
+
+                // 更新导航项状态
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        // 产品详情弹窗功能
+        function showProductDetails(productId) {
+            const modal = document.getElementById('productModal');
+            modal.style.display = 'block';
+        }
+
+        function closeProductDetails() {
+            const modal = document.getElementById('productModal');
+            modal.style.display = 'none';
+        }
+
+        // 点击弹窗外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('productModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // 筛选器功能
+        document.querySelectorAll('.filter-input').forEach(input => {
+            input.addEventListener('change', function() {
+                // 这里添加筛选逻辑
+                console.log('Filter changed:', this.value);
+            });
+        });
+
+        // 修改收益计算器初始化代码
+        document.addEventListener('DOMContentLoaded', function() {
+            const yieldChartDom = document.getElementById('yield-chart');
+            if (!yieldChartDom) {
+                console.error('Yield chart container not found');
+                return;
+            }
+
+            setTimeout(() => {
+                const yieldChart = echarts.init(yieldChartDom, null, {
+                    renderer: 'canvas',
+                    useDirtyRect: false,
+                    backgroundColor: 'transparent'
+                });
+
+                // 生成时间标签
+                const generateTimeLabels = (timeRange) => {
+                    const now = new Date();
+                    const labels = [];
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    
+                    let totalPoints = 30; // 默认数据点数
+                    let interval;
+                    
+                    switch(timeRange) {
+                        case '1d':
+                            // 每小时一个点
+                            for (let i = 23; i >= 0; i--) {
+                                const date = new Date(now - i * 60 * 60 * 1000);
+                                labels.push(`${date.getHours()}:00`);
+                            }
+                            break;
+                        case '1w':
+                            // 每天一个点
+                            for (let i = 6; i >= 0; i--) {
+                                const date = new Date(now - i * 24 * 60 * 60 * 1000);
+                                labels.push(`${months[date.getMonth()]} ${date.getDate()}`);
+                            }
+                            break;
+                        case '1m':
+                            // 每天一个点
+                            for (let i = 29; i >= 0; i--) {
+                                const date = new Date(now - i * 24 * 60 * 60 * 1000);
+                                labels.push(`${months[date.getMonth()]} ${date.getDate()}`);
+                            }
+                            break;
+                        case '6m':
+                            // 每周一个点
+                            for (let i = 25; i >= 0; i--) {
+                                const date = new Date(now - i * 7 * 24 * 60 * 60 * 1000);
+                                labels.push(`${months[date.getMonth()]} ${date.getDate()}`);
+                            }
+                            break;
+                    }
+                    return labels;
+                };
+
+                // 生成模拟数据
+                const generateMockData = (timeRange) => {
+                    const baseValue = 1000;
+                    const data = [];
+                    let points;
+                    
+                    switch(timeRange) {
+                        case '1d': points = 24; break;  // 24小时
+                        case '1w': points = 7; break;   // 7天
+                        case '1m': points = 30; break;  // 30天
+                        case '6m': points = 26; break;  // 26周
+                        default: points = 30;
+                    }
+                    
+                    for (let i = 0; i < points; i++) {
+                        const value = baseValue + Math.random() * 100 - 50;
+                        data.push(value);
+                    }
+                    return data;
+                };
+
+                // 计算数据的平均值
+                const calculateAverage = (data) => {
+                    return data.reduce((a, b) => a + b, 0) / data.length;
+                };
+
+                // 初始化图表
+                const initialTimeRange = '1d';
+                const initialData = generateMockData(initialTimeRange);
+                const avgValue = calculateAverage(initialData);
+
+                // 图表配置
+                const yieldOption = {
+                    animation: false,
+                    tooltip: {
+                        trigger: 'axis',
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        borderColor: '#E5E7EB',
+                        textStyle: {
+                            color: '#1A1B1E'
+                        },
+                        formatter: function(params) {
+                            const value = params[0].value;
+                            return `$${value.toFixed(2)}`;
+                        }
+                    },
+                    grid: {
+                        top: '10%',
+                        left: '3%',
+                        right: '3%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: generateTimeLabels(initialTimeRange),
+                        axisLine: {
+                            lineStyle: {
+                                color: '#E5E7EB'
+                            }
+                        },
+                        axisLabel: {
+                            color: '#6B7280',
+                            fontSize: 10,
+                            interval: 'auto'
+                        },
+                        splitLine: {
+                            show: false
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        min: Math.floor(avgValue - 100),
+                        max: Math.ceil(avgValue + 100),
+                        interval: 25,
+                        axisLabel: {
+                            color: '#6B7280',
+                            fontSize: 10,
+                            formatter: function(value) {
+                                return '$' + value.toFixed(0);
+                            }
+                        },
+                        splitLine: {
+                            lineStyle: {
+                                color: '#E5E7EB',
+                                type: [2, 2]
+                            }
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#E5E7EB'
+                            }
+                        }
+                    },
+                    series: [{
+                        data: initialData,
+                        type: 'line',
+                        smooth: true,
+                        symbol: 'none',
+                        lineStyle: {
+                            width: 2,
+                            color: '#1E88E5'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                {
+                                    offset: 0,
+                                    color: 'rgba(30, 136, 229, 0.2)'
+                                },
+                                {
+                                    offset: 1,
+                                    color: 'rgba(30, 136, 229, 0)'
+                                }
+                            ])
+                        }
+                    }]
+                };
+
+                // 使用配置项显示图表
+                yieldChart.setOption(yieldOption);
+
+                // 响应式调整
+                window.addEventListener('resize', function() {
+                    if (yieldChart) {
+                        yieldChart.resize();
+                    }
+                });
+
+                // 监听容器大小变化
+                const resizeObserver = new ResizeObserver(() => {
+                    if (yieldChart) {
+                        yieldChart.resize();
+                    }
+                });
+                resizeObserver.observe(yieldChartDom);
+
+                // 时间过滤器点击事件
+                document.querySelectorAll('.time-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // 移除所有按钮的active类
+                        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+                        // 添加当前按钮的active类
+                        this.classList.add('active');
+                        
+                        // 获取选择的时间范围
+                        const timeRange = this.textContent.toLowerCase();
+                        
+                        // 生成新数据和时间标签
+                        const newData = generateMockData(timeRange);
+                        const newLabels = generateTimeLabels(timeRange);
+                        const newAvg = calculateAverage(newData);
+                        
+                        // 更新图表数据和轴
+                        yieldChart.setOption({
+                            xAxis: {
+                                data: newLabels
+                            },
+                            yAxis: {
+                                min: Math.floor(newAvg - 100),
+                                max: Math.ceil(newAvg + 100),
+                                interval: 25
+                            },
+                            series: [{
+                                data: newData
+                            }]
+                        });
+                    });
+                });
+
+                // 标签页切换事件
+                document.querySelectorAll('.bond-tab').forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        // 移除所有标签的active类
+                        document.querySelectorAll('.bond-tab').forEach(t => t.classList.remove('active'));
+                        // 添加当前标签的active类
+                        this.classList.add('active');
+                        
+                        // 生成新数据并计算平均值
+                        const newData = generateMockData(initialTimeRange);
+                        const newAvg = calculateAverage(newData);
+                        
+                        // 更新图表数据和Y轴范围
+                        yieldChart.setOption({
+                            yAxis: {
+                                min: Math.floor(newAvg - 100),
+                                max: Math.ceil(newAvg + 100),
+                                interval: 25
+                            },
+                            series: [{
+                                data: newData
+                            }]
+                        });
+                    });
+                });
+
+                // 添加存取按钮切换事件
+                document.querySelectorAll('.action-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // 移除所有按钮的active类
+                        document.querySelectorAll('.action-btn').forEach(b => b.classList.remove('active'));
+                        // 添加当前按钮的active类
+                        this.classList.add('active');
+                        
+                        // 更新表单按钮文本
+                        document.querySelector('.form-button').textContent = 'Confirm';
+                    });
+                });
+            }, 100);
+        });
+
+        // 添加缩放按钮功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取缩放按钮和侧边栏元素
+            const toggleButton = document.querySelector('.toggle-sidebar');
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+
+            // 添加点击事件处理
+            toggleButton.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                // 更新箭头方向
+                const arrow = this.querySelector('i');
+                if (sidebar.classList.contains('collapsed')) {
+                    arrow.textContent = '▶';
+                } else {
+                    arrow.textContent = '◀';
+                }
+            });
+        });
+
+        // Swap 功能相关代码
+        document.addEventListener('DOMContentLoaded', function() {
+            const swapTabs = document.querySelectorAll('.swap-tab');
+            const tokenSelectors = document.querySelectorAll('.token-selector');
+            let currentMode = 'swap';
+            
+            // 定义不同模式下的代币选项
+            const tokenOptions = {
+                swap: {
+                    from: [
+                        { symbol: 'sBTC', network: 'Sui', icon: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' },
+                        { symbol: 'SUI', network: 'Sui', icon: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' }
+                    ],
+                    to: [
+                        { symbol: 'sBTC', network: 'Sui', icon: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' },
+                        { symbol: 'SUI', network: 'Sui', icon: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' }
+                    ]
+                },
+                bridge: {
+                    from: [
+                        { symbol: 'BTC', network: 'Bitcoin', icon: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' }
+                    ],
+                    to: [
+                        { symbol: 'sBTC', network: 'Sui', icon: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' },
+                        { symbol: 'SUI', network: 'Sui', icon: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png' }
+                    ]
+                }
+            };
+
+            // 生成代币列表 HTML
+            function generateTokenList(tokens, selectedSymbol) {
+                return tokens.map(token => `
+                    <div class="token-item ${token.symbol === selectedSymbol ? 'selected' : ''}" 
+                         data-symbol="${token.symbol}" 
+                         data-network="${token.network}"
+                         data-icon="${token.icon}">
+                        <img src="${token.icon}" alt="${token.symbol}" class="token-icon">
+                        <span class="token-symbol">${token.symbol}</span>
+                        <span class="token-network">${token.network}</span>
+                    </div>
+                `).join('');
+            }
+
+            // 更新代币选择器
+            function updateTokenSelectors(mode, forceUpdate = false) {
+                tokenSelectors.forEach(selector => {
+                    const tokenType = selector.dataset.token;
+                    const options = tokenOptions[mode][tokenType];
+                    const currentSymbol = selector.querySelector('.token-symbol').textContent;
+                    const dropdown = selector.querySelector('.token-list');
+                    
+                    // 更新下拉列表
+                    dropdown.innerHTML = generateTokenList(options, currentSymbol);
+                    
+                    // 如果是强制更新或当前选中的代币不在新的选项中，则选择第一个代币
+                    if (forceUpdate || !options.find(token => token.symbol === currentSymbol)) {
+                        const firstToken = options[0];
+                        updateTokenDisplay(selector, firstToken);
+                    }
+                });
+            }
+
+            // 更新代币显示
+            function updateTokenDisplay(selector, token) {
+                selector.querySelector('.token-symbol').textContent = token.symbol;
+                selector.querySelector('.token-network').textContent = token.network;
+                selector.querySelector('.token-icon').src = token.icon;
+            }
+
+            // 切换模式
+            swapTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    swapTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMode = this.dataset.mode;
+                    updateTokenSelectors(currentMode, true);
+                    closeAllDropdowns();
+                });
+            });
+
+            // 关闭所有下拉列表
+            function closeAllDropdowns() {
+                document.querySelectorAll('.token-dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+                document.querySelectorAll('.token-selector').forEach(selector => {
+                    selector.classList.remove('active');
+                });
+            }
+
+            // 代币选择器点击事件
+            tokenSelectors.forEach(selector => {
+                selector.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dropdown = this.querySelector('.token-dropdown');
+                    const isOpen = dropdown.classList.contains('show');
+                    
+                    // 关闭所有下拉列表
+                    closeAllDropdowns();
+                    
+                    // 如果当前下拉列表是关闭的，则打开它
+                    if (!isOpen) {
+                        dropdown.classList.add('show');
+                        this.classList.add('active');
+                    }
+                });
+            });
+
+            // 代币选择事件
+            document.addEventListener('click', function(e) {
+                const tokenItem = e.target.closest('.token-item');
+                if (tokenItem) {
+                    e.stopPropagation();
+                    const selector = tokenItem.closest('.token-selector');
+                    const symbol = tokenItem.dataset.symbol;
+                    const network = tokenItem.dataset.network;
+                    const icon = tokenItem.dataset.icon;
+                    
+                    // 更新选择器显示
+                    updateTokenDisplay(selector, {
+                        symbol: symbol,
+                        network: network,
+                        icon: icon
+                    });
+                    
+                    // 更新选中状态
+                    const tokenList = selector.querySelectorAll('.token-item');
+                    tokenList.forEach(t => t.classList.remove('selected'));
+                    tokenItem.classList.add('selected');
+                    
+                    // 关闭下拉列表
+                    closeAllDropdowns();
+                } else if (!e.target.closest('.token-selector')) {
+                    // 点击页面其他地方时关闭所有下拉列表
+                    closeAllDropdowns();
+                }
+            });
+
+            // 初始化代币选择器
+            updateTokenSelectors('swap', true);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-04-26",
+  "package_name": "Coin",
+  "package_id": "0xcbc842eb9ab052ca43a54d8576ba0b5225f761312a2ef0b828720e46b366b08c",
+  "deploy_tx": "776WLVrHp9cpcVnhRgYGkLPGq1FoeL2ZXiefy5m8qFnL",
+  "upgrade_cap_id": "0x2"
+}
+{
+  "timestamp": "2025-04-26",
+  "package_name": "Fund",
+  "package_id": "0x235382bd33248e918e9ad6a5f172c82d8efffda780512426493e6e4ea6fe71b5",
+  "deploy_tx": "H49MJnfqfeuWeyWqBsVX2avxGVm1WX6RfKZmsTw2a7EU",
+  "upgrade_cap_id": "0x2"
+}
+{
+  "timestamp": "2025-04-26",
+  "package_name": "Insurance",
+  "package_id": "0xb979d81fbfcdfcbb4d00b530209fcb180dcf7b4ecdbdd9926c1a9bef4bda9904",
+  "deploy_tx": "CA51ZWcexQN5ozW5mhzKA5DLqh8Yaz3Hr9YwCA6Tpn7R",
+  "upgrade_cap_id": "0x2"
+}
+{
+  "timestamp": "2025-04-26",
+  "package_name": "Bond",
+  "package_id": "0x5b7af60d595060e41e13b2475e68573fda311a5dc2b886dec1dea62e93292ffa",
+  "deploy_tx": "C7wfZ6N6qo4YUKLHSGPoLDFEvNguebZkGsT9tRjnW2Fd",
+  "upgrade_cap_id": "0x2"
+}
+{
+  "timestamp": "2025-04-26",
+  "package_name": "Pool",
+  "package_id": "0x3fcb8ffa7daf76e8ebcff614db0a2dc73d5bfc4059da4c2cab3e85dfe4e3c7f3",
+  "deploy_tx": "4G1FXwxccNDZQMEdzBShAc7k5wUUBP7owsoRrD8m9gEr",
+  "upgrade_cap_id": "0x2"
+}
