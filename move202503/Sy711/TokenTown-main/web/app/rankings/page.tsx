@@ -1,3 +1,5 @@
+"use client"
+
 import { Suspense } from "react"
 import RankingsPageComponent from "@/components/rankings-page"
 import { useCurrentAccount } from '@mysten/dapp-kit';
@@ -12,12 +14,11 @@ function GameContent() {
 
   return <RankingsPageComponent accountAddress={account.address} />
 }
+
 export default function RankingsPage() {
-  
-  
   return (
     <Suspense fallback={<div className="flex h-screen w-full items-center justify-center">加载中...</div>}>
-      <GameContent  />
+      <GameContent />
     </Suspense>
   )
 }

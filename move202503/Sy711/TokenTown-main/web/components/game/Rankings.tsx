@@ -58,11 +58,11 @@ export default function Rankings() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Info size={16} className="text-blue-400" />
-                  <span className="text-sm text-gray-300">仅限前20名玩家参与游戏</span>
+                  <span className="text-sm text-gray-300">仅限前5名玩家参与游戏</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Users size={16} className="text-blue-400" />
-                  <span className="text-sm text-gray-300">限制名额: 20名</span>
+                  <span className="text-sm text-gray-300">限制名额: 5名</span>
                 </div>
               </div>
             </div>

@@ -366,8 +366,11 @@ export default function GameBoard({ accountAddress }: Props) {
       alert("请先选择卡牌")
       return
     }
+    const now = new Date();
+const currentDay = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+console.log(currentDay)
     setIsLoading(true)
-    previewIncentiveSubmit({ cardCount: cardCount })
+    previewIncentiveSubmit({ cardCount: cardCount,time:currentDay })
       .onSuccess(async (result) => {
         console.log("提交成功", result)
         setTimeout(() => {
@@ -382,7 +385,7 @@ export default function GameBoard({ accountAddress }: Props) {
       .onError(async (e) => {
         console.log("提交失败", e)
         // 添加错误提示和重置加载状态
-        alert("提交失败：" + (e.message || "交易被拒绝"))
+        alert("提交失败：" + ("提交人数已满"))
         setIsLoading(false)
       })
       .execute()

@@ -136,6 +136,7 @@ export const previewPaymentTx = createBetterTxFactory<
       arguments: [
         tx.object(params.wallet),
         tx.object(networkVariables.Vault)
+
       ],
     });}else{
       
@@ -162,6 +163,7 @@ export const previewPaymentTx = createBetterTxFactory<
 export const previewIncentiveSubmitTx = createBetterTxFactory<
   {
     cardCount: number;
+    time:number; 
   }
   
 >(
@@ -172,6 +174,7 @@ export const previewIncentiveSubmitTx = createBetterTxFactory<
       function: "submit",
       arguments: [
         tx.pure.u64(Number(params.cardCount)),
+        tx.pure.u64(Number(params.time)),
           tx.object(networkVariables.Vault),
       ],
     });
