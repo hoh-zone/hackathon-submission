@@ -34,8 +34,12 @@ export const getUserProfile = async (address: string): Promise<CategorizedObject
 };
 
 // 新增支付事件查询
-export const getPaymentEvents =  async (): Promise<number | null> =>{
+export const getPaymentEvents = async (): Promise<number | null> => {
   const eventType = `${networkConfig.testnet.variables.Package}::card::PaymentEvent`;
+  
+  // 获取当前时间范围
+  const startOfDay = dayjs().startOf('day').unix(); // 秒级时间戳
+  const endOfDay = dayjs().endOf('day').unix();
   
   const events = await suiClient.queryEvents({
     query: { MoveEventType: eventType },
@@ -43,12 +47,20 @@ export const getPaymentEvents =  async (): Promise<number | null> =>{
     order: "descending"
   });
 
- 
-  const latest = events.data[0];
-  if (!latest) return null;
-
-  const parsed = latest.parsedJson as { amount: number };
-  return parsed.amount/1_000_000_000;
+  // 遍历事件找到当天的
+  for (const event of events.data) {
+    const timestampMs = Number(event.timestampMs); // 毫秒级时间戳
+    const tsSec = Math.floor(timestampMs / 1000);
+    
+    // 检查是否是当天的事件
+    if (tsSec >= startOfDay && tsSec <= endOfDay) {
+      const parsed = event.parsedJson as { amount: number };
+      return parsed.amount/1_000_000_000;
+    }
+  }
+  
+  // 如果没有找到当天的事件，返回0
+  return 0;
 };
 
 // 修改后的每日排行榜事件查询
@@ -84,40 +96,64 @@ export const getTodayLeaderboard = async (): Promise<DailyLeaderboardEvent[]> =>
 
 export const getTodayFirstSubmitter = async (): Promise<string | null> => {
   const eventType = `${networkConfig.testnet.variables.Package}::card::FirstEvent`;
+  const startOfDay = dayjs().startOf('day').unix(); // 秒级时间戳
+  const endOfDay = dayjs().endOf('day').unix();
 
   const events = await suiClient.queryEvents({
     query: {
       MoveEventType: eventType,
     },
-    limit: 1,
+    limit: 1, // 增加限制以确保能获取到当天的事件
     order: "descending", // 最新的在最前
   });
 
-  const latest = events.data[0];
-  if (!latest) return null;
+  // 遍历事件找到当天的
+  for (const event of events.data) {
+    const timestampMs = Number(event.timestampMs); // 毫秒级时间戳
+    const tsSec = Math.floor(timestampMs / 1000);
+    
+    // 检查是否是当天的事件
+    if (tsSec >= startOfDay && tsSec <= endOfDay) {
+      const parsed = event.parsedJson as { player: string };
+      return parsed.player;
+    }
+  }
 
-  const parsed = latest.parsedJson as { player: string };
-  return parsed.player;
+  // 如果没有找到当天的事件，返回 null
+  return null;
 };
 
 
 export const getLatestIncentiveSubmitEvent = async (): Promise<IncentiveSubmitPreviewResult | null> => {
   const eventType = `${networkConfig.testnet.variables.Package}::card::IncentiveSubmitEvent`;
 
+  // 获取当前时间范围
+  const startOfDay = dayjs().startOf('day').unix(); // 秒级时间戳
+  const endOfDay = dayjs().endOf('day').unix();
+
   const events = await suiClient.queryEvents({
     query: {
       MoveEventType: eventType,
     },
-    limit: 1,
+    limit: 1, // 增加限制以确保能获取到当天的事件
     order: "descending", // 最新的在最前
   });
 
-  const latest = events.data[0];
-  if (!latest) return null;
+  // 遍历事件找到当天的
+  for (const event of events.data) {
+    const timestampMs = Number(event.timestampMs); // 毫秒级时间戳
+    const tsSec = Math.floor(timestampMs / 1000);
+    
+    // 检查是否是当天的事件
+    if (tsSec >= startOfDay && tsSec <= endOfDay) {
+      // 解析事件内容为 IncentiveSubmitPreviewResult
+      const parsed = event.parsedJson as IncentiveSubmitPreviewResult;
+      return parsed;
+    }
+  }
 
-  // 解析事件内容为 IncentiveSubmitPreviewResult
-  const parsed = latest.parsedJson as IncentiveSubmitPreviewResult;
-  return parsed;
+  // 如果没有找到当天的事件，返回 null
+  return null;
 };
 
 

@@ -11,10 +11,7 @@ import {DailyLeaderboardEvent} from "@/types/game-types";
 import { formatAddress } from '@mysten/sui/utils';
 import { useSuiClientQuery } from "@mysten/dapp-kit"
 
-interface Props {
-  accountAddress: string
-}
-export default function RankingsPage({ accountAddress }: Props) {
+export default function RankingsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [vaultAmount, setVaultAmount] = useState<number>(0)
 const [rankings, setRankings] = useState<DailyLeaderboardEvent[]>([])
@@ -43,21 +40,7 @@ getPaymentEvents().then((value) => {
     }
   })
 
-  const {
-    data: balance,
-    isLoading: isBalanceLoading,
-    error: balanceError,
-  } = useSuiClientQuery(
-    "getBalance",
-    {
-      owner: accountAddress,
-      coinType: "0x2::sui::SUI",
-    },
-    {
-      enabled: !!accountAddress,
-      refetchInterval: 3000,
-    },
-  )
+
   useEffect(() => {
     // 模拟加载数据
     setTimeout(() => {
@@ -67,13 +50,7 @@ getPaymentEvents().then((value) => {
     }, 1000)
     
   }, [])
-  const walletBalance = useMemo(() => {
-    if (!balance || !balance.totalBalance) {
-      return 0
-    }
 
-    return Number(balance?.totalBalance) / 1e9
-  }, [balance])
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-4">
