@@ -6,6 +6,8 @@ import CardSlot from "@/components/game/CardSlot"
 import TrashBin from "@/components/game/TrashBin"
 import type { CardType, Card, CardSlots } from "@/types/game-types"
 import { motion } from "framer-motion"
+import { message } from 'antd';
+
 import {
   DndContext,
   type DragEndEvent,
@@ -49,6 +51,7 @@ export default function GameBoard({ accountAddress }: Props) {
   const [trashError, setTrashError] = useState<string | null>(null)
   const [showTrashSuccess, setShowTrashSuccess] = useState(false)
   const [activeCardId, setActiveCardId] = useState<string | null>(null)
+  const [messageApi, contextHolder] = message.useMessage();
 
   // 修改 DndContext 配置，优化拖拽灵敏度和响应性
 
@@ -318,6 +321,7 @@ export default function GameBoard({ accountAddress }: Props) {
         })
         .onError(async (e) => {
           console.log("付款失败", e)
+          messageApi.error(e.message);
           alert("抽卡过程中发生错误")
           setIsLoading(false) // 错误时重置加载状态
         })
@@ -331,7 +335,7 @@ export default function GameBoard({ accountAddress }: Props) {
   }
   // 分配新卡牌到卡槽
   const distributeNewCards = () => {
-    const allCardTypes: CardType[] = ["wusdc", "wbtc", "wal", "cetus", "usdt", "sui", "navx", "deep", "fdusd", "ns","blue"]
+    const allCardTypes: CardType[] = ["wusdc", "wbtc", "wal", "cetus", "usdt", "sui", "navx", "deep", "fdusd", "ns","blue","scallop"]
 
     // 随机选择7种卡牌类型
     const shuffledTypes = [...allCardTypes].sort(() => Math.random() - 0.5)
@@ -352,7 +356,7 @@ export default function GameBoard({ accountAddress }: Props) {
         newCardSlots[i].cards.push({
           id: uniqueId,
           type: randomType,
-          image: `/${randomType}${randomType === "wal" || randomType === "cetus"|| randomType === "blue" ? ".png" : ".svg"}`,
+          image: `/${randomType}${randomType === "wal" || randomType === "cetus"|| randomType === "blue" || randomType === "scallop"? ".png" : ".svg"}`,
         })
       }
     }
@@ -385,6 +389,8 @@ console.log(currentDay)
       .onError(async (e) => {
         console.log("提交失败", e)
         // 添加错误提示和重置加载状态
+        messageApi.error(e.message);
+
         alert("提交失败：" + ("提交人数已满"))
         setIsLoading(false)
       })

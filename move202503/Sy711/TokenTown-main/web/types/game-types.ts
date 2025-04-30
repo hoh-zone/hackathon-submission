@@ -1,4 +1,4 @@
-export type CardType = "wusdc" | "wbtc" | "wal" | "cetus" | "usdt" | "sui" | "navx" | "deep" | "fdusd" | "ns" |"blue";
+export type CardType = "wusdc" | "wbtc" | "wal" | "cetus" | "usdt" | "sui" | "navx" | "deep" | "fdusd" | "ns" |"blue"|"scallop";
 
 export interface Card {
   id: string;

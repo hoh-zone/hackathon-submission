@@ -16,6 +16,7 @@ export default function BackgroundIcons() {
     { src: "/fdusd.svg", width: 60, height: 60, className: "animate-float-slow" }, // 新增图标
     { src: "/ns.svg", width: 60, height: 60, className: "animate-float-medium" }, // 新增图标
     { src: "/blue.png",width: 60, height: 60, className: "animate-float-medium" },
+    { src: "/scallop.png", width: 60, height: 60, className: "animate-float-slow" }, // 新增图标
 
   ]
 
