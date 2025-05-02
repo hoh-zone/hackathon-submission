@@ -391,7 +391,7 @@ console.log(currentDay)
         // 添加错误提示和重置加载状态
         messageApi.error(e.message);
 
-        alert("提交失败：" + ("提交人数已满"))
+        alert("提交失败：" + (e))
         setIsLoading(false)
       })
       .execute()
