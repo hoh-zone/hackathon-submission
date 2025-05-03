@@ -3,13 +3,14 @@ import { suiClient, useNetworkVariables } from "@/app/networkconfig";
 import ChapterCard from "@/components/ChapterCard";
 import { Button } from "@/components/ui/button";
 import { queryChapters } from "@/contracts";
-import { useWalrusBlob } from "@/hooks/useWalrusBlob";
+import { UploadedBlobInfo, useWalrusBlob } from "@/hooks/useWalrusBlob";
 import { IChapter, IVaribales } from "@/type";
 import { useSignAndExecuteTransaction } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useToast } from "@/hooks/useToast";
 function Book() {
   const router = useRouter();
   const params = useParams();
@@ -18,9 +19,12 @@ function Book() {
   const book = searchParams.get("book");
   const description = searchParams.get("description");
   const avatar = searchParams.get("avatar");
-  const { writeFileToWalrus } = useWalrusBlob();
+  const { writeFileToWalrus, writeFileToWalrusWithSeal } = useWalrusBlob();
+  const { errorToast } = useToast();
   const [showModal, setShowModal] = useState(false);
+  const [showWattingModal, setShowWattingModal] = useState(false);
   const [title, setTitle] = useState("");
+  const [price, setPrice] = useState(0);
   const [chapterFile, setChapterFile] = useState<File | null>(null);
   const { packageID, module } = useNetworkVariables() as IVaribales;
   const [chapters, setChapters] = useState<IChapter[]>([]);
@@ -34,59 +38,123 @@ function Book() {
     console.log("chapters", chapters);
   }
   const goToChapterDetail = (chapter: IChapter) => {
-    router.push(
-      `/home/book/chapter/${chapter.id}?chapter=${encodeURIComponent(
-        chapter.title
-      )}&blobId=${chapter.content}`
-    );
+    router.push(`/home/book/chapter/${chapter.id}`);
   };
+  const deleteChapter = (chapter: IChapter) => {
+    if (confirm("Are you sure delete this chapter?")) {
+      setShowWattingModal(true);
+      const tx = new Transaction();
+      tx.moveCall({
+        package: packageID,
+        module: module,
+        function: "delete_chapter",
+        arguments: [tx.object(chapter.book), tx.object(chapter.id)],
+      });
+      signAndExecute(
+        {
+          transaction: tx,
+        },
+        {
+          onSuccess: async (res) => {
+            if (res.digest) {
+              const result = await suiClient.waitForTransaction({
+                digest: res.digest,
+                options: { showEffects: true, showEvents: true },
+              });
+              if (result.effects?.status.status === "success") {
+                setShowWattingModal(false);
+                fetchData();
+                console.log("Transaction success:", result);
+              }
+            }
+          },
+          onError: (err) => {
+            console.log(err);
+            setShowWattingModal(false);
+          },
+        }
+      );
+    } else {
+      // 用户点击"取消"执行的代码
+      console.log("操作已取消");
+    }
+  }
   const submitEvent = async () => {
     if (!title) {
-      alert("Please enter a title");
+      errorToast("Please enter a title");
       return;
     }
     if (!chapterFile) {
-      alert("Please upload a cover image");
+      errorToast("Please upload a cover image");
       return;
     }
-
-    const blobInfo = await writeFileToWalrus(chapterFile);
-    console.log("blobInfo====", blobInfo);
-    const tx = new Transaction();
-    tx.moveCall({
-      package: packageID,
-      module: module,
-      function: "create_chapter",
-      arguments: [
-        tx.object(id as string),
-        tx.pure.string(title),
-        tx.pure.string(blobInfo!.blobId),
-      ],
-    });
-    signAndExecute(
-      {
-        transaction: tx,
-      },
-      {
-        onSuccess: async (res) => {
-          if (res.digest) {
-            const result = await suiClient.waitForTransaction({
-              digest: res.digest,
-              options: { showEffects: true, showEvents: true },
-            });
-            if (result.effects?.status.status === "success") {
-              fetchData();
-              console.log("Transaction success:", result);
+    setShowWattingModal(true);
+    let blobInfo: UploadedBlobInfo | undefined;
+    if (price === 0) {
+      blobInfo = await writeFileToWalrus(chapterFile);
+      console.log("blobInfo====不加密", blobInfo);
+    } else {
+      blobInfo = await writeFileToWalrusWithSeal(
+        chapterFile,
+        packageID,
+        id as string
+      );
+      console.log("blobInfo====加密", blobInfo);
+    }
+    if (blobInfo && blobInfo.blobId) {
+      const tx = new Transaction();
+      const latestObject = await suiClient.getObject({
+        id: id as string,
+        options: { showContent: true },
+      });
+      console.log("===latestObject", latestObject);
+      tx.moveCall({
+        package: packageID,
+        module: module,
+        function: "create_chapter",
+        arguments: [
+          tx.objectRef({
+            objectId: latestObject.data?.objectId ?? "",
+            version: latestObject.data?.version ?? "",
+            digest: latestObject.data?.digest ?? ""
+          }),
+          // tx.object(`${latestObject.data?.objectId ?? ""}?version=${latestObject.data?.version ?? ""}`),
+          tx.pure.string(title),
+          tx.pure.string(blobInfo.blobId),
+          tx.pure.u64(price),
+        ],
+      });
+      signAndExecute(
+        {
+          transaction: tx,
+        },
+        {
+          onSuccess: async (res) => {
+            if (res.digest) {
+              const result = await suiClient.waitForTransaction({
+                digest: res.digest,
+                options: { showEffects: true, showEvents: true },
+              });
+              if (result.effects?.status.status === "success") {
+                setShowWattingModal(false);
+                setShowModal(false);
+                setTitle("");
+                setPrice(0);
+                setChapterFile(null);
+                fetchData();
+                console.log("Transaction success:", result);
+              }
             }
-          }
-        },
-        onError: (err) => {
-          console.log(err);
-        },
-      }
-    );
-
-    setShowModal(false);
+          },
+          onError: (err) => {
+            console.log(err);
+            setShowWattingModal(false);
+          },
+        }
+      );
+    } else {
+      setShowWattingModal(false);
+    }
   };
   return (
     <>
@@ -97,6 +165,7 @@ function Book() {
           <ChapterCard
             chapters={chapters}
             goToChapterDetail={goToChapterDetail}
+            deleteChapter={deleteChapter}
           />
         </div>
         {/* Right Section */}
@@ -138,12 +207,25 @@ function Book() {
               </div>
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">
+                  Price (MIST)
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  className="w-full border rounded px-3 py-2"
+                  placeholder="Enter book title"
+                  value={price}
+                  onChange={(e) => setPrice(Number(e.target.value))}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1">
                   Upload Chapter (TXT File)
                 </label>
                 <input
                   type="file"
                   className="w-full border rounded px-3 py-2"
-                  accept=".txt"
+                  accept=""
                   onChange={(e) => {
                     const file = e.target.files?.[0] || null;
                     setChapterFile(file);
@@ -170,6 +252,33 @@ function Book() {
           </div>
         )}
       </div>
+      {showWattingModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.1)]">
+          <div className="p-6 rounded-lg w-96 flex flex-col items-center">
+            <svg
+              className="animate-spin h-8 w-8 text-blue-500 mb-4"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              ></path>
+            </svg>
+            <h2 className="text-lg font-bold mb-2">Processing...</h2>
+          </div>
+        </div>
+      )}
     </>
   );
 }

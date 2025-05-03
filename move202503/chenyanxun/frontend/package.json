@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
-    "@mysten/dapp-kit": "^0.15.5",
-    "@mysten/seal": "^0.4.0",
-    "@mysten/sui": "^1.28.1",
+    "@mysten/dapp-kit": "^0.15.0",
+    "@mysten/sui": "^1.25.0",
+    "@mysten/seal": "^0.3.0",
     "@prisma/client": "^6.6.0",
     "@radix-ui/react-dropdown-menu": "^2.1.11",
     "@radix-ui/react-label": "^2.1.3",

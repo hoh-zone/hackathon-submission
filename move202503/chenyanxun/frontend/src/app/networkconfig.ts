@@ -6,9 +6,11 @@ const { networkConfig, useNetworkVariable, useNetworkVariables } =
     testnet: {
       url: getFullnodeUrl("testnet"),
       variables: {
-        packageID: "0x33128e647d04bc5e0e29bfd313487e1e4bbae19789fb9e5d7155f8b723d46860",
+        packageID: "0xb4581a53d5e1fa8303acc543515c09241b6c34cac95843262af0deb64e4fb61a",
         module: "hackathon_qidian",
-        stateID: "0x36100b74c184cde455697571bd0b21da7042214f3f12d5f55c0d765cf71e513e",
+        stateID: "0x77b47d5341feb2d51bfe56cb6985e8447398474abc57c6d36960b7cbfa0c87f1",
+        coinPool: "",
+        admin: "0xfe675584c55a561bd97cf709376daf0c318261432e92e260832f3e30d8aeae40"
       },
     },
     devnet: {
@@ -24,7 +26,7 @@ const { networkConfig, useNetworkVariable, useNetworkVariables } =
 const defaultNetwork = "testnet";
 const suiClient = new SuiClient(networkConfig[defaultNetwork]);
 const sealClient = new SealClient({
-  suiClient,
+  suiClient: suiClient,
   serverObjectIds: getAllowlistedKeyServers(defaultNetwork),
 });
 export {

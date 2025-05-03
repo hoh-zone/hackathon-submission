@@ -19,7 +19,7 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 
 [addresses]
 hackathon_qidian = "0x0"
-
+gas_address = "0xb262a0b348483ae2e8b42bbb1ed52841eadf9e3cb67240be125b16987550874b"
 # Named addresses will be accessible in Move as `@name`. They're also exported:
 # for example, `std = "0x1"` is exported by the Standard Library.
 # alice = "0xA11CE"

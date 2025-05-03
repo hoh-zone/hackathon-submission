@@ -1,8 +1,10 @@
 import { IChapterProps } from "@/type";
+import { Button } from "./ui/button";
 
 export default function CharterCard({
   chapters,
   goToChapterDetail,
+  deleteChapter,
 }: IChapterProps) {
   return (
     <>
@@ -15,6 +17,22 @@ export default function CharterCard({
               onClick={() => goToChapterDetail(chapter)}
             >
               <span className="text-lg">{chapter.title}</span>
+              <div>
+                <span>{chapter.amount} MIST</span>
+                {deleteChapter && (
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className="ml-4 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteChapter(chapter);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                )}
+              </div>
             </div>
           );
         })}

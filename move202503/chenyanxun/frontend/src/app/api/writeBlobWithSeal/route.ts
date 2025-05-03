@@ -1,25 +1,18 @@
 import { statusCode } from "@/constant/response";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  const formData = await req.formData();
-  const file = formData.get("file") as File;
-  if (!file) {
-    return NextResponse.json({
-      message: "file is required",
-      status: statusCode.BAD_REQUEST,
-    });
-  }
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const base64Data = searchParams.get("data") as string;
+  const buffer = Buffer.from(base64Data, 'base64');
+  const uint8Array = new Uint8Array(buffer);
 
   try {
-    const encryptedData = await file
-      .arrayBuffer()
-      .then((buffer: ArrayBuffer) => new Uint8Array(buffer));
     const result = await fetch(
       "https://publisher.testnet.walrus.atalma.io/v1/blobs?epochs=5",
       {
         method: "PUT",
-        body: encryptedData,
+        body: uint8Array,
       }
     );
     const data = await result.json();
