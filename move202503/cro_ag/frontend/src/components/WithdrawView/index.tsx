@@ -33,6 +33,7 @@ import { Transaction } from '@mysten/sui/dist/cjs/transactions';
 import { useQueryClient } from '@tanstack/react-query';
 import { invalidatePortfolios } from '@/hooks/usePortfolios';
 import { invalidateZeroObj } from '@/hooks/useZeroObj';
+import { invalidateAllBalance } from '@/hooks/useAllBalance';
 const cx = classNames.bind(styles);
 const WithdrawView: React.FC = () => {
   const currentAccount = useCurrentAccount();
@@ -218,11 +219,13 @@ const WithdrawView: React.FC = () => {
           });
           setInputValue(0);
           invalidateBalanceByType(queryClient);
+          invalidateAllBalance(queryClient);
           invalidateZeroObj(queryClient);
           invalidatePortfolios(queryClient);
         },
         onError: (error) => {
           invalidateBalanceByType(queryClient);
+          invalidateAllBalance(queryClient);
           invalidateZeroObj(queryClient);
           openNotification(error.name, error.message);
         },

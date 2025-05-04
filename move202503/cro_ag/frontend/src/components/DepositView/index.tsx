@@ -30,6 +30,7 @@ import { CURRENT_COIN_BTN_TYPES } from '@/constants';
 import { Transaction } from '@mysten/sui/transactions';
 import { invalidatePortfolios } from '@/hooks/usePortfolios';
 import { invalidateZeroObj } from '@/hooks/useZeroObj';
+import { invalidateAllBalance } from '@/hooks/useAllBalance';
 const cx = classNames.bind(styles);
 const DepositView: React.FC = () => {
   const currentAccount = useCurrentAccount();
@@ -131,11 +132,13 @@ const DepositView: React.FC = () => {
             );
           }
           invalidateBalanceByType(queryClient);
+          invalidateAllBalance(queryClient);
           invalidateZeroObj(queryClient);
           invalidatePortfolios(queryClient);
         },
         onError: (error) => {
           invalidateBalanceByType(queryClient);
+          invalidateAllBalance(queryClient);
           invalidateZeroObj(queryClient);
           invalidatePortfolios(queryClient);
           openNotification(error.name, error.message);

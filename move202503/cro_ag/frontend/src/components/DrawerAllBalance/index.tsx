@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './index.module.scss';
-import { ConfigProvider, Drawer, Flex, Space, Spin } from 'antd';
+import { Avatar, ConfigProvider, Drawer, Flex, Space, Spin } from 'antd';
 import { AllBalanceItem } from '@/components';
 import { ConnectModal, useCurrentAccount } from '@mysten/dapp-kit';
 import { LeftCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import icon_wallet from '@/assets/icon_wallet.png';
 import { useAllBalance, useCoinsPrice } from '@/hooks';
 import { useInView } from 'react-intersection-observer';
+import icon_pyth from '@/assets/icon_pyth.svg';
 const cx = classNames.bind(styles);
 const DrawerAllBalance: React.FC = () => {
   const currentAccount = useCurrentAccount();
@@ -130,6 +131,15 @@ const DrawerAllBalance: React.FC = () => {
         open={open1}
         extra={
           <Space>
+            <img
+              style={{
+                marginRight: '10px',
+                width: '90px',
+                height: '30.5px',
+                borderRadius: 0,
+              }}
+              src={icon_pyth}
+            />
             <LeftCircleOutlined
               style={{
                 fontSize: '25px',

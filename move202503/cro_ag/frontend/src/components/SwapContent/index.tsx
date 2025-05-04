@@ -31,6 +31,7 @@ import { Image } from 'antd';
 import { CURRENT_COIN_BTN_TYPES } from '@/constants';
 import { useInView } from 'react-intersection-observer';
 import { invalidateZeroObj } from '@/hooks/useZeroObj';
+import { invalidateAllBalance } from '@/hooks/useAllBalance';
 const cx = classNames.bind(styles);
 const SwapContent: React.FC = () => {
   const currentAccount = useCurrentAccount();
@@ -111,10 +112,12 @@ const SwapContent: React.FC = () => {
         onSuccess: () => {
           setInputTargeValue(0);
           invalidateBalanceByType(queryClient);
+          invalidateAllBalance(queryClient);
           invalidateZeroObj(queryClient);
         },
         onError: (error) => {
           invalidateBalanceByType(queryClient);
+          invalidateAllBalance(queryClient);
           invalidateZeroObj(queryClient);
           openNotification(error.name, error.message);
         },

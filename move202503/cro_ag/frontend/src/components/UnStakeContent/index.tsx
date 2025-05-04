@@ -21,6 +21,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Image } from 'antd';
 import { CURRENT_COIN_BTN_TYPES } from '@/constants';
 import { invalidateZeroObj } from '@/hooks/useZeroObj';
+import { invalidateAllBalance } from '@/hooks/useAllBalance';
 const cx = classNames.bind(styles);
 const UnStakeContent: React.FC = () => {
   const currentAccount = useCurrentAccount();
@@ -80,10 +81,12 @@ const onDSViewChange = useCallback((reallyVB: bigint | undefined, value: number 
           {
             onSuccess: () => {
               invalidateBalanceByType(queryClient);
+              invalidateAllBalance(queryClient);
               invalidateZeroObj(queryClient);
             },
             onError: (error) => {
               invalidateBalanceByType(queryClient);
+              invalidateAllBalance(queryClient);
               invalidateZeroObj(queryClient);
               openNotification(error.name, error.message);
             },
