@@ -6,56 +6,81 @@
 
 # Member:
 
-- Move 开发&测试：Dage 【 https://github.com/croprotocol 】
-- Ts 开发&测试：Xiaoyu Fu
-- Ts 开发&测试: Chenyu Li
+- **Move 开发 & 测试**：Dage （[GitHub 主页](https://github.com/croprotocol)
+- **TypeScript 开发 & 测试**：Xiaoyu Fu
+- **TypeScript 开发 & 测试**：Chenyu Li
 
 # 项目测试部署地址：
 
-https://cro.ag/
-
-# Cro Ag
-
-**Cro Ag** is a Web3 super aggregator built on the **Sui** blockchain, providing users with unified access to multiple DeFi protocols, including **Lending** and **Swap** features. Our mission is to make DeFi on Sui more accessible, efficient, and powerful by abstracting away complexities and integrating key protocols.
-
-## ✨ Features
-
-- Aggregated access to Sui-based DeFi protocols
-- Seamless lending and swapping through unified interface
-- Points-based reward system to incentivize user activity
-- Integrated with top protocols (e.g. Navi, Scallop, Kai)
-- Built with Move smart contracts and Sui SDK
+[https://cro.ag](https://cro.ag)
 
 ---
 
-## 🧰 SDK
+# 🐊 Cro Ag – The Sui DeFi Super Aggregator
 
-To help developers integrate with Cro Ag easily, we provide a TypeScript SDK.
+**Cro Ag** is a next-generation **Web3 DeFi aggregator** built on the **Sui blockchain**, providing unified access to advanced **Swap**, **Lending**, and **Wallet optimization** tools. Designed for both everyday users and pro DeFi traders, Cro Ag helps you interact with DeFi protocols in a smarter, faster, and more profitable way—without the complexity.
 
-- 📦 NPM Package: [cro-sdk](https://www.npmjs.com/package/cro-sdk)
+---
+
+## ✨ Core Features
+
+### 🔁 Swap Aggregator
+
+- Ultra-efficient swap routing across Sui DEXs using **mechanism-level pathfinding**
+- Real-time liquidity analysis with dynamic pricing via **Pyth oracle integration**
+- Cross-platform **price comparison tool**—see how Cro Ag fares against other aggregators
+- Sidebar wallet display with live balances, token insights
+- Integrated with **BTCFi liquidity pools** for native BTC asset support on Sui
+
+### 🧠 Lending Aggregator (DELA)
+
+- One-stop access to protocols like **Navi**, **Scallop**, and **Kai Finance**
+- Automated pathfinder to optimize APY, collateral ratio, and protocol choice
+- Live updates for TVL, APYs
+- Designed to help you **maximize passive income or leverage at minimal cost**
+
+### 🧹 Wallet Cleanup + Rewards
+
+- Clear 0-balance residual tokens with a single tap
+- Earn **Cro Points** for wallet maintenance—turning cleanup into value
+- Supports broader network performance by minimizing wallet bloat
+
+### 🏅 Croc Points Ecosystem
+
+- Earn points from swaps, lending, referrals, and participation
+- Future use cases: gas sponsorship credits
+- Contributor efforts are recorded and evaluated toward ambassador access
+
+---
+
+## 🧰 Developer SDK
+
+To make building on top of Cro Ag easy and modular, we offer a TypeScript SDK:
+
+- 📦 NPM: [cro-sdk](https://www.npmjs.com/package/cro-sdk)
 - 📥 Install:
 
 ```bash
-npm i cro-sdk
+npm install cro-sdk
 ```
 
 ---
 
-## 🌐 Web Usage
+## 🌐 Local Web Dev Setup
 
-Clone the repository and run the frontend locally:
+Clone this repo and start building locally:
 
 ```bash
-pnpm i         # install dependencies
-pnpm run dev   # start dev server
-pnpm run build # production build
+pnpm install      # install all dependencies  
+pnpm run dev      # start dev server  
+pnpm run build    # production build
 ```
 
 ---
 
-## 📦 Move Contracts
+## 🔐 Move Smart Contracts
 
-Smart contracts are built with Sui Move. To build Move modules:
+Our core logic is powered by secure, gas-optimized Move smart contracts built for the Sui chain.
 
 ```bash
 sui move build
@@ -63,12 +88,20 @@ sui move build
 
 ---
 
-## 📫 Join the Community
+## 🌍 Join the Cro Community
 
-- 🌐 Website: [cro.ag](https://cro.ag)
-- 🐦 Twitter: [@cro_aggregator](https://x.com/cro_aggregator)
-- 💬 Discord: [Join Us](https://discord.com/invite/UG6c7nXr5X)
+We're actively building with and for the Sui ecosystem.
+
+- 🌐 Website: [https://cro.ag](https://cro.ag)
+- 🐦 Twitter/X: [@cro\_aggregator](https://x.com/cro_aggregator)
+- 💬 Discord: [Join Our Community](https://discord.com/invite/UG6c7nXr5X)
 
 ---
 
-> Built with ❤️ by Crater Lab
+## 🎉 Community & Contests
+
+Cro Ag is participating in **Sui Overflow 2025**!
+
+---
+
+> Built with ❤️ by \[Crater Labs] – Bringing the power of DeFi to everyone on Sui.
