@@ -45,7 +45,7 @@
 - Earn **Cro Points** for wallet maintenance—turning cleanup into value
 - Supports broader network performance by minimizing wallet bloat
 
-### 🏅 Croc Points Ecosystem
+### 🏅 Cro Points Ecosystem
 
 - Earn points from swaps, lending, referrals, and participation
 - Future use cases: gas sponsorship credits
