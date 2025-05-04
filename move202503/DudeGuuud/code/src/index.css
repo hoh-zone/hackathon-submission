@@ -1,0 +1,258 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply transition-colors duration-200;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+  }
+
+  /* 设置整体颜色主题 */
+  :root {
+    --color-primary-50: 236 254 255;
+    --color-primary-100: 207 250 254;
+    --color-primary-200: 165 243 252;
+    --color-primary-300: 103 232 249;
+    --color-primary-400: 34 211 238;
+    --color-primary-500: 6 182 212;
+    --color-primary-600: 8 145 178;
+    --color-primary-700: 14 116 144;
+    --color-primary-800: 21 94 117;
+    --color-primary-900: 22 78 99;
+    --color-primary-950: 8 51 68;
+    
+    --color-secondary-50: 253 242 248;
+    --color-secondary-100: 252 231 243;
+    --color-secondary-200: 251 207 232;
+    --color-secondary-300: 249 168 212;
+    --color-secondary-400: 244 114 182;
+    --color-secondary-500: 236 72 153;
+    --color-secondary-600: 219 39 119;
+    --color-secondary-700: 190 24 93;
+    --color-secondary-800: 157 23 77;
+    --color-secondary-900: 131 24 67;
+    --color-secondary-950: 80 7 36;
+
+    --background-start-rgb: 250, 250, 250;
+    --background-end-rgb: 240, 240, 240;
+    --foreground-rgb: 30, 30, 30;
+  }
+
+  /* 深色模式颜色主题 */
+  .dark {
+    --background-start-rgb: 30, 30, 30;
+    --background-end-rgb: 10, 10, 10;
+    --foreground-rgb: 230, 230, 230;
+  }
+
+  /* 设置全局字体和颜色 */
+  body {
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(
+      to bottom,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-end-rgb))
+    );
+    min-height: 100vh;
+  }
+}
+
+/* 自定义滚动条样式 */
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* 定义动画 */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.3s ease forwards;
+}
+
+/* 添加平滑的菜单展开和收起动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes growHeight {
+  from {
+    max-height: 0;
+  }
+  to {
+    max-height: 300px;
+  }
+}
+
+/* 菜单动画类 */
+.menu-transition {
+  transition: all 0.3s ease;
+  transform-origin: top center;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.menu-transition.open {
+  max-height: 300px;
+  opacity: 1;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease forwards;
+}
+
+/* 为导航链接添加悬停过渡效果 */
+.nav-link {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: rgb(var(--color-primary-500));
+  transition: width 0.3s ease;
+}
+
+.dark .nav-link::after {
+  background-color: rgb(var(--color-primary-300));
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* 响应式布局调整 */
+@media (max-width: 768px) {
+  .prose {
+    font-size: 0.95rem;
+  }
+}
+
+/* 为故事内容添加优化的排版 */
+.prose p {
+  text-indent: 1.5em;
+  font-family: 'Serif', Georgia, serif;
+}
+
+.prose p:first-letter {
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+/* 书页翻转效果优化 */
+.perspective-deep {
+  perspective: 2000px;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 完全透明化 Suiet Wallet Kit 连接后容器，只保留文字 */
+.wkit-connected-container {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  min-height: unset !important;
+  display: flex !important;
+  align-items: center !important;
+  border: none !important;
+}
+
+.wkit-connected-container .wkit-account-address {
+  color: #1d4ed8 !important;
+  font-weight: bold;
+  font-size: 1rem;
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.wkit-connected-container .wkit-chain-tag {
+  background: none !important;
+  color: #64748b !important;
+  border-radius: 0 !important;
+  font-size: 0.8rem;
+  padding: 0 4px !important;
+  margin-left: 6px;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.wkit-connected-container .wkit-account-avatar {
+  display: none !important;
+}
+
+.wkit-connected-container button,
+.wkit-connected-container .wkit-account-dropdown {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  min-width: unset !important;
+  min-height: unset !important;
+}
