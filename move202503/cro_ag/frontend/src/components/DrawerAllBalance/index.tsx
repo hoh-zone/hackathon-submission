@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './index.module.scss';
-import { Avatar, ConfigProvider, Drawer, Flex, Space, Spin } from 'antd';
+import { ConfigProvider, Drawer, Flex, Space, Spin } from 'antd';
 import { AllBalanceItem } from '@/components';
 import { ConnectModal, useCurrentAccount } from '@mysten/dapp-kit';
 import { LeftCircleOutlined, LoadingOutlined } from '@ant-design/icons';
