@@ -39,3 +39,13 @@
         inset 0 0 1px #2424a1;
         
   }
+
+.hide-scrollbar {
+  overflow: auto;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE 10+ */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;               /* Chrome, Safari, Opera */
+}

@@ -9,7 +9,7 @@ import { WithdrawView } from '@/components';
 const cx = classNames.bind(styles);
 
 const Lending: React.FC = () => {
-  const [selectModule, setSelectModule] = useState('Deposit'); //Deposit/Withdraw
+  const [selectModule, setSelectModule] = useState('Deposit');
   const handleClick = (value: string) => {
     setSelectModule(value);
   };

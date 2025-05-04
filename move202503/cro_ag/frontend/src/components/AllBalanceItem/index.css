@@ -1,0 +1,31 @@
+.hover-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    height: 65px;
+    overflow: hidden;
+    border-radius: 0px;
+    cursor: pointer;
+  }
+  
+  .slide-box {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 65px;
+    background-color: #6072fd;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .slide-in {
+    transform: translateX(100%);
+  }
+  
+  .slide-out {
+    transform: translateX(0%);
+  }
+  

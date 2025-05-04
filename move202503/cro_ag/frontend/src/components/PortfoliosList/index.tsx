@@ -20,7 +20,7 @@ const PortfoliosList: React.FC<PortfolioListProps> = (props) => {
 
   useEffect(() => {
     props.onItemClick(protfolios.data?.[position.current]);
-  }, [protfolios.data?.[position.current].totalBalance]);
+  }, [protfolios.data?.[position.current]?.totalBalance]);
   return (
     <Scrollbars autoHide hideTracksWhenNotNeeded>
       <div className={cx('right-bottom')}>

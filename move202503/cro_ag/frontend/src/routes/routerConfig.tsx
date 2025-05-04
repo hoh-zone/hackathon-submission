@@ -8,6 +8,7 @@ import AppLayout from '@/layout/AppLayout';
 import { lazy } from 'react';
 import { MetaMenu, AuthRouteObject } from './interface';
 import { Navigate, redirect } from 'react-router-dom';
+import Home from '@/pages/Home';
 
 // ********
 const lazyLoad = (moduleName: string) =>
@@ -80,6 +81,13 @@ const routers: AuthRouteObject<MetaMenu>[] = [
         element: <Obj />,
         meta: {
           title: 'obj',
+        },
+      },
+      {
+        path: 'test',
+        element: <Home />,
+        meta: {
+          title: 'test',
         },
       },
     ],

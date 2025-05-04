@@ -193,7 +193,7 @@ const SelectCoinBtn: React.FC<SelectCoinBtnProps> = ({
         theme={{
           components: {
             Modal: {
-              contentBg: '#0d0d23',
+              contentBg: '#0d0d2300',
               padding: 16,
             },
             Input: {
@@ -209,6 +209,7 @@ const SelectCoinBtn: React.FC<SelectCoinBtnProps> = ({
         }}
       >
         <Modal
+          className={cx('glass-container')}
           closeIcon={<CloseOutlined style={{ color: '#fefefe' }} />}
           open={isModalOpen}
           footer={null}
@@ -216,7 +217,12 @@ const SelectCoinBtn: React.FC<SelectCoinBtnProps> = ({
           width={630}
           onCancel={() => setIsModalOpen(false)}
           destroyOnClose
-          style={{ top: 86, color: '#fefefe', borderRadius: 0 }}
+          style={{
+            top: 86,
+            color: '#fefefe',
+            borderRadius: 0,
+            background: '#0d0d23',
+          }}
         >
           <div
             style={{
@@ -344,7 +350,7 @@ const SelectCoinBtn: React.FC<SelectCoinBtnProps> = ({
                 {formatBalance(
                   searchBalance?.data?.balance,
                   searchBalance?.data?.decimals || 0
-                )}
+                ) || ''}
               </div>
             </Flex>
           )}

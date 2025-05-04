@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './index.module.scss';
 import {
@@ -28,7 +28,7 @@ import { invalidateGetOwnedNft, useNft } from '@/hooks/useNft';
 import { useDebounce } from 'use-debounce';
 import stringUtil from '@/utils/stringUtil';
 import { useQueryClient } from '@tanstack/react-query';
-import { invalidateNftTop, useNftTopNew } from '@/hooks/useNftTop';
+import { invalidateNftTop, useNftTop } from '@/hooks/useNftTop';
 import icon_copy from '@/assets/icon_copy.png';
 import icon_share from '@/assets/icon_share.png';
 import useCopyToClipboard from '@/hooks/useCopyToClipboard';
@@ -39,18 +39,21 @@ const cx = classNames.bind(styles);
 const RankView: React.FC = () => {
   const isTabletOrMobile = useTabletOrMobile();
   const currentAccount = useCurrentAccount();
-  const ntfTopResult = useNftTopNew();
+  const [currentPage, setCurrentPage] = useState(1);
+  const prePagePoints = useRef(1);
+  const [selectModule, setSelectModule] = useState('Points');
+  const handleClick = (value: string) => {
+    setCurrentPage(prePagePoints.current);
+    prePagePoints.current = currentPage;
+    setSelectModule(value);
+  };
+  const ntfTopResult = useNftTop(currentPage, selectModule);
 
-  // ********
-  const articles = ntfTopResult.data?.pages.flatMap((page) => page.data) || [];
-  const total = ntfTopResult.data?.pages[0]?.total || 0;
-  const currentPage = ntfTopResult.data?.pages.length || 1;
+  const articles = ntfTopResult.data?.data || [];
+  const total = ntfTopResult.data?.total || 0;
 
   const handleTableChange = (pagination: any) => {
-    const { current } = pagination;
-    if (current > currentPage && !ntfTopResult.isFetchingNextPage) {
-      ntfTopResult.fetchNextPage();
-    }
+    setCurrentPage(pagination.current);
   };
   const [showModal, setShowModal] = useState(false);
   const [_inputValue, setInputValue] = useState('');
@@ -77,7 +80,7 @@ const RankView: React.FC = () => {
         formatBalance(
           ntfResult.data?.pointsBalance?.balance,
           ntfResult.data?.pointsBalance?.decimals || 0
-        )
+        ) || ''
       )
     );
     setSlider(100);
@@ -130,7 +133,7 @@ const RankView: React.FC = () => {
             formatBalance(
               ntfResult.data?.pointsBalance?.balance,
               ntfResult.data?.pointsBalance?.decimals || 0
-            )
+            ) || ''
           )) /
         100
       ).toFixed(0)
@@ -213,150 +216,181 @@ const RankView: React.FC = () => {
     setSliderValue(value);
   };
   return (
-    <Flex
-      vertical={isTabletOrMobile}
-      align="center"
-      style={{ marginTop: '12px' }}
-    >
+    <Flex vertical={isTabletOrMobile} align="center">
       {contextHolder}
-      <div className={cx('left1')}>
-        {ntfTopResult.isError && (
+      <Flex vertical>
+        <Flex vertical={false} justify="flex-start" style={{ width: '100%' }}>
           <div
+            className={cx('deposit-tab')}
+            onClick={() => handleClick('Points')}
             style={{
-              color: '#fefefe',
-              fontSize: '18px',
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: '35px',
-              fontFamily: 'Regular, serif',
+              color: `${selectModule === 'Points' ? '#fefefe' : '#8694ff'}`,
+              borderBottom: `${
+                selectModule === 'Points' ? '3px solid #5356b1' : 'none'
+              }`,
+              borderRadius: '2px',
             }}
           >
-            error
+            Points
           </div>
-        )}
-        {ntfTopResult.isLoading && (
           <div
+            className={cx('withdraw-tab')}
+            onClick={() => handleClick('Referrals')}
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
+              color: `${selectModule === 'Referrals' ? '#fefefe' : '#8694ff'}`,
+              borderBottom: `${
+                selectModule === 'Referrals' ? '3px solid #5356b1' : 'none'
+              }`,
+              borderRadius: '2px',
             }}
           >
+            Referrals
+          </div>
+        </Flex>
+        <div className={cx('left1')} style={{ marginTop: '12px' }}>
+          {ntfTopResult.isError && (
+            <div
+              style={{
+                color: '#fefefe',
+                fontSize: '18px',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: '35px',
+                fontFamily: 'Regular, serif',
+              }}
+            >
+              error
+            </div>
+          )}
+          {ntfTopResult.isLoading && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <ConfigProvider
+                theme={{
+                  components: {
+                    Spin: {
+                      colorPrimary: '#fefefe',
+                    },
+                  },
+                }}
+              >
+                <Spin
+                  style={{
+                    marginTop: '35px',
+                  }}
+                  indicator={<LoadingOutlined spin />}
+                />
+              </ConfigProvider>
+            </div>
+          )}
+          {ntfTopResult.isSuccess && (
             <ConfigProvider
               theme={{
+                token: {
+                  colorBgContainer: '#252544',
+                  colorText: '#ffffff',
+                  colorTextHeading: '#ffffff',
+                },
                 components: {
-                  Spin: {
-                    colorPrimary: '#fefefe',
+                  Table: {
+                    borderColor: '#5356b1',
+                    rowHoverBg: '#6072fd',
+                    cellFontSizeMD: 14,
+                    cellPaddingBlockMD: 18,
+                    lineHeight: 1,
+                    headerSplitColor: '#353559',
+                    headerColor: '#ffffff',
+                    headerBg: '#353559',
+                  },
+                  Pagination: {
+                    itemActiveBg: '#6072fd',
+                    colorBgTextHover: '#4869e9',
+                    itemBg: '#5356b1',
+                    colorPrimary: '#ffffff',
+                    colorPrimaryHover: '#ffffff',
                   },
                 },
               }}
             >
-              <Spin
-                style={{
-                  marginTop: '35px',
+              <Table
+                size={'middle'}
+                // rowKey={(record) => record.address}
+                bordered={false}
+                columns={[
+                  { title: 'rank', dataIndex: 'rank', align: 'center' },
+                  { title: 'address', dataIndex: 'address', align: 'center' },
+                  {
+                    title: selectModule.toLowerCase(),
+                    dataIndex: 'points',
+                    align: 'center',
+                  },
+                ]}
+                dataSource={articles}
+                pagination={{
+                  showSizeChanger: false,
+                  current: currentPage,
+                  position: ['bottomCenter'],
+                  size: 'default',
+                  style: { border: 'none' },
+                  pageSize: 10,
+                  total: total,
+                  itemRender: (current, type, originalElement) => {
+                    if (type === 'prev') {
+                      return (
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: '#5356b1',
+                            border: 'solid 1px #4869e9',
+                            borderRadius: '4px',
+                          }}
+                        >
+                          <LeftOutlined />
+                        </div>
+                      );
+                    } else if (type === 'next') {
+                      return (
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: '#5356b1',
+                            border: 'solid 1px #4869e9',
+                            borderRadius: '4px',
+                          }}
+                        >
+                          <RightOutlined />
+                        </div>
+                      );
+                    }
+                    return originalElement; // ********、****
+                  },
                 }}
-                indicator={<LoadingOutlined spin />}
+                onChange={handleTableChange}
               />
             </ConfigProvider>
-          </div>
-        )}
-        {ntfTopResult.isSuccess && (
-          <ConfigProvider
-            theme={{
-              token: {
-                colorBgContainer: '#252544',
-                colorText: '#ffffff',
-                colorTextHeading: '#ffffff',
-              },
-              components: {
-                Table: {
-                  borderColor: '#5356b1',
-                  rowHoverBg: '#6072fd',
-                  cellFontSizeMD: 14,
-                  cellPaddingBlockMD: 18,
-                  lineHeight: 1,
-                  headerSplitColor: '#353559',
-                  headerColor: '#ffffff',
-                  headerBg: '#353559',
-                },
-                Pagination: {
-                  itemActiveBg: '#6072fd',
-                  colorBgTextHover: '#4869e9',
-                  itemBg: '#5356b1',
-                  colorPrimary: '#ffffff',
-                  colorPrimaryHover: '#ffffff',
-                },
-              },
-            }}
-          >
-            <Table
-              size={'middle'}
-              // rowKey={(record) => record.address}
-              bordered={false}
-              columns={[
-                { title: 'rank', dataIndex: 'rank', align: 'center' },
-                { title: 'address', dataIndex: 'address', align: 'center' },
-                { title: 'points', dataIndex: 'points', align: 'center' },
-              ]}
-              dataSource={articles}
-              pagination={{
-                showSizeChanger: false,
-                current: currentPage,
-                position: ['bottomCenter'],
-                size: 'default',
-                style: { border: 'none' },
-                pageSize: 10,
-                total: total,
-                itemRender: (current, type, originalElement) => {
-                  if (type === 'prev') {
-                    return (
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          width: '100%',
-                          height: '100%',
-                          backgroundColor: '#5356b1',
-                          border: 'solid 1px #4869e9',
-                          borderRadius: '4px',
-                        }}
-                      >
-                        <LeftOutlined />
-                      </div>
-                    );
-                  } else if (type === 'next') {
-                    return (
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          width: '100%',
-                          height: '100%',
-                          backgroundColor: '#5356b1',
-                          border: 'solid 1px #4869e9',
-                          borderRadius: '4px',
-                        }}
-                      >
-                        <RightOutlined />
-                      </div>
-                    );
-                  }
-                  return originalElement; // ********、****
-                },
-              }}
-              onChange={handleTableChange}
-            />
-          </ConfigProvider>
-        )}
-      </div>
-      <div style={{ width: '36px', height: '36px' }}></div>
+          )}
+        </div>
+      </Flex>
+
+      <div style={{ width: '30px', height: '30px' }}></div>
       <Flex
         vertical={!isTabletOrMobile}
         style={{ marginLeft: '36px', alignItems: 'end' }}
@@ -391,7 +425,7 @@ const RankView: React.FC = () => {
                   ntfResult.data?.nftId?.substr(-3)}
             </div>
             {copyState ? (
-              <CheckCircleOutlined style={{ fontSize: '16px' }} />
+              <CheckCircleOutlined style={{ fontSize: '18px' }} />
             ) : ntfResult.data?.type === 'old' ? (
               <div
                 onClick={(event: React.MouseEvent) => {

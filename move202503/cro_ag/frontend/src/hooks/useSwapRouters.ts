@@ -119,11 +119,14 @@ export const useSwapRouters = (
           '-' +
           String(slippageSlice.slippageLending),
         type,
-        address: currentAccount?.address,
+        address: currentAccount?.address || 'unConnect',
       },
     ],
     queryFn: () => {
-      if (type === 'swap' && stringUtil.isNotEmpty(currentAccount?.address)) {
+      if (
+        type === 'swap'
+        //  && stringUtil.isNotEmpty(currentAccount?.address)
+      ) {
         if (feeRatesSlice.fee !== undefined) {
           return new Promise((resolve, reject) => {
             const swapRouters = sdk.swap_routers(
@@ -132,9 +135,8 @@ export const useSwapRouters = (
               reallyValueBigint,
               slippageSlice.slippageSwap,
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              currentAccount!.address,
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              feeRatesSlice.fee!
+              feeRatesSlice.fee!,
+              currentAccount?.address
             );
             swapRouters
               .then((result) => {
@@ -420,10 +422,8 @@ export const useSwapRouters = (
                   target.type,
                   reallyValueBigint,
                   slippageSlice.slippageSwap,
-                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                  currentAccount!.address,
-                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                  result as number
+                  result as number,
+                  currentAccount?.address
                 );
                 swapRouters
                   .then((result) => {

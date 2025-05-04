@@ -25,6 +25,7 @@ import {
 } from '@mysten/dapp-kit';
 import { useFetchQueryCoinsShow } from '@/hooks/useCoinsShow';
 import Decimal from 'decimal.js';
+import { DrawerAllBalance } from '@/components';
 
 const cx = classNames.bind(styles);
 const { Header, Content, Footer } = Layout;
@@ -120,6 +121,20 @@ const items: MenuItem[] = [
     ),
     key: 'cSui',
   },
+  // {
+  //   label: (
+  //     <Flex
+  //       gap={14}
+  //       style={{
+  //         fontFamily: 'Bold, serif',
+  //         letterSpacing: '2px',
+  //       }}
+  //     >
+  //       test
+  //     </Flex>
+  //   ),
+  //   key: 'test',
+  // },
 ];
 
 const AppLayout: React.FC = () => {
@@ -148,12 +163,16 @@ const AppLayout: React.FC = () => {
     if (current !== 'cSui') {
       setCurrent('cSui');
     }
+  } else if ('/test' === location.pathname) {
+    if (current !== 'test') {
+      setCurrent('test');
+    }
   }
   const onClick: MenuProps['onClick'] = (e) => {
     if ('Lending' === e.key) {
       toRedux();
     } else if ('test' === e.key) {
-      router('/home');
+      router('/test');
     } else if ('Swap' === e.key) {
       router('/swap');
     } else if ('Nft' === e.key) {
@@ -219,6 +238,7 @@ const AppLayout: React.FC = () => {
   };
   return (
     <Layout
+      className={cx('hide-scrollbar')}
       style={{
         height: '100%',
         width: '100%',
@@ -378,9 +398,10 @@ const AppLayout: React.FC = () => {
         style={{
           padding: 0,
           height: '100%',
-          backgroundColor: '#00000000',
+          backgroundColor: '#ffffff00',
         }}
       >
+        <DrawerAllBalance />
         <Outlet />
       </Content>
       <Footer

@@ -37,10 +37,10 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
-    // https: {
-    //   key: fs.readFileSync(path.resolve(__dirname, 'ssl/private.key')),
-    //   cert: fs.readFileSync(path.resolve(__dirname, 'ssl/fullchain.pem')),
-    // },
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, 'ssl/private.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, 'ssl/fullchain.pem')),
+    },
     host: '0.0.0.0', // *******（**）
     port: 3000,
   },

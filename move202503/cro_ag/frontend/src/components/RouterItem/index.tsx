@@ -11,7 +11,7 @@ export type RouterItemProps = {
   provider: string;
 };
 const RouterItem: React.FC<RouterItemProps> = (props) => {
-  const ratio = useTabletOrMobile() ? 4 / 5 : 1;
+  const ratio = useTabletOrMobile() ? 5 / 6 : 1;
 
   const cionFromType = useCoinByType(props.typeFrom);
   const cionTargetType = useCoinByType(props.typeTarget);

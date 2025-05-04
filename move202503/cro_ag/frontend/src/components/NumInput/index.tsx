@@ -2,8 +2,9 @@ import stringUtil from '@/utils/stringUtil';
 import { ConfigProvider, InputNumber, InputNumberProps } from 'antd';
 import React, { useRef, useState } from 'react';
 export type ApyListProps = {
-  currentValue: number;
+  currentValue: number | undefined;
   maxBalance: number;
+  maxBalanceAbled: boolean;
   decimalPlaces: number;
   onInputChange: (value: number | null) => void;
   disabled?: boolean;
@@ -11,6 +12,7 @@ export type ApyListProps = {
 const NumInput: React.FC<ApyListProps> = ({
   currentValue,
   maxBalance,
+  maxBalanceAbled,
   decimalPlaces,
   onInputChange,
   disabled,
@@ -48,6 +50,7 @@ const NumInput: React.FC<ApyListProps> = ({
       theme={{
         components: {
           InputNumber: {
+            colorTextPlaceholder: '#c1c1c1',
             hoverBorderColor: '#00000000',
             hoverBg: '#00000000',
             activeBg: '#00000000',
@@ -71,7 +74,9 @@ const NumInput: React.FC<ApyListProps> = ({
         <InputNumber<number>
           disabled={disabled}
           min={0}
-          max={maxBalance}
+          placeholder={'0'}
+          max={maxBalanceAbled ? maxBalance : Number.MAX_SAFE_INTEGER}
+          // max={Number.MAX_SAFE_INTEGER}
           defaultValue={0}
           controls={false}
           onChange={onInputChange1}
@@ -107,4 +112,4 @@ const NumInput: React.FC<ApyListProps> = ({
   );
 };
 
-export default NumInput;
+export default React.memo(NumInput);

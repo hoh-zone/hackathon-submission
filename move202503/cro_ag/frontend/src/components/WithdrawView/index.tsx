@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './index.module.scss';
 import {
@@ -42,7 +42,7 @@ const WithdrawView: React.FC = () => {
   );
   const selectedCion = useCoinByType(croPortfolioItem?.coinType);
   const [showModal, setShowModal] = useState(false); //Deposit ******
-  const [_inputValue, setInputValue] = useState(0); //*****
+  const [_inputValue, setInputValue] = useState<number | undefined>(undefined); //*****
   // ** 500ms *********
   const [reallyValue] = useDebounce(_inputValue, 500);
   const [maxBalance, setMaxBalance] = useState(Number.MAX_SAFE_INTEGER); //*******
@@ -52,25 +52,26 @@ const WithdrawView: React.FC = () => {
     croPortfolioItem,
     reallyValue === maxBalance
       ? croPortfolioItem?.totalBalance || 0n
-      : selectedCion?.decimals
+      : selectedCion?.decimals !== undefined
       ? convertToBigInt(selectedCion?.decimals, String(reallyValue))
       : 0n
   );
   const client = useSuiClient();
   const queryClient = useQueryClient();
   const [totalBalance, setTotalBalance] = useState('');
-  const onInputChange: InputNumberProps['onChange'] = (value) => {
+  const onInputChange = useCallback((value: number | null) => {
     if (stringUtil.isNotEmpty(value)) {
       lastUpdatedBy.current = 'input';
-      setInputValue(value as number);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      setInputValue(value!);
+    } else {
+      setInputValue(undefined);
     }
-  };
-
+  }, []);
   const formatBalanceMax = () => {
-    const balanceMax = formatBalance(
-      croPortfolioItem?.totalBalance,
-      selectedCion?.decimals
-    );
+    const balanceMax =
+      formatBalance(croPortfolioItem?.totalBalance, selectedCion?.decimals) ||
+      '';
     if (stringUtil.isEmpty(balanceMax)) {
       return Number.MAX_SAFE_INTEGER;
     } else {
@@ -91,10 +92,9 @@ const WithdrawView: React.FC = () => {
     ) {
       return;
     }
-    const formatTotal = formatBalance(
-      croPortfolioItem?.totalBalance,
-      selectedCion?.decimals
-    );
+    const formatTotal =
+      formatBalance(croPortfolioItem?.totalBalance, selectedCion?.decimals) ||
+      '';
     const v = Number(formatTotal);
     lastUpdatedBy.current = 'input';
     setInputValue(v >= maxBalance ? maxBalance : v);
@@ -121,7 +121,7 @@ const WithdrawView: React.FC = () => {
             formatBalance(
               croPortfolioItem?.totalBalance,
               selectedCion?.decimals
-            )
+            ) || ''
           )) /
         100
       ).toFixed(selectedCion?.decimals)
@@ -133,7 +133,9 @@ const WithdrawView: React.FC = () => {
     if (lastUpdatedBy.current === 'slider') {
       return;
     }
-    if (_inputValue >= maxBalance) {
+    if (_inputValue == undefined) {
+      setSliderValue(0);
+    } else if (_inputValue >= maxBalance) {
       setSliderValue(100);
     } else {
       setSliderValue(Number(((_inputValue / maxBalance) * 100).toFixed(2)));
@@ -156,7 +158,8 @@ const WithdrawView: React.FC = () => {
       !croPortfolioItem ||
       !currentAccount ||
       !selectedCion ||
-      (reallyValue <= 0 && croPortfolioItem?.totalBalance <= 0n) ||
+      ((reallyValue == undefined ? 0 : reallyValue) <= 0 &&
+        croPortfolioItem?.totalBalance <= 0n) ||
       !depositTx.data ||
       _inputValue != reallyValue
     ) {
@@ -244,6 +247,7 @@ const WithdrawView: React.FC = () => {
             currentValue={_inputValue}
             onInputChange={onInputChange}
             maxBalance={maxBalance}
+            maxBalanceAbled={true}
             disabled={!currentAccount}
             decimalPlaces={selectedCion?.decimals || 0}
           />
@@ -320,7 +324,8 @@ const WithdrawView: React.FC = () => {
                 !croPortfolioItem ||
                 !currentAccount ||
                 !selectedCion?.type ||
-                (reallyValue <= 0 && croPortfolioItem?.totalBalance <= 0n) ||
+                ((reallyValue == undefined ? 0 : reallyValue) <= 0 &&
+                  croPortfolioItem?.totalBalance <= 0n) ||
                 !depositTx.data
                   ? '#9a94cf'
                   : '#6072fd',

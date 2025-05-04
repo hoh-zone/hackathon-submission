@@ -22,6 +22,8 @@ import StakeContent from './StakeContent';
 import UnStakeContent from './UnStakeContent';
 import RankView from './RankView';
 import PointsView from './PointsView';
+import AllBalanceItem from './AllBalanceItem';
+import DrawerAllBalance from './DrawerAllBalance';
 // import { Question, SelectLang } from './RightContent';
 // import { AvatarDropdown, AvatarName } from './RightContent/AvatarDropdown';
 
@@ -47,4 +49,6 @@ export {
   UnStakeContent,
   RankView,
   PointsView,
+  AllBalanceItem,
+  DrawerAllBalance,
 };

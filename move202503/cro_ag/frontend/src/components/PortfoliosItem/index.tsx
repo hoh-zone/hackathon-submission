@@ -17,7 +17,7 @@ export type PortfolioListProps = {
 };
 const PortfoliosItem: React.FC<PortfolioListProps> = (props) => {
   const cion = useCoinByType(props.item.coinType);
-  const balance = formatBalance(props.item.totalBalance, cion?.decimals);
+  const balance = formatBalance(props.item.totalBalance, cion?.decimals) || '';
   const apy = fetchApyByPlatformAndCoinType(
     props.item.platform,
     props.item.coinType
@@ -35,7 +35,8 @@ const PortfoliosItem: React.FC<PortfolioListProps> = (props) => {
         <div className={cx('left-top')}>
           {(props.portfolioItem?.coinType == props.item.coinType &&
           props.portfolioItem?.platform == props.item.platform
-            ? formatBalance(props.portfolioItem.totalBalance, cion?.decimals)
+            ? formatBalance(props.portfolioItem.totalBalance, cion?.decimals) ||
+              ''
             : balance || '--') +
             '  ' +
             (cion?.name || '--')}

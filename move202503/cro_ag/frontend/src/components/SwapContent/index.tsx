@@ -38,21 +38,33 @@ const SwapContent: React.FC = () => {
   const isTabletOrMobile = useTabletOrMobile();
   const [showModal, setShowModal] = useState(false); //swap ******
   const [inputTargetValue, setInputTargeValue] = useState(0);
-
-  const [reallyValue, setReallyValue] = useState(0);
-  const [reallyValueBigint, setReallyValueBigint] = useState(0n);
-  const onDSViewChange = useCallback((reallyVB: bigint, value: number) => {
-    setReallyValue(value);
-    setReallyValueBigint(reallyVB);
-    if (value === 0) {
-      setInputTargeValue(0);
-    }
-  }, []);
+  const [insufficient, setInsufficient] = useState(false);
+  const [reallyValue, setReallyValue] = useState<number | undefined>(undefined);
+  const [reallyValueBigint, setReallyValueBigint] = useState<
+    bigint | undefined
+  >(undefined);
+  const onDSViewChange = useCallback(
+    (
+      reallyVB: bigint | undefined,
+      value: number | undefined,
+      resultBalance: bigint | undefined,
+      insufficientBalance: boolean | undefined
+    ) => {
+      setReallyValue(value);
+      setReallyValueBigint(reallyVB);
+      if (value === 0) {
+        setInputTargeValue(0);
+      }
+      setInsufficient(insufficientBalance || false);
+    },
+    []
+  );
   const checkSubmitAble = (): boolean => {
     return (
+      !insufficient &&
       !!currentCoin?.coinSwapIn?.type &&
       !!currentCoin?.coinSwapOut?.type &&
-      reallyValue > 0 &&
+      (reallyValue == undefined ? 0 : reallyValue) > 0 &&
       !!currentAccount &&
       inputTargetValue !== 0
     );
@@ -123,7 +135,6 @@ const SwapContent: React.FC = () => {
   const onRealTimeChange = useCallback(() => {
     setInputTargeValue(0);
   }, []);
-
   return (
     <>
       {contextHolder}
@@ -135,6 +146,7 @@ const SwapContent: React.FC = () => {
               onDSViewChange={onDSViewChange}
               initValue={0}
               onRealTimeChange={onRealTimeChange}
+              maxBalanceAbled={false}
             ></DepositSwapView>
             <div
               style={{
@@ -220,7 +232,7 @@ const SwapContent: React.FC = () => {
                     />
                   </ConfigProvider>
                 ) : (
-                  'Swap'
+                  <div>{insufficient ? 'insufficient balance' : 'Swap'}</div>
                 )}
               </div>
             )}
@@ -244,7 +256,7 @@ const SwapContent: React.FC = () => {
       </Flex>
       {!!currentCoin?.coinSwapIn?.type &&
         !!currentCoin?.coinSwapOut?.type &&
-        reallyValue > 0 && (
+        (reallyValue == undefined ? 0 : reallyValue) > 0 && (
           <SwapRoutersView
             inViewP={inView}
             targetIncomeAfterExchange={(value, tx) => {
@@ -255,7 +267,7 @@ const SwapContent: React.FC = () => {
             target={currentCoin.coinSwapOut}
             amount={String(reallyValue)}
             decimals={currentCoin.coinSwapIn?.decimals}
-            reallyValueBigint={reallyValueBigint}
+            reallyValueBigint={reallyValueBigint || 0n}
             refetchInterval={!signTx.isPending}
             onState={(value) => {
               if (value !== 'success') {

@@ -17,3 +17,5 @@ export const QUERY_ZERO_OBJ = 'zeroObj';
 export const QUERY_GET_OWNED_NFT = 'getOwnedNft';
 export const QUERY_NFT_ADD_POINTS = 'addPoints';
 export const QUERY_NFT_TOP = 'getTop';
+export const QUERY_ALL_BALANCE = 'allBalance';
+export const QUERY_COINS_PRICE = 'coinsPrice';
