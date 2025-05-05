@@ -20,8 +20,8 @@
 
 - github: https://github.com/rzexin/Mandy
 - PPT: https://github.com/rzexin/Mandy/blob/main/PPT/Mandy-PPT.pdf
-- testnet：https://securefilesharelab.vercel.app/
-- video：https://www.youtube.com/watch?v=70WoEe64Suo
+- testnet: https://mandylab.vercel.app
+- video: https://www.youtube.com/watch?v=9VD1sHJm9RA
 
 ## Member
 - [rzexin](https://github.com/JasonRUAN)
