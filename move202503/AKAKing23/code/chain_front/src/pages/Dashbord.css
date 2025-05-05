@@ -1,0 +1,388 @@
+.welcome {
+  --scale: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ._fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  z-index: 100;
+} */
+
+._fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  z-index: 100;
+  overflow: hidden;
+}
+
+._hidden {
+  display: none;
+}
+
+.welcome_middle {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  /* width: 100%; */
+  /* height: 100%; */
+  /* width: calc(var(--scale) * 82rem);
+  height: calc(var(--scale) * 55rem); */
+}
+
+.welcome_middle_title {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 300px;
+  color: var(--color_white);
+  mix-blend-mode: exclusion;
+  z-index: 10;
+  font-family: title !important;
+}
+
+.welcome_middle_title > div {
+  display: flex;
+}
+
+.welcome_middle_title > div:nth-child(1) {
+  margin-right: calc(var(--scale) * 15rem);
+}
+
+.welcome_middle_title > div:nth-child(2) {
+  justify-content: flex-end;
+  margin-left: calc(var(--scale) * 15rem);
+}
+
+.welcome_middle_title p {
+  font-family: title;
+  /* line-height: calc(var(--scale) * 17rem); */
+}
+
+.welcome_middle_info {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  width: 40%;
+  /* color: var(--color_back); */
+  color: var(--color_white);
+  line-height: calc(var(--scale) * 3.5rem);
+  mix-blend-mode: exclusion;
+  z-index: 10;
+  font-family: title;
+}
+
+.welcome_middle_balls {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* width: calc(var(--scale) * 85rem);
+  height: calc(var(--scale) * 85rem); */
+  width: 100vw;
+  height: 100vh;
+}
+
+.welcome_middle_balls div {
+  position: absolute;
+  left: 500px;
+}
+
+.welcome_middle_balls_filter {
+  filter: contrast(1000%);
+  /* background-color: var(--color_back); */
+  background-color: var(--color_white);
+  mix-blend-mode: var(--mix);
+  opacity: 0.5;
+}
+
+.welcome_middle_balls_filter div {
+  filter: blur(calc(var(--scale) * 3rem));
+}
+
+.welcome_middle_balls_big {
+  width: calc(var(--scale) * 30rem);
+  height: calc(var(--scale) * 30rem);
+  background-color: var(--color_front);
+  border-radius: 100%;
+}
+
+.welcome_middle_balls_small {
+  width: calc(var(--scale) * 15rem * var(--s));
+  height: calc(var(--scale) * 15rem * var(--s));
+  background-color: var(--color_front);
+  border-radius: 100%;
+}
+
+.welcome_middle_line {
+  position: absolute;
+  width: calc(var(--scale) * 66rem);
+  overflow: visible;
+}
+
+.welcome_middle_line circle {
+  stroke: var(--color_front);
+  stroke-dasharray: 0 calc(var(--scale) * 2rem);
+  transform-origin: center;
+  /* animation: welcome_line_rotate 8s linear infinite; */
+}
+
+.welcome_nav {
+  /* 整个选项框显示前的旋转度数 */
+  --before_rotate: 45deg;
+  /* 整个选项框显示后的旋转度数 */
+  --after_rotate: 0deg;
+  /* 每一个选项的间隔旋转度数 */
+  --interval_rotate: 12deg;
+  /* 每一个选项屏幕比例修改后的修正旋转度数 */
+  --correct_rotate: 0deg;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* width: calc(var(--scale) * 135rem); */
+  width: calc(var(--scale) * 100rem);
+  height: calc(var(--scale) * 50rem);
+  transform: rotate(var(--before_rotate));
+  pointer-events: none;
+  /* 样式偏上 */
+  bottom: 200px;
+}
+
+.welcome_nav_show {
+  transform: rotate(var(--after_rotate));
+  transition: transform 1.2s var(--ease_out);
+}
+
+.welcome_nav_line {
+  position: absolute;
+  width: 100%;
+  overflow: visible;
+  animation: welcome_line_rotate 15s linear infinite;
+}
+
+.welcome_nav_line circle {
+  stroke: var(--color_front);
+  stroke-dasharray: 0 calc(var(--scale) * 2rem);
+}
+
+.welcome_nav_selection {
+  position: absolute;
+  /* width: 100%; */
+  width: 70%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-origin: center;
+  transform: rotate(calc(var(--interval_rotate) * var(--i)));
+}
+
+.wns_node {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  left: 80%;
+  height: calc(var(--scale) * 7rem);
+  transform-origin: left;
+  transform: rotate(calc(var(--interval_rotate) * var(--i) * -1 - var(--correct_rotate)));
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.wns_node div {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(var(--scale) * 1rem);
+  height: calc(var(--scale) * 1rem);
+  background-color: var(--color_front);
+  border-radius: 100%;
+  margin-right: calc(var(--scale) * 1.5rem);
+}
+
+.wns_node div::after {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  border: calc(var(--scale) * 0.05rem) solid var(--color_front);
+  border-radius: 100%;
+  transform: scale(0);
+  transition: transform 0.5s var(--ease_out);
+}
+
+.wns_node p {
+  /* align-self: flex-end; */
+  color: var(--color_front);
+  white-space: nowrap;
+  transition: transform 0.5s var(--ease_out);
+}
+
+.wns_unclickable {
+  pointer-events: none;
+  cursor: auto;
+}
+
+.wns_unclickable div {
+  background-color: var(--color_gray);
+}
+
+.wns_unclickable p {
+  color: var(--color_gray);
+}
+
+@media (hover: hover) {
+  .wns_node:hover div::after {
+    transform: scale(1);
+  }
+  .wns_node:hover p {
+    transform: translateX(5%);
+  }
+}
+
+._dashed {
+  fill: none;
+  stroke-width: 0.2;
+}
+
+._font_2 {
+  font-size: calc(var(--scale) * 2.2rem);
+  font-family: title !important;
+}
+
+._font_3 {
+  font-size: calc(var(--scale) * 2rem);
+}
+
+._font_6 {
+  /* font-size: calc(var(--scale) * 15rem); */
+  font-size: calc(var(--scale) * 8rem);
+}
+
+/* 定义全局CSS变量，通常会在根样式中定义 */
+:root {
+  --color_white: #ffffff;
+  /* --color_front: #041a31; */
+  --color_front: #020432;
+  --color_back: #000000;
+  --color_gray: #a0a0a0;
+  --mix: difference;
+  --ease_out: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@keyframes welcome_line_rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-aspect-ratio: 1/1) {
+  .welcome_nav {
+    --interval_rotate: 25deg;
+    --before_rotate: 5deg;
+    --after_rotate: 60deg;
+    --correct_rotate: 60deg;
+    width: calc(var(--scale) * 135rem * 0.9);
+    height: calc(var(--scale) * 135rem * 0.9);
+  }
+  .wns_node {
+    left: 100%;
+  }
+}
+
+/* 添加移动端适配 */
+@media screen and (max-width: 768px) {
+  .welcome {
+    --scale: 0.5; /* 在移动设备上缩小整体比例 */
+  }
+  
+  .welcome_middle {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+  }
+  
+  .welcome_middle_title {
+    transform: scale(0.4);
+  }
+  
+  .welcome_middle_title > div:nth-child(1) {
+    margin-right: calc(var(--scale) * 5rem);
+  }
+  
+  .welcome_middle_title > div:nth-child(2) {
+    margin-left: calc(var(--scale) * 5rem);
+  }
+  
+  .welcome_middle_info {
+    width: 80%;
+    text-align: center;
+    position: relative;
+    margin-top: 1rem;
+  }
+  
+  .welcome_nav {
+    width: calc(var(--scale) * 105rem);
+    height: calc(var(--scale) * 105rem);
+  }
+}
+
+/* 小屏幕设备的更多适配 */
+@media screen and (max-width: 480px) {
+  .welcome {
+    --scale: 0.35; /* 在更小的移动设备上进一步缩小 */
+  }
+  
+  .welcome_middle_title {
+    transform: scale(0.5);
+  }
+  
+  .welcome_nav {
+    width: calc(var(--scale) * 95rem);
+    height: calc(var(--scale) * 95rem);
+  }
+  
+  ._font_6 {
+    font-size: calc(var(--scale) * 6rem);
+  }
+  
+  ._font_3 {
+    font-size: calc(var(--scale) * 2.5rem);
+  }
+  
+  ._font_2 {
+    font-size: calc(var(--scale) * 1.8rem);
+  }
+}
+
+/* 针对横屏模式的适配 */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  .welcome {
+    --scale: 0.4;
+  }
+  
+  .welcome_middle {
+    height: 90vh;
+  }
+  
+  .welcome_nav {
+    transform: scale(0.8);
+  }
+}

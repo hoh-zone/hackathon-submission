@@ -1,0 +1,35 @@
+.background {
+  --scale: 0.7;
+  pointer-events: none;
+}
+
+.fullscreen {
+  position: fixed;
+  top: 0%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* z-index: 101; */
+  /* z-index: -1; */
+}
+
+.background .ball {
+  position: absolute;
+  left: calc(100% * var(--x));
+  top: calc(100% * var(--y));
+  width: calc(var(--scale) * 50rem * var(--s));
+  height: calc(var(--scale) * 50rem * var(--s));
+  opacity: var(--o);
+  overflow: hidden;
+}
+
+/* 黑暗模式下，小球亮了点，这里再减去一点透明度 */
+.darkMode .background .ball {
+  opacity: calc(var(--o) - 0.4);
+}
+
+.background .ball img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}

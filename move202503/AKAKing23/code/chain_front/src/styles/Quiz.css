@@ -1,0 +1,352 @@
+/* 问答页面的主容器 */
+.quiz-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  animation: fadeIn 0.5s ease-in-out;
+  position: relative;
+  z-index: 999;
+}
+
+/* 加载动画容器 */
+.quiz-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  text-align: center;
+}
+
+/* 加载旋转动画 */
+.loading-spinner {
+  width: 80px;
+  height: 80px;
+  border: 8px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #3498db;
+  animation: spin 1s linear infinite, pulse 2s ease-in-out infinite;
+  margin-bottom: 2rem;
+}
+
+/* 加载文字动画 */
+.loading-text {
+  font-size: 1.8rem;
+  color: #333;
+  animation: bounce 2s ease infinite;
+}
+
+/* 进度条 */
+.quiz-progress {
+  height: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3498db, #2ecc71);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* 问题标题样式 */
+.quiz-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.quiz-header h2 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-question h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #34495e;
+}
+
+/* 选项样式 */
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.quiz-option {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quiz-option:hover {
+  border-color: #3498db;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
+}
+
+.quiz-option.selected {
+  border-color: #3498db;
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+.quiz-option.correct {
+  border-color: #2ecc71;
+  background-color: rgba(46, 204, 113, 0.1);
+}
+
+.quiz-option.incorrect {
+  border-color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+}
+
+.option-letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  margin-right: 1rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.option-text {
+  flex: 1;
+}
+
+/* 按钮样式 */
+.quiz-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.quiz-actions button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quiz-actions button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+/* 完成页面样式 */
+.quiz-completed {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.quiz-completed h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.quiz-completed p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: #34495e;
+}
+
+.home-link {
+  display: inline-block;
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.home-link:hover {
+  background-color: #e0e0e0;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 答案解析样式 */
+.answer-explanation {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  border-left: 4px solid #4caf50;
+}
+
+.answer-explanation p {
+  margin: 8px 0;
+}
+
+.correct-answer {
+  font-weight: bold;
+  color: #4caf50;
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+.explanation-text {
+  margin: 20px 0;
+  color: #666;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .quiz-container {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .quiz-option {
+    padding: 0.75rem;
+  }
+
+  .loading-spinner {
+    width: 60px;
+    height: 60px;
+    border-width: 6px;
+  }
+
+  .loading-text {
+    font-size: 1.5rem;
+  }
+}
+.token-balance {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  justify-content: end;
+}
+.reflesh-button {
+  background: #000;
+  color: #fff;
+  margin-left: 10px;
+  font-size: 12px;
+}
+
+/* 成就部分样式 */
+.achievement-section {
+  background: linear-gradient(to right, #f6f7f9, #e9f7fe);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e0e7ff;
+  animation: glow 2s infinite alternate;
+}
+
+.achievement-section h3 {
+  color: #3a539b;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+}
+
+.achievement-text {
+  color: #4a6fa5;
+  font-size: 1.1rem;
+  margin: 10px 0;
+}
+
+.mint-sbt-button {
+  background: linear-gradient(135deg, #3498db, #1d6fa5);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 15px auto;
+  display: inline-block;
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+}
+
+.mint-sbt-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 15px rgba(52, 152, 219, 0.4);
+  background: linear-gradient(135deg, #2980b9, #164866);
+}
+
+.mint-sbt-button:active {
+  transform: translateY(1px);
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px rgba(66, 139, 202, 0.2);
+  }
+  to {
+    box-shadow: 0 0 15px rgba(66, 139, 202, 0.5);
+  }
+}
