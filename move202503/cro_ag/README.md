@@ -2,63 +2,66 @@
 
 - 项目名称：Cro Ag
   描述：
-  Cro Ag 是建立在 Sui 区块链上的 Web3 超级聚合器，为用户提供对多个 DeFi 协议的统一访问，包括 Lending 和 Swap 功能。我们的使命是通过抽象复杂性并集成各Defi平台的关键协议，使 Sui 上的 DeFi 更易于访问、更高效和更强大。
+  Cro Ag 是构建在 **Sui 区块链**上的下一代 **Web3 超级聚合器**，为用户提供对多个 DeFi 协议的统一访问，涵盖 **Swap 聚合交易**、**Lending 借贷聚合** 和 **钱包优化** 等功能。我们的使命是通过整合 Sui 上主要的 DeFi 协议并抽象复杂性，使 DeFi 更易用、高效、强大。
 
-# Member:
+# Member
 
-- **Move 开发 & 测试**：Dage （[GitHub 主页](https://github.com/croprotocol)
-- **TypeScript 开发 & 测试**：Xiaoyu Fu
-- **TypeScript 开发 & 测试**：Chenyu Li
+- **Move 智能合约开发 & 测试**：Dage（[GitHub 主页](https://github.com/croprotocol)）
+- **TypeScript 前端开发 & 测试**：Xiaoyu Fu
+- **TypeScript 前端开发 & 测试**：Chenyu Li
 
-# 项目测试部署地址：
+# 项目测试部署地址
 
-[https://cro.ag](https://cro.ag)
+正式部署网址：[https://cro.ag](https://cro.ag)
 
----
-
-# 🐊 Cro Ag – The Sui DeFi Super Aggregator
-
-**Cro Ag** is a next-generation **Web3 DeFi aggregator** built on the **Sui blockchain**, providing unified access to advanced **Swap**, **Lending**, and **Wallet optimization** tools. Designed for both everyday users and pro DeFi traders, Cro Ag helps you interact with DeFi protocols in a smarter, faster, and more profitable way—without the complexity.
+你也可以在 **DeFiLlama** 查看 Cro Ag 的交易数据：
+🔗 [https://defillama.com/aggregators/chains/sui](https://defillama.com/aggregators/chains/sui)
 
 ---
 
-## ✨ Core Features
+# 🐊 Cro Ag – Sui 上的 DeFi 超级聚合器
 
-### 🔁 Swap Aggregator
-
-- Ultra-efficient swap routing across Sui DEXs using **mechanism-level pathfinding**
-- Real-time liquidity analysis with dynamic pricing via **Pyth oracle integration**
-- Cross-platform **price comparison tool**—see how Cro Ag fares against other aggregators
-- Sidebar wallet display with live balances, token insights
-- Integrated with **BTCFi liquidity pools** for native BTC asset support on Sui
-
-### 🧠 Lending Aggregator (DELA)
-
-- One-stop access to protocols like **Navi**, **Scallop**, and **Kai Finance**
-- Automated pathfinder to optimize APY, collateral ratio, and protocol choice
-- Live updates for TVL, APYs
-- Designed to help you **maximize passive income or leverage at minimal cost**
-
-### 🧹 Wallet Cleanup + Rewards
-
-- Clear 0-balance residual tokens with a single tap
-- Earn **Cro Points** for wallet maintenance—turning cleanup into value
-- Supports broader network performance by minimizing wallet bloat
-
-### 🏅 Cro Points Ecosystem
-
-- Earn points from swaps, lending, referrals, and participation
-- Future use cases: gas sponsorship credits
-- Contributor efforts are recorded and evaluated toward ambassador access
+**Cro Ag** 是专为 Sui 区块链设计的 Web3 DeFi 聚合平台，面向普通用户与专业交易者，提供更智能、更快速、更有利可图的 DeFi 操作体验，帮助用户以统一界面接入多个协议，简化复杂流程。
 
 ---
 
-## 🧰 Developer SDK
+## ✨ 核心功能亮点
 
-To make building on top of Cro Ag easy and modular, we offer a TypeScript SDK:
+### 🔁 Swap 聚合器
 
-- 📦 NPM: [cro-sdk](https://www.npmjs.com/package/cro-sdk)
-- 📥 Install:
+- 基于协议级路径算法的高效 Swap 路由系统
+- 集成 **Pyth 预言机** 实时流动性与价格数据
+- 跨平台价格对比工具：一目了然比较各大聚合器的报价
+- 侧边栏钱包实时显示余额和代币信息
+- 集成 **BTCFi 流动性池**，支持原生 BTC 在 Sui 链上的交易
+
+### 🧠 Lending 借贷聚合器（DELA）
+
+- 一站式接入 **Navi**、**Scallop**、**Kai Finance** 等协议
+- 自动化路径引擎，智能推荐最佳 APY、质押率、平台选择
+- 实时更新 TVL、APY 数据
+- 无论是被动收入还是杠杆策略，均可实现更优成本结构
+
+### 🧹 钱包清理 + 奖励机制
+
+- 一键清理 0 余额的代币残留
+- 每次清理可获得 **Cro Points**，变“清理”为收益
+- 同时优化整个网络性能，降低链上垃圾负担
+
+### 🏅 Cro Points 积分生态
+
+- 通过 Swap、借贷、邀请、参与互动获取积分
+- 积分将用于未来的奖励机制，例如 Gas 补贴、治理资格
+- 所有贡献行为将被记录，用于筛选社区大使及核心成员
+
+---
+
+## 🧰 开发者 SDK
+
+我们提供 TypeScript 开发工具包，方便集成 Cro Ag 功能：
+
+- 📦 NPM 包：[cro-sdk](https://www.npmjs.com/package/cro-sdk)
+- 📥 安装：
 
 ```bash
 npm install cro-sdk
@@ -66,21 +69,21 @@ npm install cro-sdk
 
 ---
 
-## 🌐 Local Web Dev Setup
+## 🌐 本地开发部署指南
 
-Clone this repo and start building locally:
+克隆项目并启动本地开发环境：
 
 ```bash
-pnpm install      # install all dependencies  
-pnpm run dev      # start dev server  
-pnpm run build    # production build
+pnpm install      # 安装依赖  
+pnpm run dev      # 启动开发服务器  
+pnpm run build    # 构建生产环境
 ```
 
 ---
 
-## 🔐 Move Smart Contracts
+## 🔐 Move 智能合约构建
 
-Our core logic is powered by secure, gas-optimized Move smart contracts built for the Sui chain.
+核心逻辑基于 Sui 链上优化 Gas 的 Move 合约：
 
 ```bash
 sui move build
@@ -88,20 +91,20 @@ sui move build
 
 ---
 
-## 🌍 Join the Cro Community
+## 🌍 加入 Cro 社区
 
-We're actively building with and for the Sui ecosystem.
+我们正在积极构建并服务于 Sui 生态：
 
-- 🌐 Website: [https://cro.ag](https://cro.ag)
-- 🐦 Twitter/X: [@cro\_aggregator](https://x.com/cro_aggregator)
-- 💬 Discord: [Join Our Community](https://discord.com/invite/UG6c7nXr5X)
-
----
-
-## 🎉 Community & Contests
-
-Cro Ag is participating in **Sui Overflow 2025**!
+- 🌐 官网：[https://cro.ag](https://cro.ag)
+- 🐦 推特/X：[Cro Aggregator @cro\_aggregator](https://x.com/cro_aggregator)
+- 💬 Discord：[点击加入](https://discord.com/invite/UG6c7nXr5X)
 
 ---
 
-> Built with ❤️ by \[Crater Labs] – Bringing the power of DeFi to everyone on Sui.
+## 🎉 社区活动与大赛
+
+Cro Ag 正在参与 **Sui Overflow 2025 开发大赛**！
+
+---
+
+> 由 \[Crater Labs] 打造，致力于将 DeFi 的强大力量带给 Sui 上的每一位用户。
