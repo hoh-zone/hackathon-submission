@@ -1,12 +1,14 @@
 "use client";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SuiClientProvider, useSuiClientContext, WalletProvider } from "@mysten/dapp-kit";
+import {
+  SuiClientProvider,
+  useSuiClientContext,
+  WalletProvider,
+} from "@mysten/dapp-kit";
 import { defaultNetwork, networkConfig } from "@/app/networkconfig";
-import { isEnokiNetwork, registerEnokiWallets } from "@mysten/enoki";
 import "@mysten/dapp-kit/dist/index.css";
 import { useEffect } from "react";
-
+import { isEnokiNetwork, registerEnokiWallets } from "@mysten/enoki";
 const queryClient = new QueryClient();
 
 export function SuiProvider({ children }: { children: React.ReactNode }) {
@@ -16,7 +18,7 @@ export function SuiProvider({ children }: { children: React.ReactNode }) {
         networks={networkConfig}
         defaultNetwork={defaultNetwork}
       >
-        {/* <RegisterEnokiWallets /> */}
+        <RegisterEnokiWallets />
         <WalletProvider autoConnect>{children}</WalletProvider>
       </SuiClientProvider>
     </QueryClientProvider>
@@ -34,7 +36,9 @@ function RegisterEnokiWallets() {
       providers: {
         // Provide the client IDs for each of the auth providers you want to use:
         google: {
-          clientId: "179718222126-s2gr8vord96b0qtgs1mff0mt6a74rsao.apps.googleusercontent.com",
+          clientId:
+            "179718222126-s2gr8vord96b0qtgs1mff0mt6a74rsao.apps.googleusercontent.com",
+          redirectUrl: "http://127.0.0.1:9000",
         },
       },
       client,

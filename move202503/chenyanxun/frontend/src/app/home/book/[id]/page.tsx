@@ -5,13 +5,12 @@ import { Button } from "@/components/ui/button";
 import { queryChapters } from "@/contracts";
 import { UploadedBlobInfo, useWalrusBlob } from "@/hooks/useWalrusBlob";
 import { IChapter, IVaribales } from "@/type";
+import { useSignAndExecuteTransaction } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useToast } from "@/hooks/useToast";
-import { useZkproof } from "@/hooks/useZkproof";
-import { useCrypto } from "@/hooks/useCrypto";
 function Book() {
   const router = useRouter();
   const params = useParams();
@@ -20,11 +19,8 @@ function Book() {
   const book = searchParams.get("book");
   const description = searchParams.get("description");
   const avatar = searchParams.get("avatar");
-  const { writeFileToWalrus } = useWalrusBlob();
-  const { encryptFile } = useCrypto();
+  const { writeFileToWalrus, writeFileToWalrusWithSeal } = useWalrusBlob();
   const { errorToast } = useToast();
-  const { zktx } = useZkproof();
-  const account = localStorage.getItem("address");
   const [showModal, setShowModal] = useState(false);
   const [showWattingModal, setShowWattingModal] = useState(false);
   const [title, setTitle] = useState("");
@@ -32,22 +28,19 @@ function Book() {
   const [chapterFile, setChapterFile] = useState<File | null>(null);
   const { packageID, module } = useNetworkVariables() as IVaribales;
   const [chapters, setChapters] = useState<IChapter[]>([]);
+  const { mutate: signAndExecute } = useSignAndExecuteTransaction();
   useEffect(() => {
     fetchData();
   }, []);
-  const fetchData = async () => {
+  async function fetchData() {
     const chapters = await queryChapters(id as string);
     setChapters([...chapters]);
     console.log("chapters", chapters);
-  };
+  }
   const goToChapterDetail = (chapter: IChapter) => {
     router.push(`/home/book/chapter/${chapter.id}`);
   };
-  const deleteChapter = async (chapter: IChapter) => {
-    if (!account) {
-      errorToast("Account is undefined");
-      return;
-    }
+  const deleteChapter = (chapter: IChapter) => {
     if (confirm("Are you sure delete this chapter?")) {
       setShowWattingModal(true);
       const tx = new Transaction();
@@ -57,22 +50,36 @@ function Book() {
         function: "delete_chapter",
         arguments: [tx.object(chapter.book), tx.object(chapter.id)],
       });
-      const executeRes = await zktx(tx, account);
-      console.log("executeRes===", executeRes);
-      if (executeRes?.digest) {
-        fetchData();
-      }
-      setShowWattingModal(false);
+      signAndExecute(
+        {
+          transaction: tx,
+        },
+        {
+          onSuccess: async (res) => {
+            if (res.digest) {
+              const result = await suiClient.waitForTransaction({
+                digest: res.digest,
+                options: { showEffects: true, showEvents: true },
+              });
+              if (result.effects?.status.status === "success") {
+                setShowWattingModal(false);
+                fetchData();
+                console.log("Transaction success:", result);
+              }
+            }
+          },
+          onError: (err) => {
+            console.log(err);
+            setShowWattingModal(false);
+          },
+        }
+      );
     } else {
       // 用户点击"取消"执行的代码
       console.log("操作已取消");
     }
-  };
+  }
   const submitEvent = async () => {
-    if (!account) {
-      errorToast("Account is undefined");
-      return;
-    }
     if (!title) {
       errorToast("Please enter a title");
       return;
@@ -87,9 +94,11 @@ function Book() {
       blobInfo = await writeFileToWalrus(chapterFile);
       console.log("blobInfo====不加密", blobInfo);
     } else {
-      // 加密chapterFile
-      const newChapterFile = await encryptFile(chapterFile, "123456")
-      blobInfo = await writeFileToWalrus(newChapterFile);
+      blobInfo = await writeFileToWalrusWithSeal(
+        chapterFile,
+        packageID,
+        id as string
+      );
       console.log("blobInfo====加密", blobInfo);
     }
     if (blobInfo && blobInfo.blobId) {
@@ -107,22 +116,42 @@ function Book() {
           tx.objectRef({
             objectId: latestObject.data?.objectId ?? "",
             version: latestObject.data?.version ?? "",
-            digest: latestObject.data?.digest ?? "",
+            digest: latestObject.data?.digest ?? ""
           }),
+          // tx.object(`${latestObject.data?.objectId ?? ""}?version=${latestObject.data?.version ?? ""}`),
           tx.pure.string(title),
           tx.pure.string(blobInfo.blobId),
           tx.pure.u64(price),
         ],
       });
-      const result = await zktx(tx, account);
-      if (result?.digest) {
-        setShowWattingModal(false);
-        setShowModal(false);
-        setTitle("");
-        setPrice(0);
-        setChapterFile(null);
-        fetchData();
-      }
+      signAndExecute(
+        {
+          transaction: tx,
+        },
+        {
+          onSuccess: async (res) => {
+            if (res.digest) {
+              const result = await suiClient.waitForTransaction({
+                digest: res.digest,
+                options: { showEffects: true, showEvents: true },
+              });
+              if (result.effects?.status.status === "success") {
+                setShowWattingModal(false);
+                setShowModal(false);
+                setTitle("");
+                setPrice(0);
+                setChapterFile(null);
+                fetchData();
+                console.log("Transaction success:", result);
+              }
+            }
+          },
+          onError: (err) => {
+            console.log(err);
+            setShowWattingModal(false);
+          },
+        }
+      );
     } else {
       setShowWattingModal(false);
     }

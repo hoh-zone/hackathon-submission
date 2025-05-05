@@ -19,13 +19,13 @@ function BookCard({ book, goToBookDetail, deleteBook }: IbookProps) {
             priority={true}
           />
           <div className="flex-1 flex flex-col justify-start p-4 pr-0">
-            <CardTitle className="text-lg font-bold line-clamp-3">
+            <CardTitle className="text-lg font-bold line-clamp-2">
               {book.title}
             </CardTitle>
             <div className="text-sm text-gray-600 mt-2">
               Serialized in {book.chapters.length} chapters
             </div>
-            <div className="text-sm text-gray-600 mt-2 line-clamp-4">
+            <div className="text-sm text-gray-600 mt-2 line-clamp-3">
               {book.description || "No description available."}
             </div>
             {deleteBook && (
