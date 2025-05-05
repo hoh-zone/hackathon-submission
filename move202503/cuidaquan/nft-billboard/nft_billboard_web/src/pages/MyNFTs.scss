@@ -1,0 +1,302 @@
+.my-nfts-page {
+  padding: 20px;
+  position: relative;
+
+  // 粒子背景动画
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100px;
+    right: -100px;
+    height: 300px;
+    background-image:
+      radial-gradient(circle at 50% 50%, rgba(78, 99, 255, 0.03) 0%, transparent 80%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  // 添加装饰元素
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 400px;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(78, 99, 255, 0.03) 1px, transparent 5px),
+      radial-gradient(circle at 45% 30%, rgba(110, 86, 207, 0.03) 1px, transparent 6px),
+      radial-gradient(circle at 75% 20%, rgba(78, 99, 255, 0.03) 1px, transparent 8px),
+      radial-gradient(circle at 85% 45%, rgba(110, 86, 207, 0.02) 1px, transparent 10px);
+    animation: float 20s infinite linear;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .section-title {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 40px;
+
+    h2 {
+      font-weight: 700;
+      font-size: 32px;
+      position: relative;
+      margin-bottom: 16px;
+      color: var(--text-dark);
+
+      &:after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #4e63ff, #6e56cf);
+        margin: 12px 0 0;
+        border-radius: 3px;
+      }
+    }
+
+    p {
+      display: block;
+      margin-bottom: 30px;
+      color: var(--text-medium);
+      font-size: 16px;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+  }
+
+  .connect-wallet-prompt {
+    margin: 24px 0;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    animation: fadeIn var(--animation-speed-normal) ease-in-out;
+  }
+
+  .loading-container {
+    text-align: center;
+    padding: 80px 0;
+    position: relative;
+    z-index: 1;
+
+    .ant-spin {
+      .ant-spin-dot-item {
+        background-color: #4e63ff;
+      }
+    }
+
+    p {
+      margin-top: 16px;
+      color: var(--text-medium);
+      font-size: 16px;
+    }
+  }
+
+  .error-alert {
+    margin-bottom: 24px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(78, 99, 255, 0.1);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 80px 30px;
+    background: linear-gradient(145deg, #f9faff, #f0f2ff);
+    border-radius: 16px;
+    margin-top: 40px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(78, 99, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    animation: fadeIn var(--animation-speed-normal) ease-in-out;
+
+    &:before {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(78, 99, 255, 0.05) 0%, transparent 70%);
+      top: -150px;
+      right: -150px;
+      z-index: 0;
+    }
+
+    .empty-actions {
+      margin-top: 30px;
+      position: relative;
+      z-index: 1;
+
+      .ant-btn-primary {
+        height: 44px;
+        padding: 0 24px;
+        font-weight: 600;
+        background: linear-gradient(90deg, #4e63ff, #6e56cf);
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(78, 99, 255, 0.3);
+        transition: all 0.3s;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(78, 99, 255, 0.4);
+          background: linear-gradient(90deg, #5a6eff, #7a62d9);
+        }
+
+        a {
+          text-decoration: none;
+          color: white;
+        }
+      }
+    }
+  }
+
+  .nft-tabs {
+    animation: slideUpFadeIn 0.6s ease-out forwards;
+    position: relative;
+    z-index: 1;
+
+    .ant-tabs-nav {
+      margin-bottom: 32px;
+
+      &::before {
+        border-bottom: 1px solid rgba(78, 99, 255, 0.1);
+      }
+
+      .ant-tabs-tab {
+        padding: 12px 0;
+        margin: 0 24px 0 0;
+        font-weight: 600;
+
+        .tab-label {
+          display: flex;
+          align-items: center;
+
+          .anticon {
+            margin-right: 8px;
+            font-size: 16px;
+            color: #4e63ff;
+          }
+        }
+
+        &.ant-tabs-tab-active .ant-tabs-tab-btn {
+          color: #4e63ff;
+        }
+      }
+
+      .ant-tabs-ink-bar {
+        background: linear-gradient(90deg, #4e63ff, #6e56cf);
+        height: 3px;
+        border-radius: 3px 3px 0 0;
+      }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+
+      // 卡片入场动画
+      > div {
+        animation: slideUpFadeIn 0.6s ease-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+
+        @for $i from 1 through 12 {
+          &:nth-child(#{$i}) {
+            animation-delay: $i * 0.05s;
+          }
+        }
+      }
+    }
+
+    .empty-tab-content {
+      padding: 60px 0;
+      margin: 24px 0;
+      background: linear-gradient(145deg, #f9faff, #f0f2ff);
+      border-radius: 16px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(78, 99, 255, 0.1);
+
+      .ant-empty-image {
+        height: 80px;
+      }
+
+      .ant-empty-description {
+        color: var(--text-medium);
+        font-size: 16px;
+        margin-top: 16px;
+      }
+    }
+  }
+}
+
+// 动画定义
+@keyframes float {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// 响应式调整
+@media (max-width: 768px) {
+  .my-nfts-page {
+    .nft-tabs {
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .ant-tabs-nav {
+        .ant-tabs-tab {
+          margin: 0 16px 0 0;
+
+          .tab-label {
+            .anticon {
+              margin-right: 4px;
+            }
+
+            .ant-badge {
+              transform: scale(0.8);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .my-nfts-page {
+    h2 {
+      font-size: 28px;
+    }
+
+    .empty-state {
+      padding: 60px 20px;
+    }
+  }
+}

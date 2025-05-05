@@ -1,0 +1,137 @@
+.walrus-upload-container {
+  margin-bottom: 20px;
+
+  .storage-selector {
+    margin-bottom: 16px;
+  }
+
+  .ratio-guidance {
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background-color: #f0f8ff;
+    border-radius: 4px;
+    border: 1px solid #e6f0ff;
+    font-size: 14px;
+    color: #333;
+
+    .anticon {
+      color: #1677ff;
+      margin-right: 8px;
+    }
+  }
+
+  .ant-upload-drag {
+    border: 2px dashed #d9d9d9;
+
+    &:hover {
+      border-color: #1890ff;
+    }
+  }
+
+  .upload-note {
+    font-size: 12px;
+    color: #888;
+    margin-top: 8px;
+  }
+
+  .upload-requirements {
+    margin-top: 12px;
+    padding: 8px 16px;
+    border-top: 1px dashed #e8e8e8;
+    text-align: center;
+
+    p {
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: #888;
+    }
+  }
+
+  .external-url-preview {
+    margin-top: 16px;
+  }
+
+  .preview-error {
+    color: #ff4d4f;
+    padding: 12px;
+    border: 1px dashed #ff4d4f;
+    border-radius: 4px;
+    background-color: #fff1f0;
+  }
+
+  // 上传进度容器样式
+  .upload-progress-container {
+    margin: 16px 0;
+
+    .ant-card {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .upload-progress-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+
+      h3 {
+        margin: 0;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+      }
+    }
+
+    .upload-stage-info {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #333;
+
+      .upload-stage-hint {
+        font-size: 13px;
+        color: #fa8c16;
+        background-color: #fff7e6;
+        padding: 8px 12px;
+        border-radius: 4px;
+        margin-top: 8px;
+      }
+    }
+  }
+}
+
+.walrus-upload-success {
+  .uploaded-content-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .ant-card-head {
+      background-color: #f6ffed;
+      border-bottom: 1px solid #b7eb8f;
+      color: #52c41a;
+    }
+
+    .uploaded-content-preview {
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: center;
+      background-color: #fafafa;
+      padding: 16px;
+      border-radius: 4px;
+    }
+
+    .content-url {
+      border-top: 1px dashed #d9d9d9;
+      padding-top: 12px;
+      margin-top: 12px;
+
+      p {
+        margin-bottom: 4px;
+        color: #555;
+        font-weight: 500;
+      }
+
+      a {
+        word-break: break-all;
+      }
+    }
+  }
+}

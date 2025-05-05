@@ -1,0 +1,33 @@
+/* 提高深色背景下文本的亮度 */
+
+/* 首页CTA部分的副标题 - 特别加强 */
+.cta-subtitle {
+  color: #ffffff !important; /* 使用纯白色 */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important; /* 添加适度的黑色阴影 */
+  font-weight: 500 !important; /* 适度加粗 */
+  font-size: 16px !important; /* 缩小字体 */
+  background-color: transparent !important; /* 去掉背景 */
+  display: block !important; /* 改为块级元素确保换行 */
+  margin: 0 auto 30px !important; /* 保持原有的下边距 */
+  max-width: 80% !important; /* 最大宽度限制 */
+}
+
+/* 页脚版权信息 */
+.footer-copyright {
+  color: #ffffff !important; /* 使用纯白色 */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important; /* 添加文字阴影 */
+  font-weight: 500 !important; /* 稍微加粗 */
+  letter-spacing: 0.5px !important; /* 增加字间距 */
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3)) !important; /* 渐变背景 */
+  padding: 6px 12px !important; /* 增加内边距 */
+  border-radius: 4px !important; /* 圆角边框 */
+  display: inline-block !important; /* 使背景只包围文本 */
+  border: 1px solid rgba(255, 255, 255, 0.1) !important; /* 添加细微边框 */
+  transition: all 0.3s ease !important; /* 添加过渡效果 */
+}
+
+.footer-copyright:hover {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)) !important; /* 悬停时背景加深 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important; /* 添加阴影 */
+  transform: translateY(-2px) !important; /* 轻微上浮 */
+}

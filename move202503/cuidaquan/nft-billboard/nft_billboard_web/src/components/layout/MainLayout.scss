@@ -1,0 +1,124 @@
+.main-layout {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f0f2ff, #fbfcff);
+  
+  .ant-layout-header {
+    background: #001529; /* 深色背景 */
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+    
+    &.scrolled {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    // 菜单项样式
+    .ant-menu {
+      background: transparent;
+      border-bottom: none;
+      line-height: 70px;
+      
+      .ant-menu-item a {
+        color: rgba(255, 255, 255, 0.85);
+      }
+      
+      .ant-menu-item-selected a {
+        color: #fff;
+      }
+    }
+  }
+  
+  .main-content {
+    padding: 40px 24px;
+    background: transparent;
+    position: relative;
+    
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: radial-gradient(rgba(78, 99, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+    }
+    
+    .content-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(78, 99, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      
+      // 科技装饰元素
+      &:before {
+        content: '';
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(78, 99, 255, 0.03) 0%, transparent 70%);
+        top: -250px;
+        right: -250px;
+        z-index: 0;
+      }
+      
+      &:after {
+        content: '';
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(110, 86, 207, 0.03) 0%, transparent 70%);
+        bottom: -150px;
+        left: -150px;
+        z-index: 0;
+      }
+      
+      & > * {
+        position: relative;
+        z-index: 1;
+      }
+    }
+  }
+  
+  .ant-layout-footer {
+    background: #101432;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 40px 24px;
+    position: relative;
+    overflow: hidden;
+    
+    // 添加科技风格网格背景
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+  }
+} 

@@ -1,0 +1,42 @@
+.app-footer {
+  text-align: center;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .footer-links {
+    margin-top: 16px;
+
+    a {
+      margin: 0 12px;
+      position: relative;
+      transition: all 0.3s ease;
+      padding: 4px 8px;
+      border-radius: 4px;
+
+      &:hover {
+        color: #ffffff !important;
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+
+      &:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 1px;
+        bottom: 0;
+        left: 50%;
+        background-color: #ffffff;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      &:hover:after {
+        width: 80%;
+      }
+    }
+  }
+}

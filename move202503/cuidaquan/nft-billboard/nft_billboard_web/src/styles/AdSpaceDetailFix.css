@@ -1,0 +1,119 @@
+/* 修复广告位详情页样式问题 */
+/* 全局图标修复 */
+.anticon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.anticon svg {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 修复图标显示问题 */
+.ad-space-detail-page .ad-info .info-item .anticon {
+  display: inline-flex !important;
+  margin-right: 10px !important;
+  font-size: 16px !important;
+  color: #4e63ff !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 强制显示图标 */
+.ad-space-detail-page .ad-info .info-item .anticon svg {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 修复文字间距问题 */
+.ad-space-detail-page .ad-info .info-item {
+  display: flex !important;
+  align-items: center !important;
+  margin-bottom: 12px !important;
+  line-height: 1.5 !important;
+}
+
+.ad-space-detail-page .ad-info .info-item .ant-typography {
+  margin-bottom: 0 !important;
+  margin-left: 5px !important;
+}
+
+/* 修复活跃标签背景问题 */
+.ad-space-detail-page .active-nft-display .active-badge {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10 !important;
+  background: transparent !important;
+}
+
+.ad-space-detail-page .active-nft-display .active-badge .ant-tag {
+  margin: 0 !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  padding: 3px 10px !important;
+  border-radius: 20px !important;
+  background: rgba(82, 196, 26, 0.9) !important;
+  border: none !important;
+  color: white !important;
+}
+
+/* 修复NFT卡片标签样式 */
+.nft-card-tag {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10 !important;
+}
+
+.nft-card-tag .ant-tag {
+  margin: 0 2px !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  padding: 3px 10px !important;
+  border-radius: 20px !important;
+  border: none !important;
+  color: white !important;
+}
+
+.nft-card-tag .ant-tag-green {
+  background: rgba(82, 196, 26, 0.9) !important;
+}
+
+.nft-card-tag .ant-tag-blue {
+  background: rgba(24, 144, 255, 0.9) !important;
+}
+
+.nft-card-tag .ant-tag-grey {
+  background: rgba(120, 120, 120, 0.9) !important;
+}
+
+.nft-card-tag .ant-tag-purple {
+  background: rgba(114, 46, 209, 0.9) !important;
+}
+
+/* 修复按钮样式 */
+.nft-list-card .ant-btn-primary {
+  background: linear-gradient(90deg, #4e63ff, #6e56cf) !important;
+  border: none !important;
+  box-shadow: 0 4px 10px rgba(78, 99, 255, 0.2) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+}
+
+.nft-list-card .ant-btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 15px rgba(78, 99, 255, 0.3) !important;
+  background: linear-gradient(90deg, #5a6eff, #7a62d9) !important;
+}
+
+.nft-list-card .ant-btn-primary a {
+  color: white !important;
+  text-decoration: none !important;
+}

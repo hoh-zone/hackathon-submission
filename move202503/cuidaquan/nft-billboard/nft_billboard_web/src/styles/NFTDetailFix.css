@@ -1,0 +1,87 @@
+/* 修复NFT详情页样式问题 */
+/* 全局图标修复 */
+.anticon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.anticon svg {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 修复NFT详情页字段间距 */
+.nft-detail-page .nft-details .ant-descriptions-item {
+  margin-bottom: 20px !important;
+  padding-bottom: 12px !important;
+}
+
+.nft-detail-page .nft-details .ant-descriptions-item-label {
+  font-weight: 600 !important;
+  color: var(--text-dark) !important;
+  padding-bottom: 8px !important;
+}
+
+.nft-detail-page .nft-details .ant-descriptions-item-content {
+  padding-top: 4px !important;
+}
+
+/* 调整字段间距与广告位详情页保持一致 */
+.nft-detail-page .ad-info .info-item {
+  display: flex !important;
+  align-items: center !important;
+  margin-bottom: 16px !important;
+  line-height: 1.5 !important;
+}
+
+.nft-detail-page .nft-details .ant-descriptions-item-label {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.nft-detail-page .nft-details .ant-descriptions-item-content {
+  margin-top: 4px !important;
+  margin-bottom: 16px !important;
+}
+
+/* 修复图标显示问题 */
+.nft-detail-page .nft-details .ant-descriptions-item-label .anticon {
+  display: inline-flex !important;
+  margin-right: 10px !important;
+  font-size: 16px !important;
+  color: #4e63ff !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 强制显示图标 */
+.nft-detail-page .nft-details .ant-descriptions-item-label .anticon svg {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 修改卡片背景样式与广告位详情页保持一致 */
+.nft-detail-page .nft-details .ant-card {
+  width: 100% !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  border: none !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important; /* 纯白色背景，不使用渐变 */
+  transition: all 0.3s !important;
+  margin-bottom: 30px !important;
+}
+
+.nft-detail-page .nft-details .ant-card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12) !important;
+}
+
+.nft-detail-page .nft-details .ant-card .ant-card-body {
+  padding: 30px !important;
+}

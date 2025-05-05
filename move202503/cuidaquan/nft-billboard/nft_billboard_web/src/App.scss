@@ -1,0 +1,274 @@
+/* Antd 默认已经内置了样式，不需要额外导入 */
+/* 全局样式 */
+
+// 导入字体
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap');
+
+// 定义全局 CSS 变量
+:root {
+  --primary: #4e63ff;
+  --primary-light: #6e7eff;
+  --primary-dark: #3a4edb;
+  --secondary: #6e56cf;
+  --secondary-light: #8a74e3;
+  --secondary-dark: #5642a6;
+  
+  --text-dark: #101432;
+  --text-medium: #505780;
+  --text-light: #9098b6;
+  
+  --background: #fbfcff;
+  --background-content: #ffffff;
+  
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  
+  --box-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.05);
+  --box-shadow-md: 0 5px 15px rgba(0, 0, 0, 0.08);
+  --box-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+  
+  --primary-gradient: linear-gradient(90deg, var(--primary), var(--secondary));
+  --primary-gradient-hover: linear-gradient(90deg, #5a6eff, #7a62d9);
+  
+  --animation-speed-slow: 0.5s;
+  --animation-speed-normal: 0.3s;
+  --animation-speed-fast: 0.15s;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background);
+  color: var(--text-dark);
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-layout-content {
+  padding: 24px;
+  min-height: calc(100vh - 64px - 70px);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  
+  p {
+    margin-top: 16px;
+    color: #666;
+  }
+}
+
+/* 基础样式重置 */
+code, pre {
+  font-family: 'Roboto Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* 通用样式 */
+.text-center {
+  text-align: center;
+}
+
+.mt-1 {
+  margin-top: 8px;
+}
+
+.mt-2 {
+  margin-top: 16px;
+}
+
+.mt-3 {
+  margin-top: 24px;
+}
+
+.mb-1 {
+  margin-bottom: 8px;
+}
+
+.mb-2 {
+  margin-bottom: 16px;
+}
+
+.mb-3 {
+  margin-bottom: 24px;
+}
+
+.ml-1 {
+  margin-left: 8px;
+}
+
+.mr-1 {
+  margin-right: 8px;
+}
+
+/* 页面容器 */
+.page-container {
+  padding: 24px 0;
+}
+
+.section-title {
+  margin-bottom: 24px;
+  
+  h2 {
+    margin-bottom: 8px;
+  }
+  
+  p {
+    color: rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* 栅格系统 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 16px 0;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+// 全局滚动条样式
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f2f5;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c6d9;
+  border-radius: 10px;
+  
+  &:hover {
+    background: #9aa0b9;
+  }
+}
+
+// 全局表单元素样式
+.ant-input,
+.ant-select-selector,
+.ant-picker,
+.ant-input-number,
+.ant-input-affix-wrapper {
+  border-radius: var(--border-radius-md) !important;
+  border-color: #e0e6f5 !important;
+  
+  &:hover, &:focus, &-focused {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 2px rgba(78, 99, 255, 0.1) !important;
+  }
+}
+
+// 全局按钮样式增强
+.ant-btn {
+  border-radius: var(--border-radius-md);
+  font-weight: 500;
+  transition: all var(--animation-speed-normal);
+  
+  &.ant-btn-primary {
+    background: var(--primary);
+    border: none;
+    box-shadow: 0 4px 10px rgba(78, 99, 255, 0.2);
+    
+    &:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(78, 99, 255, 0.3);
+    }
+  }
+  
+  &.ant-btn-gradient {
+    background: var(--primary-gradient);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 10px rgba(78, 99, 255, 0.2);
+    
+    &:hover {
+      background: var(--primary-gradient-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(78, 99, 255, 0.3);
+    }
+  }
+}
+
+// 强调文本效果
+.gradient-text {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+// 卡片样式增强
+.ant-card {
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  transition: all var(--animation-speed-normal);
+  border: none;
+  box-shadow: var(--box-shadow-sm);
+  
+  &:hover {
+    box-shadow: var(--box-shadow-md);
+    transform: translateY(-5px);
+  }
+}
+
+// 全局标题样式
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-dark);
+  font-weight: 700;
+}
+
+// 添加一些共用动画
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn var(--animation-speed-normal) ease-in-out;
+}
+
+.slide-up {
+  animation: slideUp var(--animation-speed-normal) ease-in-out;
+}
+
+.pulse {
+  animation: pulse 2s infinite ease-in-out;
+} 

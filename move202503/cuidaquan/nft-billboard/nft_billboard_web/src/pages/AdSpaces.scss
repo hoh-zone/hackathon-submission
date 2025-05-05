@@ -1,0 +1,343 @@
+.ad-spaces-page {
+  padding: 20px;
+  position: relative;
+  
+  // 粒子背景动画
+  .particles-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+    
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 400px;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(78, 99, 255, 0.03) 1px, transparent 5px),
+        radial-gradient(circle at 45% 30%, rgba(110, 86, 207, 0.03) 1px, transparent 6px),
+        radial-gradient(circle at 75% 20%, rgba(78, 99, 255, 0.03) 1px, transparent 8px),
+        radial-gradient(circle at 85% 45%, rgba(110, 86, 207, 0.02) 1px, transparent 10px);
+      animation: float 20s infinite linear;
+    }
+  }
+  
+  // 页面标题区
+  .page-header {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 40px;
+  }
+  
+  // 科技感页面标题
+  h2 {
+    font-weight: 700;
+    font-size: 32px;
+    position: relative;
+    margin-bottom: 16px;
+    color: var(--text-dark);
+    
+    &:after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #4e63ff, #6e56cf);
+      margin: 12px 0 0;
+      border-radius: 3px;
+    }
+  }
+
+  .subtitle {
+    display: block;
+    margin-bottom: 30px;
+    color: var(--text-medium);
+    font-size: 16px;
+    max-width: 700px;
+    line-height: 1.6;
+  }
+  
+  // 添加装饰背景
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100px;
+    right: -100px;
+    height: 300px;
+    background-image: 
+      radial-gradient(circle at 50% 50%, rgba(78, 99, 255, 0.03) 0%, transparent 80%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .loading-container {
+    text-align: center;
+    padding: 80px 0;
+    position: relative;
+    z-index: 1;
+    
+    .ant-spin {
+      .ant-spin-dot-item {
+        background-color: #4e63ff;
+      }
+    }
+    
+    p {
+      margin-top: 16px;
+      color: var(--text-medium);
+      font-size: 16px;
+    }
+  }
+
+  .ad-spaces-grid {
+    margin-top: 30px;
+    position: relative;
+    z-index: 1;
+    
+    // 卡片入场动画
+    .animate-card {
+      animation: slideUpFadeIn 0.6s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+      
+      @for $i from 1 through 12 {
+        &:nth-child(#{$i}) {
+          animation-delay: $i * 0.05s;
+    }
+      }
+    }
+  }
+  
+  // 过滤器和排序区域样式
+  .filters-section {
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+      align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+    
+    .search-filter {
+      flex: 1;
+      min-width: 280px;
+      max-width: 400px;
+      
+      .ant-input-affix-wrapper {
+        border-radius: 8px;
+        height: 44px;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(78, 99, 255, 0.15);
+        padding: 0 16px;
+        
+        &:hover, &:focus, &-focused {
+          border-color: #4e63ff;
+          box-shadow: 0 0 0 2px rgba(78, 99, 255, 0.1);
+        }
+        
+        .ant-input-prefix {
+          color: #4e63ff;
+          margin-right: 8px;
+        }
+        
+        .ant-input {
+          background: transparent;
+        }
+      }
+    }
+    
+    .sort-filters {
+      display: flex;
+      gap: 12px;
+      
+      .ant-select {
+        min-width: 160px;
+        
+        .ant-select-selector {
+          height: 44px;
+          padding: 0 16px;
+          display: flex;
+          align-items: center;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(10px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+          border: 1px solid rgba(78, 99, 255, 0.15);
+          
+          &:hover {
+            border-color: #4e63ff;
+          }
+        }
+        
+        &.ant-select-focused {
+          .ant-select-selector {
+            border-color: #4e63ff !important;
+            box-shadow: 0 0 0 2px rgba(78, 99, 255, 0.1) !important;
+        }
+      }
+    }
+    
+      .refresh-button {
+        height: 44px;
+        width: 44px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(78, 99, 255, 0.15);
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        
+        .anticon {
+          color: #4e63ff;
+          font-size: 16px;
+        }
+        
+        &:hover {
+          border-color: #4e63ff;
+          background: rgba(255, 255, 255, 0.9);
+        }
+      }
+    }
+  }
+
+  // 空状态样式
+  .empty-state-container {
+    text-align: center;
+    padding: 80px 30px;
+    background: linear-gradient(145deg, #f9faff, #f0f2ff);
+    border-radius: 16px;
+    margin-top: 40px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(78, 99, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    
+    &:before {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(78, 99, 255, 0.05) 0%, transparent 70%);
+      top: -150px;
+      right: -150px;
+      z-index: 0;
+    }
+    
+    .empty-icon {
+      font-size: 48px;
+      color: #4e63ff;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+    
+    .empty-description {
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 1;
+      
+      p {
+        margin-bottom: 10px;
+        
+        &:first-child {
+          font-size: 18px;
+          font-weight: 600;
+          color: var(--text-dark);
+        }
+      }
+      
+      .empty-subtitle {
+        color: var(--text-medium);
+        max-width: 500px;
+        margin: 0 auto;
+      }
+    }
+    
+    .empty-actions {
+      margin-top: 30px;
+      position: relative;
+      z-index: 1;
+    
+    .ant-btn-primary {
+        height: 44px;
+        padding: 0 24px;
+        font-weight: 600;
+        background: linear-gradient(90deg, #4e63ff, #6e56cf);
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(78, 99, 255, 0.3);
+        transition: all 0.3s;
+      
+      &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(78, 99, 255, 0.4);
+          background: linear-gradient(90deg, #5a6eff, #7a62d9);
+      }
+    }
+    }
+  }
+}
+
+// 动画定义
+@keyframes float {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 适配移动设备
+@media (max-width: 768px) {
+  .ad-spaces-page {
+    .filters-section {
+      flex-direction: column;
+      align-items: flex-start;
+      
+      .search-filter {
+        width: 100%;
+        max-width: none;
+      }
+      
+      .sort-filters {
+        width: 100%;
+        
+        .ant-select {
+          flex: 1;
+      }
+    }
+  }
+}
+}
+
+@media (max-width: 576px) {
+  .ad-spaces-page {
+    h2 {
+      font-size: 28px;
+    }
+    
+    .empty-state-container {
+      padding: 60px 20px;
+    }
+  }
+} 
