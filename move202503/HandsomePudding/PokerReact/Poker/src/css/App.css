@@ -608,3 +608,121 @@
 .profit-negative {
   color: #F44336;
 }
+
+/* swap 弹窗遮罩和居中样式 */
+.swap-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(30, 30, 30, 0.7); /* 半透明黑色遮罩 */
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swap-panel {
+  background: #23242a;
+  border-radius: 20px;
+  padding: 32px 24px;
+  min-width: 350px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  color: #fff;
+}
+
+.swap-token-row {
+  background: #18191d;
+  border-radius: 12px;
+  padding: 18px 16px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.swap-label {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 4px;
+}
+
+.swap-token-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.swap-token-info input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  outline: none;
+}
+
+.swap-token-symbol {
+  margin-left: 8px;
+  font-weight: bold;
+}
+
+.swap-balance {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.swap-quick {
+  margin-left: 8px;
+  color: #4e8cff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.swap-switch-row {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.swap-switch-btn {
+  background: #23242a;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.swap-rate {
+  text-align: center;
+  color: #aaa;
+  margin: 12px 0 8px 0;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.confirm-button, .close-button {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.confirm-button {
+  background: #4e8cff;
+  color: #fff;
+}
+
+.close-button {
+  background: #444;
+  color: #fff;
+}

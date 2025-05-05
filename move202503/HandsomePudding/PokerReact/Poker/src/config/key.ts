@@ -1,8 +1,10 @@
-export const PACKAGE = "0x3545e456c50f417f88b8d2c8988bf6829b6b93943dd2323ceebfb6709e79ad4d"
-export const GAME_STORE = "0xde9d98d85405c9db32df314467e7553018993cf7363e5688c34375fc7a7c85b4"
+export const PACKAGE = "0xf25288470734df06e338fefc2dcb302a2c680c155411c07a3e4c8115eb059875"
+export const GAME_STORE = "0x0e8226e7be4e8ee0f3a1c4b4f108cc197904fde9be415d4a554e8ac3818eb395"
+export const PokerTreasuryCap = "0x54ffab36c9d229385b9ba97274c4ecd3a087280223f7d44d6b926dbbd1a5b42e"
 export const RANDOM = "0x8"
-export const GET_BALANCE = `${PACKAGE}::poker::get_balance`
-export const ADD_BALANCE = `${PACKAGE}::poker::add_balance`
-export const PLAY_GAME = `${PACKAGE}::poker::play_game`
-export const BALANCE_EVENT = `${PACKAGE}::poker::BalanceEvent`
-export const GAME_RESULT_EVENT = `${PACKAGE}::poker::GameResultEvent`
+export const PLAY_GAME = `${PACKAGE}::POKERTOEN::play_game`
+export const GAME_RESULT_EVENT = `${PACKAGE}::POKERTOEN::GameResultEvent`
+export const POKERTOEN = `${PACKAGE}::POKERTOEN::POKERTOEN`
+export const BUY_POKER_TOKENS = `${PACKAGE}::POKERTOEN::buy_poker_tokens`
+export const SELL_TOKENS = `${PACKAGE}::POKERTOEN::sell_tokens`
+export const REWARD = `${PACKAGE}::POKERTOEN::reward`

@@ -1,8 +1,8 @@
 import { ConnectButton } from "@mysten/dapp-kit";
 import { useState, useRef, useEffect  } from "react";
-import { useCurrentAccount, useSuiClient, useSignAndExecuteTransaction } from "@mysten/dapp-kit";
+import { useCurrentAccount, useSignAndExecuteTransaction } from "@mysten/dapp-kit";
 import './css/App.css';
-import { getBalance, addBalance, playGame} from './contracts/poker';
+import { playGame, getPokerTokenBalance, getSuiBalance, buyPokerTokens, sellTokens, reward } from './contracts/poker';
 import {suiClient} from "./config/index";
 
 // 导入图片资源
@@ -11,12 +11,11 @@ import musicoff from './assets/musicoff.png';
 import ruleIcon from './assets/rule.png';
 import cardBack from './assets/card_b.png';
 import cardFront from './assets/card_f.png';
+import pokerToken from './assets/pokerToken.png';
 import suiToken from './assets/suiToken.png';
 import token1 from './assets/1.png';
 import token10 from './assets/10.png';
 import token100 from './assets/100.png';
-import submitButton from './assets/submit.png';
-import resetButton from './assets/reset.png';
 import music_btn from './assets/music_btn.mp3';
 import bet_music from './assets/bet_music.mp3';
 import win from './assets/win.mp3';
@@ -83,18 +82,25 @@ function App() {
   });
   const [showRules, setShowRules] = useState(false);
   const [walletBalance, setWalletBalance] = useState(0);
+  const [suiBalance, setSuiBalance] = useState(0);
   const [selectedToken, setSelectedToken] = useState<number>(1);
   const [tokenAnimations, setTokenAnimations] = useState<{ [key: number]: TokenAnimation[] }>({
     0: [], 1: [], 2: [], 3: [], 4: []
   });
-  const [showAddCoins, setShowAddCoins] = useState(false);
-  const [coinsToAdd, setCoinsToAdd] = useState('');
   const [gameResult, setGameResult] = useState<GameResultEvent | null>(null);
   const [showResults, setShowResults] = useState(false);
   const [showResultPopup, setShowResultPopup] = useState(false);
   const [currentProfit, setCurrentProfit] = useState(0);
-  const [totalBet, setTotalBet] = useState(0);
   const [lastBets, setLastBets] = useState<number[]>([0, 0, 0, 0, 0]);
+  const [showSwap, setShowSwap] = useState(false);
+  const [swapDirection, setSwapDirection] = useState<'SUI_TO_POKER' | 'POKER_TO_SUI'>('SUI_TO_POKER');
+  const [fromAmount, setFromAmount] = useState('');
+  const [toAmount, setToAmount] = useState('');
+  const EXCHANGE_RATE = 100;
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [lastTotalBet, setLastTotalBet] = useState(0);
+  // 下注总额实时计算，供全组件使用
+  const totalBet = mines.reduce((sum, mine) => sum + mine, 0);
   
   const account = useCurrentAccount();
   const {mutateAsync: signAndExecuteTransaction} = useSignAndExecuteTransaction({
@@ -157,43 +163,28 @@ function App() {
     const fetchBalance = async () => {
       if (account) {
         try {
-          // 从localStorage获取所有钱包余额
-          const savedBalances = JSON.parse(localStorage.getItem('walletBalances') || '{}');
-          const address = account.address.toLowerCase(); // 统一转换为小写
-          
-          console.log("savedBalances", savedBalances);
-          console.log("address", address);
-          
-          // 检查当前钱包地址是否有保存的余额
-          const savedBalance = Object.entries(savedBalances).find(([key]) => 
-            key.toLowerCase() === address
-          );
-          
-          if (savedBalance) {
-            const balanceValue = Number(savedBalance[1]);
-            console.log("savedBalance", balanceValue);
-            setWalletBalance(balanceValue);
-            return;
-          }
+          const startTime = performance.now();
+          const balance = await getPokerTokenBalance(account.address);
+          const endTime = performance.now();
+          console.log("POKERTOEN balance", balance);
+          console.log(`getPokerTokenBalance execution time: ${(endTime - startTime).toFixed(2)}ms`);
 
-          // 如果没有保存的余额，则调用合约获取
-          const balance = await getBalance(signAndExecuteTransaction);
-          console.log("balance", balance);
+          const suibalance = await getSuiBalance(account.address);
+          console.log("suibalance balance", suibalance);
+
           setWalletBalance(balance);
-          
-          // 更新localStorage中的余额
-          savedBalances[address] = balance;
-          localStorage.setItem('walletBalances', JSON.stringify(savedBalances));
+          setSuiBalance(suibalance);
         } catch (error) {
           console.error("Error fetching balance:", error);
         }
       } else {
         setWalletBalance(0);
+        setSuiBalance(0);
       }
     };
 
     fetchBalance();
-  }, [account, signAndExecuteTransaction]);
+  }, [account]);
 
   const getTokenImage = (amount: number) => {
     switch (amount) {
@@ -273,15 +264,14 @@ function App() {
   };
 
   const handleSubmit = async () => {
+    if (submitLoading) return;
+    setSubmitLoading(true);
     playButtonSound();
     try {
-      // Calculate total bet amount
       const bet = mines.reduce((sum, mine) => sum + mine, 0);
-      setTotalBet(bet);
-      
+      setLastTotalBet(bet);
       // Save current bet information
       setLastBets([...mines]);
-      
       // Call playGame with all bet amounts
       const result = await playGame(
         signAndExecuteTransaction,
@@ -289,34 +279,29 @@ function App() {
         mines[1],
         mines[2],
         mines[3],
-        mines[4]
-      ) as unknown as GameResultEvent | undefined;
-      
+        mines[4],
+        account?.address || ''
+      ) as any;
       if (result) {
-        // Store the result and show it
         setGameResult(result);
-        setShowResults(true);
-        
-        // Calculate profit = prize - total bet
-        const profit = result.prize - bet;
+        // 本地计算盈亏
+        const winBet = mines[result.winner_region] || 0;
+        const profit = winBet > 0 ? winBet * 4.8 - bet : -bet;
         setCurrentProfit(profit);
-        
-        // Show result popup
-        setShowResultPopup(true);
-        
+        // 等待链上最新余额，延迟1.2秒后再查
+        if (account?.address) {
+          setTimeout(async () => {
+            const latestBalance = await getPokerTokenBalance(account.address);
+            setWalletBalance(latestBalance);
+            setShowResults(true);
+            setShowResultPopup(true);
+          }, 500);
+        } else {
+          setShowResults(true);
+          setShowResultPopup(true);
+        }
         // Play win sound
         playWinSound();
-        
-        // Update wallet balance with final_balance from game result
-        setWalletBalance(result.final_balance);
-        
-        // Update localStorage
-        if (account) {
-          const savedBalances = JSON.parse(localStorage.getItem('walletBalances') || '{}');
-          savedBalances[account.address.toLowerCase()] = result.final_balance;
-          localStorage.setItem('walletBalances', JSON.stringify(savedBalances));
-        }
-        
         // Reset mines and animations after showing results
         setMines([0, 0, 0, 0, 0]);
         setTokenAnimations({
@@ -325,6 +310,8 @@ function App() {
       }
     } catch (error) {
       console.error("Error submitting bets:", error);
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
@@ -337,28 +324,6 @@ function App() {
   const handleRulesClick = () => {
     playButtonSound();
     setShowRules(true);
-  };
-
-  const handleAddCoins = async () => {
-    playButtonSound();
-    if (!coinsToAdd || parseInt(coinsToAdd) <= 0) return;
-    
-    try {
-      const newBalance = await addBalance(signAndExecuteTransaction, parseInt(coinsToAdd));
-      setWalletBalance(newBalance);
-      
-      // Update localStorage
-      if (account) {
-        const savedBalances = JSON.parse(localStorage.getItem('walletBalances') || '{}');
-        savedBalances[account.address.toLowerCase()] = newBalance;
-        localStorage.setItem('walletBalances', JSON.stringify(savedBalances));
-      }
-      
-      setShowAddCoins(false);
-      setCoinsToAdd('');
-    } catch (error) {
-      console.error("Error adding coins:", error);
-    }
   };
 
   // Function to get suit image based on suit number
@@ -414,6 +379,82 @@ function App() {
     }
   };
 
+  // 输入与方向切换逻辑
+  const handleFromAmountChange = (val: string) => {
+    // 只允许数字和最多两位小数
+    let formatted = val.replace(/^([0-9]+)(\.[0-9]{0,2})?.*$/, (m, int, dec) => int + (dec ? dec : ''));
+    // 去除前导0
+    if (formatted.length > 1 && formatted[0] === '0' && formatted[1] !== '.') {
+      formatted = formatted.replace(/^0+/, '');
+    }
+    setFromAmount(formatted);
+    if (swapDirection === 'SUI_TO_POKER') {
+      setToAmount(formatted ? String(Math.floor(Number(formatted) * EXCHANGE_RATE)) : '');
+    } else {
+      setToAmount(formatted ? (parseInt(formatted, 10) / EXCHANGE_RATE).toFixed(2) : '');
+    }
+  };
+  const handleSwitchDirection = () => {
+    setSwapDirection(d => d === 'SUI_TO_POKER' ? 'POKER_TO_SUI' : 'SUI_TO_POKER');
+    setFromAmount(toAmount);
+    setToAmount(fromAmount);
+  };
+  const handleMax = () => {
+    if (swapDirection === 'SUI_TO_POKER') {
+      setFromAmount((suiBalance || 0).toString());
+      setToAmount(((suiBalance || 0) * EXCHANGE_RATE).toString());
+    } else {
+      setFromAmount((walletBalance || 0).toString());
+      setToAmount(((walletBalance || 0) / EXCHANGE_RATE).toString());
+    }
+  };
+  const handleHalf = () => {
+    if (swapDirection === 'SUI_TO_POKER') {
+      setFromAmount(((suiBalance || 0) / 2).toString());
+      setToAmount((((suiBalance || 0) / 2) * EXCHANGE_RATE).toString());
+    } else {
+      setFromAmount(((walletBalance || 0) / 2).toString());
+      setToAmount((((walletBalance || 0) / 2) / EXCHANGE_RATE).toString());
+    }
+  };
+  const handleSwap = async () => {
+    playButtonSound();
+    if (!fromAmount || parseFloat(fromAmount) <= 0) return;
+    try {
+      if (swapDirection === 'SUI_TO_POKER') {
+        // 传递整数MIST
+        const suiAmount = Math.floor(Number(fromAmount) * 1_000_000_000);
+        const tx = await buyPokerTokens(suiAmount, account?.address || '');
+        await signAndExecuteTransaction({transaction: tx});
+      } else {
+        // PokerToken 直接传整数
+        const pokerAmount = Math.floor(Number(fromAmount) * 10);
+        const tx = await sellTokens(pokerAmount, account?.address || '');
+        await signAndExecuteTransaction({transaction: tx});
+      }
+      // 刷新余额
+      if (account?.address) {
+        const newPoker = await getPokerTokenBalance(account.address);
+        const newSui = await getSuiBalance(account.address);
+        setWalletBalance(newPoker);
+        setSuiBalance(newSui);
+        setSwapPokerBalance(newPoker);
+        setSwapSuiBalance(newSui);
+      }
+      setFromAmount('');
+      setToAmount('');
+      setShowSwap(false);
+    } catch (error) {
+      console.error("Error swapping tokens:", error);
+    }
+  };
+
+  const [swapSuiBalance, setSwapSuiBalance] = useState(0);
+  const [swapPokerBalance, setSwapPokerBalance] = useState(0);
+  const [showDonate, setShowDonate] = useState(false);
+  const [donateAmount, setDonateAmount] = useState('');
+  const [donateLoading, setDonateLoading] = useState(false);
+
   return (
     <div className="game-container">
       <div className="game-header">
@@ -446,31 +487,6 @@ function App() {
         </div>
       )}
 
-      {showAddCoins && (
-        <div className="rules-popup">
-          <div className="rules-content">
-            <h2>Get Game Coins</h2>
-            <div className="add-coins-input">
-              <input
-                type="number"
-                value={coinsToAdd}
-                onChange={(e) => setCoinsToAdd(e.target.value)}
-                placeholder="Enter amount"
-                min="1"
-              />
-            </div>
-            <div className="modal-buttons">
-              <button className="confirm-button" onClick={handleAddCoins}>Confirm</button>
-              <button className="close-button" onClick={() => {
-                setShowAddCoins(false);
-                setCoinsToAdd('');
-              }}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Game results popup */}
       {showResultPopup && gameResult && (
         <div className="rules-popup result-overlay">
           <div className="rules-content result-content">
@@ -495,8 +511,8 @@ function App() {
                 <span className="profit-label">{currentProfit >= 0 ? ' Profit' : ' Loss'}</span>
               </div>
               <div className="bet-details">
-                <p>Total Bet: {totalBet}</p>
-                <p>New Balance: {gameResult.final_balance}</p>
+                <p>Total Bet: {lastTotalBet}</p>
+                <p>New Balance: {walletBalance}</p>
               </div>
             </div>
             <button className="confirm-button" onClick={handleCloseResultPopup}>Confirm</button>
@@ -580,14 +596,28 @@ function App() {
       <div className="controls-container">
         <div className="balance-section">
           <div className="balance-display" ref={balanceDisplayRef}>
-          <img src={suiToken} alt="Token" className="token-icon" />
+            <img src={pokerToken} alt="Token" className="token-icon" />
             <span>{walletBalance}</span>
           </div>
-          <button className="add-coins-button" onClick={() => {
+          <button className="swap-button pretty-swap-btn" onClick={() => {
             playButtonSound();
-            setShowAddCoins(true);
+            setSwapSuiBalance(suiBalance);
+            setSwapPokerBalance(walletBalance);
+            setShowSwap(true);
+            // 异步刷新
+            if (account?.address) {
+              getSuiBalance(account.address).then(sui => setSwapSuiBalance(sui));
+              getPokerTokenBalance(account.address).then(poker => setSwapPokerBalance(poker));
+            }
           }}>
-          Claim Coins
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginRight: 6, verticalAlign: 'middle'}}><path d="M7 15L11 19L15 15" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M19 11V19H11" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M15 7L11 3L7 7" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M3 11V3H11" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span style={{fontWeight: 600, fontSize: 18, verticalAlign: 'middle'}}>Swap</span>
+          </button>
+          <button className="donate-btn" onClick={() => { playButtonSound(); setShowDonate(true); }}>
+            <svg width="30" height="30" viewBox="0 0 22 22" fill="none" style={{marginRight: 6, verticalAlign: 'middle'}} xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 19s-7-4.35-7-10A5 5 0 0 1 11 4a5 5 0 0 1 7 5c0 5.65-7 10-7 10z" fill="#fff" stroke="#ff7e5f" strokeWidth="2"/>
+            </svg>
+            Donate
           </button>
         </div>
         <div className="betting-controls">
@@ -611,14 +641,249 @@ function App() {
           </button>
         </div>
         <div className="action-buttons">
-          <button className="action-button" onClick={handleReset}>
-            <img src={resetButton} alt="Reset" />
+          <button className="action-button pretty-reset-btn" onClick={handleReset} disabled={totalBet === 0}>
+            Reset
           </button>
-          <button className="action-button" onClick={handleSubmit}>
-            <img src={submitButton} alt="Submit" />
-        </button>
+          <button className="action-button pretty-submit-btn" onClick={handleSubmit} disabled={submitLoading || totalBet === 0}>
+            {submitLoading ? 'Submitting...' : 'Submit'}
+          </button>
         </div>
       </div>
+
+      {showSwap && (
+        <style>{`
+          .swap-modal input[type=number]::-webkit-inner-spin-button,
+          .swap-modal input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+          .swap-modal input[type=number] {
+            -moz-appearance: textfield;
+          }
+        `}</style>
+      )}
+
+      {showSwap && (
+        <div className="swap-modal">
+          <div className="swap-panel">
+            <div className="swap-token-row">
+              <div className="swap-label">From</div>
+              <div className="swap-token-info">
+                <input
+                  type="number"
+                  value={fromAmount}
+                  onChange={e => handleFromAmountChange(e.target.value)}
+                  placeholder="0.00"
+                  step="0.01"
+                />
+                <img
+                  src={swapDirection === 'SUI_TO_POKER' ? suiToken : pokerToken}
+                  alt="from-token"
+                  style={{ width: 32, height: 32, marginRight: 4, objectFit: 'contain', verticalAlign: 'middle' }}
+                />
+                <span className="swap-token-symbol">
+                  {swapDirection === 'SUI_TO_POKER' ? 'SUI' : 'PokerToken'}
+                </span>
+              </div>
+              <div className="swap-balance">
+                Balance: {swapDirection === 'SUI_TO_POKER' ? swapSuiBalance : swapPokerBalance}
+                <span className="swap-quick" onClick={handleHalf}>50%</span>
+                <span className="swap-quick" onClick={handleMax}>MAX</span>
+              </div>
+            </div>
+            <div className="swap-switch-row">
+              <button className="swap-switch-btn" onClick={handleSwitchDirection}>⇅</button>
+            </div>
+            <div className="swap-token-row">
+              <div className="swap-label">To</div>
+              <div className="swap-token-info">
+                <input
+                  type="text"
+                  value={toAmount}
+                  readOnly
+                  placeholder="0"
+                />
+                <img
+                  src={swapDirection === 'SUI_TO_POKER' ? pokerToken : suiToken}
+                  alt="to-token"
+                  style={{ width: 32, height: 32, marginRight: 4, objectFit: 'contain', verticalAlign: 'middle' }}
+                />
+                <span className="swap-token-symbol">
+                  {swapDirection === 'SUI_TO_POKER' ? 'PokerToken' : 'SUI'}
+                </span>
+              </div>
+              <div className="swap-balance">
+                Balance: {swapDirection === 'SUI_TO_POKER' ? swapPokerBalance : swapSuiBalance}
+              </div>
+            </div>
+            <div className="swap-rate">1 SUI = 100 PokerToken</div>
+            <div className="modal-buttons">
+              <button className="confirm-button" onClick={handleSwap}>Swap</button>
+              <button className="close-button" onClick={() => setShowSwap(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDonate && (
+        <div className="swap-modal donate-modal">
+          <div className="swap-panel">
+            <div className="swap-token-row">
+              <div className="swap-label">Donate SUI</div>
+              <div className="swap-token-info">
+                <input
+                  type="number"
+                  value={donateAmount}
+                  onChange={e => setDonateAmount(e.target.value)}
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
+                />
+                <img
+                  src={suiToken}
+                  alt="sui-token"
+                  style={{ width: 32, height: 32, marginRight: 4, objectFit: 'contain', verticalAlign: 'middle' }}
+                />
+                <span className="swap-token-symbol">SUI</span>
+              </div>
+              <div className="swap-balance">
+                Balance: {suiBalance}
+              </div>
+            </div>
+            <div className="modal-buttons">
+              <button className="confirm-button" disabled={donateLoading || !donateAmount || parseFloat(donateAmount) <= 0} onClick={async () => {
+                if (!account?.address || !donateAmount || parseFloat(donateAmount) <= 0) return;
+                setDonateLoading(true);
+                try {
+                  const suiAmount = Math.floor(Number(donateAmount) * 1_000_000_000);
+                  const tx = await reward(suiAmount, account.address);
+                  await signAndExecuteTransaction({transaction: tx});
+                  // 刷新SUI余额
+                  if (account.address) {
+                    const newSui = await getSuiBalance(account.address);
+                    setSuiBalance(newSui);
+                  }
+                  setShowDonate(false);
+                  setDonateAmount('');
+                } catch (e) {
+                  console.error('Donate error', e);
+                } finally {
+                  setDonateLoading(false);
+                }
+              }}>{donateLoading ? 'Donating...' : 'Confirm'}</button>
+              <button className="close-button" onClick={() => setShowDonate(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        .pretty-swap-btn {
+          background: linear-gradient(90deg, #4e8cff 0%, #6ec6ff 100%);
+          color: #fff;
+          border: none;
+          border-radius: 18px;
+          padding: 10px 22px 10px 16px;
+          font-size: 18px;
+          font-weight: 600;
+          margin-left: 12px;
+          box-shadow: 0 2px 8px rgba(78,140,255,0.12);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+          cursor: pointer;
+          height: 60px;
+          min-width: 80px;
+        }
+        .pretty-swap-btn:hover {
+          background: linear-gradient(90deg, #6ec6ff 0%, #4e8cff 100%);
+          box-shadow: 0 4px 16px rgba(78,140,255,0.18);
+          transform: translateY(-2px) scale(1.04);
+        }
+        .pretty-reset-btn {
+          background: linear-gradient(90deg, #ffb347 0%, #ffcc80 100%);
+          color: #fff;
+          border: none;
+          border-radius: 18px;
+          padding: 10px 32px;
+          font-size: 18px;
+          font-weight: 600;
+          margin-right: 18px;
+          box-shadow: 0 2px 8px rgba(255,179,71,0.12);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+          cursor: pointer;
+          height: 60px;
+          min-width: 100px;
+        }
+        .pretty-reset-btn:hover {
+          background: linear-gradient(90deg, #ffcc80 0%, #ffb347 100%);
+          box-shadow: 0 4px 16px rgba(255,179,71,0.18);
+          transform: translateY(-2px) scale(1.04);
+        }
+        .pretty-submit-btn {
+          background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+          color: #fff;
+          border: none;
+          border-radius: 18px;
+          padding: 10px 32px;
+          font-size: 18px;
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(67,233,123,0.12);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+          cursor: pointer;
+          height: 60px;
+          min-width: 100px;
+        }
+        .pretty-submit-btn:hover {
+          background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
+          box-shadow: 0 4px 16px rgba(67,233,123,0.18);
+          transform: translateY(-2px) scale(1.04);
+        }
+        .pretty-reset-btn:disabled,
+        .pretty-submit-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          filter: grayscale(0.4);
+        }
+        .donate-modal input[type=number]::-webkit-inner-spin-button,
+        .donate-modal input[type=number]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        .donate-modal input[type=number] {
+          -moz-appearance: textfield;
+        }
+        .donate-btn {
+          background: linear-gradient(90deg, #ff7e5f 0%, #feb47b 100%);
+          color: #fff;
+          border: none;
+          border-radius: 18px;
+          padding: 10px 22px 10px 16px;
+          font-size: 18px;
+          font-weight: 600;
+          margin-left: 12px;
+          box-shadow: 0 2px 8px rgba(255,126,95,0.12);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+          cursor: pointer;
+          height: 60px;
+          min-width: 80px;
+        }
+        .donate-btn:hover {
+          background: linear-gradient(90deg, #feb47b 0%, #ff7e5f 100%);
+          box-shadow: 0 4px 16px rgba(255,126,95,0.18);
+          transform: translateY(-2px) scale(1.04);
+        }
+      `}</style>
     </div>
   );
 }
