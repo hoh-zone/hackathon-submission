@@ -1,0 +1,17 @@
+{
+  "name": "voting-backend",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@mysten/sui.js": "^0.32.2",
+    "axios": "^0.21.4",
+    "express": "^4.21.2"
+  },
+  "main": "server.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
