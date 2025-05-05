@@ -1,0 +1,41 @@
+{
+  "name": "voting-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@mysten/sui": "^1.26.0",
+    "@mysten/dapp-kit": "^0.15.1",
+    "@tanstack/react-query": "^5.71.3",
+    "crypto-js": "^4.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-app-rewired": "^2.2.1",
+    "typescript": "^4.9.5"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1",
+    "react-scripts": "^5.0.1",
+    "nodemon": "^3.1.0"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "eject": "react-app-rewired eject"
+  },
+  "resolutions": {
+    "ajv": "6.12.6",
+    "ajv-keywords": "3.5.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+*.env
+user-data.sh
+trust-policy.json
+secrets-policy.json
+
+/move/enclave/build
+/move/app/build
+
+/src/nautilus-server/target
+
+/out
+/target
