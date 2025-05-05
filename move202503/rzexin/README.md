@@ -5,3 +5,10 @@
 ## Member
 - [rzexin](https://github.com/rzexin)
 > 自我介绍&技术栈: 多年Web2的后端开发者，学习Sui Move一年多时间
+
+## Demo
+
+- github: https://github.com/rzexin/Mandy
+- [PPT](./PPT/SecureFileShare-PPT.pdf)
+- testnet：https://securefilesharelab.vercel.app/
+- video：https://www.youtube.com/watch?v=70WoEe64Suo
