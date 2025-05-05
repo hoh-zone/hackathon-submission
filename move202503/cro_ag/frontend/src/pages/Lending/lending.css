@@ -1,0 +1,15 @@
+/* .ant-modal-content {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background-image: url('@/assets/bg_first_5.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  } */
+  .ant-input::placeholder {
+    color: #a9a9a9; /* ****** */
+  }
+  .ant-input-number-input {
+    caret-color: #fefefe !important;   /* ******** */
+    color: #fefefe !important;         /* ******** */
+    text-align: right !important;   /* ********** */
+  }

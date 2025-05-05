@@ -1,0 +1,25 @@
+// ****
+$blue: #4680f1;
+$hoverBorderBlue: #73a6ff;
+$popperBorderRadius: 6px;
+$iconColor: #7c7c7c;
+
+$white: #fff;
+$red: #ea002f;
+$yellow: #fec171;
+$panGreen: #30b08f;
+$green: #0ec07c;
+
+@font-face {
+  font-weight: normal;
+  font-family: 'Bold';
+  font-style: normal;
+  src: url('../assets/fonts/Hack-Bold-1.ttf') format('truetype');
+}
+@font-face {
+  font-weight: normal;
+  font-family: 'Regular';
+  font-style: normal;
+  src: url('../assets/fonts/Hack-Regular-4.ttf') format('truetype');
+}
+

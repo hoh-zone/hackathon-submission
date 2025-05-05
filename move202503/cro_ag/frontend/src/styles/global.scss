@@ -1,0 +1,51 @@
+.glass-container {
+    /* ********* */
+    // backdrop-filter: blur(0.1px); /* **** */
+    
+    /* ****** */
+    border: double 0px transparent;
+    border-radius: 5px;
+    background-clip: padding-box;
+    background-color: rgb(54, 54, 89, 0.5);
+    /* background-image: 
+        linear-gradient(
+            to right bottom, 
+            rgba(147, 112, 219, 0.6), /* ***** 
+            rgba(221, 160, 221, 0.3) 70% /* ***** 
+        ),
+        linear-gradient(
+            to right bottom, 
+            #E6000033, 
+            #00FF0033
+        ); */
+    // opacity: 0.5;
+    
+    /* ******* */
+    box-shadow: 
+        0 8px 32px rgba(33, 3, 95, 0.2),
+        inset 0 0 16px rgb(40, 54, 213, 0.5);
+        
+  }
+  .bg-first-1 {
+    
+    /* ****** */
+    border: solid 1px #2424a1;
+    background-clip: padding-box;
+    background-color: rgba(255, 255, 255, 0.01);
+    
+    /* ******* */
+    box-shadow: 
+        0 1px 1px rgba(33, 3, 95, 0.2),
+        inset 0 0 1px #2424a1;
+        
+  }
+
+.hide-scrollbar {
+  overflow: auto;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE 10+ */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;               /* Chrome, Safari, Opera */
+}

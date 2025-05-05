@@ -1,0 +1,123 @@
+.left1 {
+  width: 580px;
+  height: 265px;
+  padding: 26px 15px;
+  color: #fefefe;
+}
+.select-coin{
+  height: 40px;
+  width: 1px;
+  margin-left: 7px;
+  border-radius: 20px;
+  line-height: 40px;
+  text-align: center;
+  font-family: Bold, serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+.total-coin{
+  width: 100%;
+  height: 20px;
+  margin-top: 23px;
+  text-align: right;
+  font-family: Heavy, serif;
+  font-size: 20px;
+  font-weight: normal;
+  font-stretch: normal;
+  line-height: 22px;
+  letter-spacing: 0;
+  color: #a9b2ff;
+}
+.split{
+  width: 100%;
+  height: 3px;
+  margin-top: 20px;
+  background-color: #2836d5;
+}
+.slider-box{
+  width: 100%;
+  line-height: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.slider-left{
+  width: calc(100% - 126px - 20px - 50px - 10px);
+}
+.slider-right{
+  width: 126px;
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.half, .max{
+  width: 60px;
+  height: 30px;
+  background-color: #5356b1;
+  border-radius: 15px;
+  text-align: center;
+  font-family: Bold, serif;
+  font-size: 14px;
+  font-stretch: normal;
+  letter-spacing: 1px;
+  color: #fefefe;
+  cursor: pointer;
+}
+.left-percentage{
+  display: flex;
+  font-family: Bold, serif;
+  font-size: 16px;
+  font-stretch: normal;
+  letter-spacing: 1px;
+  color: #fefefe;
+  width: 56px;
+}
+.right {
+  width: 580px;
+  height: 329px;
+  padding: 35px 15px 40px;
+}
+.right-top{
+  display: flex;
+  flex-direction: row;
+  font-family: Bold, serif;
+  font-size: 20px;
+  font-stretch: normal;
+  letter-spacing: 2px;
+  color: #8694ff;
+  margin-bottom: 5px;
+}
+.right-top div{
+  margin-left: 30px;
+  cursor: pointer;
+}
+
+.left2 {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 579px;
+  height: 40px;
+  background-color: #6072fd;
+  border-radius: 20px;
+  border: solid 2px #3422d5;
+  user-select: none;
+  font-family: Bold, serif;
+  font-size: 18px;
+  font-stretch: normal;
+  letter-spacing: 1px;
+  color: #fefefe;
+  cursor: pointer;
+}
+
+.selected-balance {
+	font-size: 20px;
+	font-weight: normal;
+	font-stretch: normal;
+	line-height: 22px;
+	letter-spacing: 0px;
+	color: #a9b2ff;
+}

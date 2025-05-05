@@ -1,0 +1,21 @@
+
+.select-coin{
+  height: 40px;
+  width: 126px;
+  margin-left: 19px;
+  background-color: #5356b1;
+  border-radius: 20px;
+  line-height: 40px;
+  text-align: center;
+  font-family: Bold, serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: #fefefe;
+  cursor: pointer;
+}
+.select-apy-item{
+  background-color: #00000000;
+}
+.select-apy-item:hover {
+  color: #6072fd; /* ********* */
+}

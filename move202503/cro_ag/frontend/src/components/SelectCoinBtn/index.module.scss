@@ -1,0 +1,44 @@
+
+.select-a-coin{
+	font-family: Bold, serif;
+	font-size: 20px;
+	font-stretch: normal;
+	letter-spacing: 2px;
+	color: #fefefe;
+}
+.select-coin{
+  height: 40px;
+  margin-left: 7px;
+  background-color: #5356b1;
+  border-radius: 20px;
+  line-height: 40px;
+  text-align: center;
+  font-family: Bold, serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+.select-coin-item{
+  height: 40px;
+  border-radius: 5px;
+  padding: 6px 11px 6px 8px ;
+  border: solid 1px #5356b1;
+  line-height: 38px;
+  text-align: center;
+  font-family: Bold, serif;
+  font-size: 18px;
+  color: #fefefe;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+.select-coin-item:hover {
+  border-color: #6072fd; /* ********* */
+}
+.selected-balance {
+	font-size: 20px;
+	font-weight: normal;
+	font-stretch: normal;
+	line-height: 22px;
+	letter-spacing: 0px;
+	color: #a9b2ff;
+}

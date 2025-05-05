@@ -1,0 +1,38 @@
+
+.right {
+  width: 580px;
+  height: 329px;
+  padding: 35px 15px 40px;
+}
+.right-top{
+  display: flex;
+  flex-direction: row;
+  font-family: Bold, serif;
+  font-size: 20px;
+  font-stretch: normal;
+  letter-spacing: 2px;
+  color: #8694ff;
+  margin-bottom: 5px;
+}
+.right-top div{
+  margin-left: 30px;
+  cursor: pointer;
+}
+
+.left2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 434px;
+  height: 40px;
+  background-color: #6072fd;
+  border-radius: 20px;
+  border: solid 2px #3422d5;
+  user-select: none;
+  font-family: Bold, serif;
+  font-size: 18px;
+  font-stretch: normal;
+  letter-spacing: 1px;
+  color: #fefefe;
+  cursor: pointer;
+}
