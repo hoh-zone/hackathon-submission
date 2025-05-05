@@ -1,0 +1,48 @@
+{
+  "name": "@buzzing-club/core-move",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "bin": {
+    "sui-move-cli": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "cli": "ts-node src/cli.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-all": "mocha --require ts-node/register test/*/*.test.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Buzzing-Club/core-move.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Buzzing-Club/core-move/issues"
+  },
+  "homepage": "https://github.com/Buzzing-Club/core-move#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/bn.js": "^5.1.6",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.14.0",
+    "mocha": "^11.1.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@cetusprotocol/cetus-sui-clmm-sdk": "^5.3.4",
+    "@mysten/sui": "^1.29.0",
+    "bn.js": "^5.2.2",
+    "commander": "^13.1.0",
+    "decimal.js": "^10.5.0",
+    "dotenv": "^16.5.0",
+    "ora": "^8.2.0",
+    "tslib": "^2.8.1",
+    "winston": "^3.17.0"
+  }
+}
