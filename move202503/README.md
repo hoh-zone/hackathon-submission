@@ -1,3 +1,12 @@
-# hackathon-submission
-提交方式:复制模板[template]文件夹到本期黑客松的文件，并按自己[github name]取名自己的文件夹,比如[move202411]期
+## project
+- 项目名称:
+> SwSui
+
+
+## Member
+- OKA github: https://github.com/OkaTtal
+> 自我介绍&技术栈:  
+
+- Vincy  github: null
+> 自我介绍&技术栈:
 
