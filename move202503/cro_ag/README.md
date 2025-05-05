@@ -17,6 +17,9 @@
 你也可以在 **DeFiLlama** 查看 Cro Ag 的交易数据：
 🔗 [https://defillama.com/aggregators/chains/sui](https://defillama.com/aggregators/chains/sui)
 
+Cro Ag 功能演示视频：
+🎥 [https://youtu.be/PWv324KFqrM?si=da\_b4aS7Zi\_7bqsz](https://youtu.be/PWv324KFqrM?si=da_b4aS7Zi_7bqsz)
+
 ---
 
 # 🐊 Cro Ag – Sui 上的 DeFi 超级聚合器
