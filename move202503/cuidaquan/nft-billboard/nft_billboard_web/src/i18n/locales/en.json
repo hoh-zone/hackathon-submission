@@ -1,0 +1,596 @@
+{
+  "app": {
+    "name": "NFT Billboards",
+    "slogan": "NFT Billboards - Redefining the Future of Blockchain Advertising",
+    "shortName": "NFT Billboards"
+  },
+  "header": {
+    "home": "Home",
+    "adSpaces": "Ad Spaces",
+    "myNFTs": "My NFTs",
+    "manage": "Manage"
+  },
+  "footer": {
+    "copyright": "NFT Billboards System © {{year}}",
+    "links": {
+      "sui": "Sui Blockchain",
+      "github": "GitHub Repository",
+      "about": "Contact Us",
+      "walrus": "Walrus Storage"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "NFT Billboards",
+      "subtitle": "Revolutionary decentralized advertising solution: Permanently mint your ad content on the blockchain, enabling transparent, secure, and verifiable on-chain ad display and transactions",
+      "browseButton": "Browse Ad Spaces",
+      "myNFTsButton": "My NFTs"
+    },
+    "stats": {
+      "adSpaces": "Available Ad Spaces",
+      "dailyViews": "Daily Views",
+      "uniqueUsers": "Unique Users"
+    },
+    "features": {
+      "title": "Platform Features",
+      "decentralized": {
+        "title": "Decentralized Ad Platform",
+        "description": "Leverage blockchain technology for transparent ad space transactions and management, eliminating intermediaries and ensuring openness and immutability"
+      },
+      "nftFormat": {
+        "title": "NFT Format Ad Spaces",
+        "description": "Your purchased ad spaces are stored on the blockchain as NFTs, featuring uniqueness and permanence, freely tradable and manageable"
+      },
+      "flexibleLease": {
+        "title": "Flexible Lease Management",
+        "description": "Flexibly set ad space lease terms, renew or update ad content anytime, adjusting according to your marketing strategy"
+      }
+    },
+    "tech": {
+      "title": "Next-Generation Ad Ecosystem Based on Sui",
+      "description": "Sui is a next-generation high-performance blockchain platform, providing a solid technical foundation for our advertising system. We leverage Sui blockchain's unique advantages to create a truly decentralized advertising ecosystem.",
+      "features": {
+        "throughput": "High-throughput Transaction Processing",
+        "global": "Global Immutable Records",
+        "settlement": "Instant Settlement & Automatic Execution",
+        "smart": "Smart Contract Driven Ad Display"
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "steps": {
+        "connectWallet": {
+          "title": "Connect Sui Wallet",
+          "description": "Click the 'Connect Wallet' button in the top right corner to connect your Sui wallet, ensuring you have a wallet extension that supports the Sui blockchain installed"
+        },
+        "browseAdSpaces": {
+          "title": "Browse Ad Spaces",
+          "description": "Browse available ad spaces, view details, locations, exposure data, and prices, and select the location that best fits your marketing strategy"
+        },
+        "purchaseNFT": {
+          "title": "Purchase NFT Ad Space",
+          "description": "Choose a suitable ad space, pay Sui tokens to purchase the NFT, and the transaction will be directly recorded on the blockchain, guaranteeing uniqueness and permanence of ownership"
+        },
+        "manageAds": {
+          "title": "Manage Your Ads",
+          "description": "Manage your ad content on the 'My NFTs' page, upload creative materials, set links and descriptions, and update or renew anytime"
+        }
+      }
+    },
+    "cta": {
+      "title": "Ready to Start Your Blockchain Advertising Journey?",
+      "subtitle": "Join NFT Billboards now and experience the new advertising method empowered by blockchain",
+      "button": "Start Browsing Now"
+    }
+  },
+  "adSpaces": {
+    "title": "Available Ad Spaces",
+    "subtitle": "Browse the following available on-chain ad spaces, choose the location that best suits your marketing strategy, and achieve brand display on the blockchain",
+    "search": "Search ad space name or location",
+    "loading": "Loading ad spaces...",
+    "empty": {
+      "title": "No available ad spaces",
+      "subtitle": "Ad space resources are created by blockchain game developers, please check back later or contact the platform administrator",
+      "refreshButton": "Refresh Page"
+    },
+    "nftHistory": "Ad Space NFT History",
+    "noNftRecords": "No NFT Records",
+    "noNftRecordsDesc": "This ad space currently has no NFT history records.",
+    "priceDetails": "Price Details",
+    "alerts": {
+      "devOwned": "This is your created ad space",
+      "devOwnedDesc": "Developers cannot purchase ad spaces they created",
+      "adminCantBuy": "Cannot purchase ad space",
+      "adminCantBuyDesc": "Administrators cannot purchase ad spaces",
+      "alreadyOwned": "You already own an NFT for this ad space",
+      "alreadyOwnedDesc": "You already own an active or pending NFT for this ad space and cannot purchase again"
+    },
+    "filters": {
+      "sortBy": "Sort By",
+      "sortOptions": {
+        "priceAsc": "Price: Low to High",
+        "priceDesc": "Price: High to Low",
+        "newest": "Newest First",
+        "popular": "Most Popular"
+      }
+    },
+    "status": {
+      "active": "Active",
+      "waiting": "Waiting for Ad Content",
+      "available": "Available",
+      "occupied": "Occupied",
+      "myAdSpace": "My Ad Space",
+      "myNFT": "My NFT"
+    },
+    "buttons": {
+      "viewDetails": "View Details",
+      "buyNow": "Buy Now",
+      "backToList": "Back to Ad Spaces"
+    },
+    "errors": {
+      "notFound": "Ad space not found or unavailable. If you just created this ad space, please try again later.",
+      "alreadyPurchased": "This ad space has already been purchased, please select another available ad space.",
+      "loadFailed": "Failed to load ad space details, please try again later.",
+      "loadingFailed": "Failed to load ad space",
+      "notFoundTitle": "Ad Space Not Found",
+      "notFoundDesc": "The requested ad space was not found, it may have been deleted or not yet created."
+    }
+  },
+  "myNFTs": {
+    "title": "My Billboard NFTs",
+    "subtitle": "View and manage your owned billboard NFTs.",
+    "connectWallet": {
+      "title": "Please Connect Wallet",
+      "description": "You need to connect your wallet to view your NFTs."
+    },
+    "loading": "Loading your NFT assets...",
+    "error": "Loading Error",
+    "empty": {
+      "title": "You don't own any billboard NFTs yet",
+      "subtitle": "Browse available ad spaces and get your first NFT",
+      "browseButton": "Browse Ad Spaces",
+      "pending": "No pending NFTs",
+      "active": "No active NFTs",
+      "expired": "No expired NFTs"
+    },
+    "tabs": {
+      "active": "Active NFTs",
+      "pending": "Pending",
+      "expiring": "Expiring NFTs",
+      "expired": "Expired NFTs"
+    },
+    "admin": {
+      "title": "Admin Account",
+      "description": "Admin accounts cannot hold NFTs. Please use a regular user account."
+    }
+  },
+  "purchase": {
+    "title": "Purchase Ad Space",
+    "connectWallet": "Please connect your wallet to purchase ad space",
+    "form": {
+      "fillAdInfo": "Fill Ad Information",
+      "basicInfo": "Basic Information",
+      "brandName": "Brand Name",
+      "brandNameRequired": "Please enter brand name",
+      "brandNamePlaceholder": "Please enter brand name",
+      "leaseDays": "Lease Days",
+      "leaseDaysRequired": "Please enter lease days",
+      "leaseDaysExtra": "Please enter 1-365 days, longer lease offers more discount",
+      "leaseDaysExtraUploaded": "Lease period cannot be modified after upload",
+      "leaseSettings": "Lease Settings",
+      "customStartTime": "Custom Start Time",
+      "enabled": "Enabled",
+      "default": "Default",
+      "defaultTimeDesc": "Uses current time when transaction is confirmed",
+      "uploadedTimeDesc": "Cannot be modified after upload, using system default time",
+      "adStartTime": "Ad Start Time",
+      "selectStartTime": "Select start time",
+      "useDefaultTime": "Use system default time",
+      "timeRequired": "Please select a start time",
+      "adContent": "Ad Content",
+      "adContentRequired": "Please provide ad content",
+      "recommendedSize": "Recommended size is",
+      "recommendedRatio": "Recommended ratio",
+      "ratioGuidance": "For best display, prepare ad content that matches this aspect ratio",
+      "projectUrl": "Project Website URL",
+      "projectUrlRequired": "Please enter project website URL",
+      "projectUrlInvalid": "Please enter a valid URL",
+      "projectUrlExtra": "Users will be redirected to this link when clicking the ad",
+      "yourLeasePeriod": "Your selected lease period",
+      "days": "days",
+      "calculatingPrice": "Calculating price...",
+      "totalPrice": "Total Price",
+      "priceCalculationFailed": "Price calculation failed, please try again",
+      "confirmPurchase": "Confirm Purchase",
+      "uploadSuccessAlert": "Ad content uploaded successfully",
+      "uploadSuccessAlertDesc": "Ad content has been successfully uploaded to Walrus storage network, lease settings are now locked.",
+      "uploadSuccessAlertWithCustomTime": "Ad content uploaded successfully, will be displayed starting from {{time}}",
+      "externalUrlAlert": "External URL set",
+      "externalUrlAlertDesc": "You have set an external URL as ad content, lease settings can be modified at any time.",
+      "externalUrlSuccess": "External URL has been successfully set"
+    },
+    "transaction": {
+      "purchasing": "Purchasing ad space...",
+      "submitted": "Ad space purchase transaction submitted",
+      "waitingConfirmation": "Waiting for transaction confirmation...",
+      "success": "Ad space purchased successfully!",
+      "error": "Failed to purchase ad space, please check your input and try again.",
+      "failed": "Ad space purchase failed"
+    }
+  },
+  "nftDetail": {
+    "loading": "Loading NFT details...",
+    "error": "Error",
+    "notFound": "NFT details not found",
+    "details": "NFT Details",
+    "mediaLoadError": "Media loading failed",
+    "leasePeriod": "Lease Period",
+    "from": "From",
+    "to": "To",
+    "fields": {
+      "nftId": "NFT ID",
+      "adSpaceId": "Ad Space ID",
+      "owner": "Owner",
+      "brandName": "Brand Name",
+      "projectUrl": "Project URL",
+      "leaseStart": "Lease Start",
+      "leaseEnd": "Lease End",
+      "leasePeriod": "Lease Period",
+      "daysRemaining": "Days Remaining",
+      "status": "Status",
+      "contentUrl": "Ad Content URL"
+    },
+    "status": {
+      "active": "Active",
+      "expiring": "Expiring Soon",
+      "expired": "Expired",
+      "pending": "Pending"
+    },
+    "buttons": {
+      "viewAdSpace": "View Ad Space",
+      "updateContent": "Update Content",
+      "renewLease": "Renew Lease"
+    },
+    "modals": {
+      "updateContent": {
+        "title": "Update Ad Content",
+        "placeholder": "Enter content URL",
+        "required": "Please enter content URL",
+        "description": "Please enter a new ad content URL. This URL should point to an image or other media content.",
+        "storageMode": "Select Content Source",
+        "externalUrl": "External URL",
+        "walrusUpload": "Walrus Upload",
+        "currentContent": "Current Ad Content",
+        "source": "Source",
+        "walrusStorage": "Walrus Storage",
+        "externalStorage": "External URL",
+        "newContent": "New Ad Content",
+        "externalUrlLabel": "External URL",
+        "externalUrlHelp": "Please enter a valid image or video URL",
+        "preview": "New Content Preview",
+        "deleteWarning": {
+          "title": "Notice",
+          "description": "You are switching from Walrus storage to external URL. After updating, the original Walrus content will be deleted, potentially refunding some storage fees."
+        }
+      },
+      "renewLease": {
+        "title": "Renew NFT Lease",
+        "daysLabel": "Renewal Days",
+        "daysPlaceholder": "Enter renewal days",
+        "daysExtra": "Enter an integer between 1-365 days. Longer lease periods offer better discounts",
+        "calculatingPrice": "Calculating price...",
+        "priceLabel": "Renewal Price: ",
+        "walletBalance": "Wallet Balance:",
+        "walBalance": "WAL Balance:",
+        "insufficientBalanceHint": "(Insufficient Balance)",
+        "description": "Renewal will extend the NFT lease period. Price is dynamically calculated by the smart contract based on renewal days. Renewal range: 1-365 days."
+      }
+    },
+    "transaction": {
+      "fetchingDetails": "Fetching NFT details...",
+      "fetchSuccess": "NFT details fetched successfully",
+      "fetchFailed": "Failed to fetch NFT details, unable to determine storage type. Continuing with renewal operation.",
+      "extendingWalrus": "Extending Walrus storage duration...",
+      "extendWalrusFailed": "Failed to extend Walrus storage duration, renewal operation cancelled. Please try again later.",
+      "extendWalrusSuccess": "Walrus storage duration extended successfully!",
+      "renewingNft": "Renewing NFT...",
+      "renewSubmitted": "Renewal transaction submitted",
+      "renewSuccess": "NFT renewed successfully!",
+      "renewPartialSuccess": "Transaction submitted, but could not immediately confirm the result. Please refresh the page later to see the update.",
+      "renewFailed": "Renewal failed, please check your wallet and try again",
+      "renewFailedInsufficientBalance": "Renewal failed: Insufficient wallet balance, please ensure you have enough SUI to pay for the lease",
+      "renewFailedContractError": "Renewal failed: Contract execution error",
+      "renewFailedUserCancelled": "You have cancelled the renewal operation",
+      "invalidDays": "Please select valid renewal days",
+      "invalidPrice": "Invalid renewal price, please refresh the page and try again",
+      "insufficientBalance": "Insufficient balance! Need {{price}} SUI, but wallet only has {{balance}} SUI",
+      "insufficientBalanceGeneric": "Insufficient balance! Your wallet only has {{balance}} SUI",
+      "expiredNft": "This NFT has expired. According to contract rules, expired NFTs cannot be renewed.",
+      "expiredNftWarning": "Due to contract limitations, currently only non-expired NFTs can be renewed. This NFT has expired, please contact the administrator."
+    },
+    "messages": {
+      "contentUpdateSuccess": "Ad content updated successfully",
+      "contentUpdatePartialSuccess": "Ad content has been updated, but unable to refresh page data. Please refresh the page manually.",
+      "invalidDate": "Invalid date"
+    },
+    "notOwner": "You are not the owner of this NFT and cannot perform this action"
+  },
+  "manage": {
+    "title": "Management Center",
+    "subtitle": "Manage ad spaces and platform settings",
+    "errors": {
+      "accessDenied": "Access Denied",
+      "accessDeniedDesc": "You do not have permission to access the management center. Only registered game developers or platform administrators can access this page."
+    },
+    "tabs": {
+      "createAdSpace": "Create Ad Space",
+      "myAdSpaces": "My Ad Spaces",
+      "registerDev": "Register Developer",
+      "manageDev": "Manage Developers",
+      "platformManage": "Platform Management"
+    },
+    "buttons": {
+      "changePrice": "Change Price",
+      "updatePrice": "Update Price",
+      "deleteAdSpace": "Delete Ad Space",
+      "waitingConfirmation": "Transaction submitted, waiting for confirmation..."
+    },
+    "priceModal": {
+      "title": "Update Ad Space Price",
+      "currentAdSpace": "Current Ad Space",
+      "currentPrice": "Current Price (SUI/day)",
+      "newPrice": "New Price (SUI/day)",
+      "priceUpdateSuccess": "Ad space price updated successfully"
+    },
+    "confirmDelete": {
+      "title": "Are you sure you want to delete this ad space?",
+      "description": "This action cannot be undone. Ad spaces with active NFTs cannot be deleted."
+    },
+    "createAdSpace": {
+      "title": "Create New Ad Space",
+      "loading": "Creating ad space...",
+      "success": "Ad space created successfully! Data confirmed",
+      "form": {
+        "name": "Ad Space Name",
+        "gameId": "Game ID",
+        "gameIdRequired": "Please enter Game ID",
+        "gameIdPlaceholder": "Game ID",
+        "location": "Ad Space Location",
+        "locationRequired": "Please enter ad space location",
+        "locationPlaceholder": "Ad space location, e.g.: Main Menu, Game Lobby",
+        "description": "Description",
+        "dimension": "Ad Space Ratio",
+        "dimensionRequired": "Please select ad space dimension",
+        "dimensionPlaceholder": "Select dimension",
+        "dimensionType": "Dimension Type",
+        "standardRatio": "Standard Ratio",
+        "customRatio": "Custom Ratio",
+        "customDimension": "Custom Dimension Ratio",
+        "widthRequired": "Please enter width ratio",
+        "heightRequired": "Please enter height ratio",
+        "invalidCustomDimension": "Please enter valid custom dimension ratio",
+        "price": "Daily Price (SUI)",
+        "priceRequired": "Please enter daily price",
+        "pricePlaceholder": "Daily price (SUI)",
+        "submit": "Create Ad Space",
+        "allFieldsRequired": "Please fill in all required fields",
+        "invalidDimension": "Invalid dimension format, please select a valid dimension option",
+        "priceGreaterThanZero": "Price must be greater than 0",
+        "txSubmitted": "Ad space creation transaction submitted",
+        "waitingConfirmation": "Waiting for transaction confirmation...",
+        "delayedDisplay": "Newly created ad space may take some time to display, please refresh manually later",
+        "errors": {
+          "notGameDev": "Transaction failed: You are not a registered game developer",
+          "insufficientGas": "Transaction failed: Insufficient gas, please ensure you have enough SUI in your wallet",
+          "invalidParams": "Transaction failed: Invalid parameters provided to the smart contract, please check if the game ID, location, and dimension format meet the requirements",
+          "createFailed": "Failed to create ad space",
+          "contractConfigIncomplete": "System configuration error: Contract parameters incomplete"
+        }
+      }
+    },
+    "myAdSpaces": {
+      "loading": "Loading your ad space assets...",
+      "loadingData": "Loading ad space data...",
+      "loadSuccess": "Ad space data loaded",
+      "loadFailed": "Failed to load ad space data",
+      "notGameDev": "You are not a registered game developer, cannot view ad spaces",
+      "empty": "You haven't created any ad spaces yet",
+      "emptyDesc": "Create your first ad space and start earning SUI tokens",
+      "activeNFT": "Active NFT",
+      "waitingContent": "Waiting for Ad Content",
+      "listTitle": "Your Created Ad Spaces List",
+      "deleteSuccess": "Ad space deleted successfully",
+      "refreshFailed": "Failed to refresh ad space list, please refresh the page manually",
+      "deleteFailed": "Failed to delete ad space",
+      "priceUpdateFailed": "Failed to update price",
+      "invalidPrice": "Please enter a valid price"
+    },
+    "registerDev": {
+      "title": "Register Game Developer",
+      "form": {
+        "address": "Developer Address",
+        "submit": "Register Developer"
+      }
+    },
+    "platformManage": {
+      "factoryInfo": {
+        "title": "Factory Object Information",
+        "objectId": "Factory Object ID",
+        "view": "View",
+        "description": "Factory Object Description",
+        "descriptionText": "The factory object is the core smart contract of the platform, containing platform ratio, ad space list, and developer list information"
+      },
+      "platformRatio": {
+        "title": "Platform Ratio Settings",
+        "label": "Platform Ratio (%)",
+        "required": "Please enter platform ratio",
+        "rangeError": "Ratio must be between 0-100",
+        "placeholder": "Enter a number between 0-100",
+        "currentRatio": "Current Platform Ratio",
+        "currentRatioDesc": "{{ratio}}% (When an ad space is purchased, the platform will charge {{ratio}}% of the total price as a service fee)",
+        "updateButton": "Update Ratio",
+        "updateSuccess": "Platform ratio updated successfully!",
+        "updateFailed": "Failed to update platform ratio",
+        "updating": "Updating platform ratio...",
+        "waitingConfirmation": "Waiting for transaction confirmation...",
+        "manuallyUpdated": "Unable to confirm update from blockchain, UI manually updated",
+        "updateUnconfirmed": "Transaction submitted, but unable to confirm update result. Please refresh the page later to see the latest data.",
+        "userRejected": "You have cancelled the transaction"
+      },
+      "registerDev": {
+        "title": "Register Game Developer",
+        "addressLabel": "Developer Address",
+        "addressPlaceholder": "Enter developer's address",
+        "registerButton": "Register Developer",
+        "invalidAddress": "Invalid developer address format, please enter a valid Sui wallet address",
+        "alreadyRegistered": "This address is already registered as a game developer",
+        "executing": "Executing transaction...",
+        "success": "Game developer registered successfully!",
+        "refreshing": "Refreshing developer list...",
+        "userRejected": "You have cancelled the transaction"
+      },
+      "registeredDevs": {
+        "title": "Registered Game Developers",
+        "refreshButton": "Refresh",
+        "removeButton": "Remove",
+        "empty": "No registered game developers yet",
+        "removeConfirmTitle": "Are you sure you want to remove this developer?",
+        "removeConfirmDesc": "After removal, the developer will no longer be able to create ad spaces",
+        "notInList": "The developer to be removed is not in the list",
+        "removing": "Executing removal operation...",
+        "removeSuccess": "Game developer removed successfully!",
+        "refreshing": "Refreshing developer list...",
+        "listUpdated": "Developer list updated",
+        "manuallyRemoved": "Developer manually removed from the list",
+        "manuallyUpdated": "Unable to get the latest list from the contract, manually updated",
+        "removeFailed": "Failed to remove game developer",
+        "manuallyAdded": "Developer manually added to the list",
+        "updateUnconfirmed": "Transaction submitted, but unable to confirm update result. Please refresh the page later to see the latest data.",
+        "userRejected": "You have cancelled the transaction"
+      }
+    },
+    "manageDev": {
+      "title": "Registered Developers",
+      "empty": "No registered game developers",
+      "remove": "Remove"
+    }
+  },
+  "walrusUpload": {
+    "storage": {
+      "walrus": "Upload to Walrus",
+      "external": "Use External URL"
+    },
+    "upload": {
+      "dragText": "Click or drag file to this area to upload",
+      "connectWalletFirst": "Please connect wallet first",
+      "hint": "Support for a single file upload, file will be stored on Walrus",
+      "requirements": "Supported formats: PNG, JPG, GIF, WEBP images or MP4, WEBM, MOV videos",
+      "maxSize": "Maximum file size: 10MB",
+      "unsupportedType": "Unsupported file type, please upload PNG, JPG, GIF, WEBP images or MP4, WEBM, MOV videos",
+      "fileTooLarge": "File size exceeds limit, maximum allowed is 10MB, current file size is {{size}}MB",
+      "connectWalletError": "Please connect wallet first",
+      "uploadSuccess": "File uploaded successfully",
+      "uploadFailed": "File upload failed",
+      "blobUploadFailed": "Blob upload failed",
+      "ratioGuidance": "Please use images or videos with proper {{ratio}} aspect ratio for best display",
+      "noWalBalance": "Your WAL token balance is 0, cannot upload to Walrus storage"
+    },
+    "walrusUpdateWarning": "You are uploading new ad content to Walrus. After the update, the original Walrus content will be deleted, potentially refunding some storage fees.",
+    "externalToWalrusWarning": "You are switching from external URL to Walrus upload. The uploaded content will be stored on Walrus and storage fees will be charged based on your lease period.",
+    "externalUrlWarning": "You are using an external URL. Please ensure your URL is accessible and the content complies with platform regulations.",
+    "noticeTitle": "Notice",
+    "deleteWalrus": {
+      "notice": "NFT content has been updated successfully. Now deleting original Walrus content to free up storage space. You can confirm or reject this operation in your wallet, it will not affect the NFT content update",
+      "deleting": "Deleting original Walrus content...",
+      "success": "Original Walrus content deleted",
+      "error": "Failed to delete original Walrus content, but update operation completed",
+      "userRejected": "You have cancelled deleting the original Walrus content, but the NFT content has been successfully updated"
+    },
+    "validation": {
+      "invalidUrl": "Please enter a valid URL",
+      "uploadFirst": "Please upload a file to Walrus first"
+    },
+    "transaction": {
+      "updating": "Updating ad content...",
+      "submitted": "Update transaction submitted",
+      "waiting": "Waiting for transaction confirmation...",
+      "success": "Ad content updated successfully!",
+      "partialSuccess": "Transaction submitted, but could not immediately confirm the result. Please refresh the page later to see the update."
+    },
+    "progress": {
+      "title": "Uploading",
+      "preparing": "Preparing to upload file...",
+      "signing": "Waiting for wallet signature...",
+      "signSuccess": "Transaction signed successfully",
+      "uploading": "Uploading file to Walrus storage network...",
+      "finalizing": "Finalizing upload, generating access link...",
+      "completed": "Upload completed!",
+      "signingHint": "Please confirm the transaction in your wallet, do not close this page"
+    },
+    "external": {
+      "placeholder": "Please enter complete external media URL, including http:// or https://",
+      "note": "Please ensure your URL is publicly accessible and the file format is a supported image or video format",
+      "preview": "Preview:",
+      "loadError": "Unable to load image, please check if the URL is correct or accessible",
+      "checkUrl": "Unable to load image, please check if the URL is correct or publicly accessible",
+      "ensureImageUrl": "Please ensure the URL points to an image file, not a webpage",
+      "openInNewTab": "Check URL in new tab",
+      "confirmUrl": "Confirm URL",
+      "urlConfirmed": "External URL confirmed"
+    },
+    "success": {
+      "title": "Ad content uploaded successfully",
+      "contentUrl": "Content URL:",
+      "uploadedImage": "Uploaded image"
+    }
+  },
+  "common": {
+    "dimensions": {
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large",
+      "extraLarge": "Extra Large",
+      "widescreen": "Widescreen",
+      "portrait": "Portrait",
+      "square": "Square",
+      "standard": "Standard",
+      "ultrawide": "Ultrawide"
+    },
+    "time": {
+      "day": "day",
+      "days": "days"
+    },
+    "price": {
+      "discount": "Price is calculated proportionally to the lease period, longer lease is more cost-effective"
+    },
+    "units": {
+      "pixels": "pixels"
+    },
+    "width": "Width",
+    "height": "Height",
+    "buttons": {
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "update": "Update",
+      "delete": "Delete",
+      "refresh": "Refresh",
+      "retry": "Retry",
+      "copy": "Copy Address",
+      "copied": "Copied!",
+      "viewInExplorer": "View in Explorer"
+    },
+    "messages": {
+      "success": "Success",
+      "error": "Error",
+      "warning": "Warning",
+      "info": "Information",
+      "loading": "Loading",
+      "invalidDate": "Invalid date",
+      "required": "This field is required",
+      "invalidAddress": "Please enter a valid SUI address",
+      "unknown": "Unknown",
+      "userRejected": "You have cancelled the transaction"
+    }
+  }
+}

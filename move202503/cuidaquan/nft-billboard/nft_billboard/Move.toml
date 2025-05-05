@@ -1,0 +1,11 @@
+[package]
+name = "nft_billboard"
+version = "0.1.0"
+edition = "2024.beta"
+
+[dependencies]
+
+
+[addresses]
+nft_billboard = "0x0"
+

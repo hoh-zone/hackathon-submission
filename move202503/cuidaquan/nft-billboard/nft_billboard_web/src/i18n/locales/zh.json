@@ -1,0 +1,596 @@
+{
+  "app": {
+    "name": "NFT Billboards",
+    "slogan": "NFT Billboards - 重新定义区块链广告的未来",
+    "shortName": "链上广告牌"
+  },
+  "header": {
+    "home": "首页",
+    "adSpaces": "广告位",
+    "myNFTs": "我的NFT",
+    "manage": "管理"
+  },
+  "footer": {
+    "copyright": "链上动态NFT广告牌系统 © {{year}}",
+    "links": {
+      "sui": "Sui区块链",
+      "github": "GitHub仓库",
+      "about": "联系我们",
+      "walrus": "Walrus存储"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "NFT Billboards",
+      "subtitle": "革命性的去中心化广告解决方案：将您的广告内容永久铸造到区块链上，实现透明、安全、可验证的链上广告展示与交易",
+      "browseButton": "浏览广告位",
+      "myNFTsButton": "我的 NFT"
+    },
+    "stats": {
+      "adSpaces": "可用广告位",
+      "dailyViews": "每日浏览量",
+      "uniqueUsers": "独立用户"
+    },
+    "features": {
+      "title": "平台特色",
+      "decentralized": {
+        "title": "去中心化广告平台",
+        "description": "利用区块链技术实现广告位的透明交易和管理，无需中介机构参与，确保交易的公开透明和不可篡改性"
+      },
+      "nftFormat": {
+        "title": "NFT 形式广告位",
+        "description": "您购买的广告位以 NFT 形式存储在区块链上，具有唯一性和永久性，可自由交易和管理"
+      },
+      "flexibleLease": {
+        "title": "灵活的租期管理",
+        "description": "灵活设置广告位租期，随时续租或更新广告内容，根据您的营销策略进行调整"
+      }
+    },
+    "tech": {
+      "title": "基于 Sui 的新一代广告生态系统",
+      "description": "Sui 是下一代的高性能区块链平台，为我们的广告系统提供了坚实的技术基础。我们利用 Sui 区块链的独特优势，打造真正的去中心化广告生态系统。",
+      "features": {
+        "throughput": "高吞吐量交易处理",
+        "global": "全球性不可篡改记录",
+        "settlement": "即时结算与自动执行",
+        "smart": "智能合约驱动的广告展示"
+      }
+    },
+    "howItWorks": {
+      "title": "使用步骤",
+      "steps": {
+        "connectWallet": {
+          "title": "连接 Sui 钱包",
+          "description": "点击右上角的“连接钱包”按钮，连接您的 Sui 钱包，确保您已安装支持 Sui 区块链的钱包扩展"
+        },
+        "browseAdSpaces": {
+          "title": "浏览广告位",
+          "description": "浏览可用的广告位，查看详情、位置、曝光数据和价格，选择最适合您营销策略的位置"
+        },
+        "purchaseNFT": {
+          "title": "购买 NFT 广告位",
+          "description": "选择合适的广告位，支付 Sui 代币购买 NFT，交易将直接记录在区块链上，保证所有权的唯一性与永久性"
+        },
+        "manageAds": {
+          "title": "管理您的广告",
+          "description": "在“我的 NFT”页面管理您的广告内容，上传创意素材，设置链接与说明，并可随时更新或续租"
+        }
+      }
+    },
+    "cta": {
+      "title": "准备好开始您的区块链广告之旅了吗？",
+      "subtitle": "立即加入 NFT Billboards，体验区块链赋能的全新广告方式",
+      "button": "立即开始浏览"
+    }
+  },
+  "adSpaces": {
+    "title": "可用广告位",
+    "subtitle": "浏览以下可用的链上广告位，选择最适合您营销策略的位置，实现区块链上的品牌展示",
+    "search": "搜索广告位名称或位置",
+    "loading": "加载广告位中...",
+    "empty": {
+      "title": "暂无可用的广告位",
+      "subtitle": "广告位资源由区块链游戏开发者创建，请稍后再来查看或联系平台管理员",
+      "refreshButton": "刷新页面"
+    },
+    "nftHistory": "广告位历史NFT记录",
+    "noNftRecords": "暂无NFT记录",
+    "noNftRecordsDesc": "该广告位目前没有任何NFT历史记录。",
+    "priceDetails": "价格详情",
+    "alerts": {
+      "devOwned": "这是您创建的广告位",
+      "devOwnedDesc": "开发者不能购买自己创建的广告位",
+      "adminCantBuy": "无法购买广告位",
+      "adminCantBuyDesc": "管理员不能购买广告位",
+      "alreadyOwned": "您已拥有此广告位的NFT",
+      "alreadyOwnedDesc": "您已拥有此广告位的活跃或待展示NFT，不能再次购买"
+    },
+    "filters": {
+      "sortBy": "排序方式",
+      "sortOptions": {
+        "priceAsc": "价格: 从低到高",
+        "priceDesc": "价格: 从高到低",
+        "newest": "最新发布",
+        "popular": "最受欢迎"
+      }
+    },
+    "status": {
+      "active": "运行中",
+      "waiting": "等待广告内容",
+      "available": "可购买",
+      "occupied": "已占用",
+      "myAdSpace": "我的广告位",
+      "myNFT": "我的NFT"
+    },
+    "buttons": {
+      "viewDetails": "查看详情",
+      "buyNow": "立即购买",
+      "backToList": "返回广告位列表"
+    },
+    "errors": {
+      "notFound": "未找到广告位或广告位不可用。如果您刚刚创建此广告位，请稍后再试。",
+      "alreadyPurchased": "此广告位已被购买，请选择其他可用广告位。",
+      "loadFailed": "获取广告位详情失败，请稍后再试。",
+      "loadingFailed": "广告位加载失败",
+      "notFoundTitle": "未找到广告位",
+      "notFoundDesc": "未找到请求的广告位，可能已被删除或尚未创建。"
+    }
+  },
+  "myNFTs": {
+    "title": "我的广告牌NFT",
+    "subtitle": "查看并管理您拥有的广告牌NFT。",
+    "connectWallet": {
+      "title": "请连接钱包",
+      "description": "您需要连接钱包才能查看您的NFT。"
+    },
+    "loading": "正在加载您的NFT资产...",
+    "error": "加载错误",
+    "empty": {
+      "title": "您还没有拥有任何广告牌NFT",
+      "subtitle": "浏览可用的广告位并获取您的第一个NFT",
+      "browseButton": "浏览广告位",
+      "pending": "没有待展示的NFT",
+      "active": "没有活跃的NFT",
+      "expired": "没有过期的NFT"
+    },
+    "tabs": {
+      "active": "活跃NFT",
+      "pending": "待展示",
+      "expiring": "即将到期NFT",
+      "expired": "过期NFT"
+    },
+    "admin": {
+      "title": "管理员账户",
+      "description": "管理员账户不能持有NFT，请使用普通用户账户。"
+    }
+  },
+  "purchase": {
+    "title": "购买广告位",
+    "connectWallet": "请先连接钱包以购买广告位",
+    "form": {
+      "fillAdInfo": "填写广告信息",
+      "basicInfo": "基本信息",
+      "brandName": "品牌名称",
+      "brandNameRequired": "请输入品牌名称",
+      "brandNamePlaceholder": "请输入品牌名称",
+      "leaseDays": "租赁天数",
+      "leaseDaysRequired": "请输入租赁天数",
+      "leaseDaysExtra": "请输入1-365天的整数，租期越长折扣越多",
+      "leaseDaysExtraUploaded": "上传成功后租期不可修改",
+      "leaseSettings": "租期设置",
+      "customStartTime": "自定义开始时间",
+      "enabled": "启用",
+      "default": "默认",
+      "defaultTimeDesc": "默认使用交易确认时的当前时间",
+      "uploadedTimeDesc": "上传成功后不可修改，使用系统默认时间",
+      "adStartTime": "广告开始时间",
+      "selectStartTime": "选择开始时间",
+      "useDefaultTime": "使用系统默认时间",
+      "timeRequired": "请选择开始时间",
+      "adContent": "广告内容",
+      "adContentRequired": "请提供广告内容",
+      "recommendedSize": "推荐尺寸为",
+      "recommendedRatio": "推荐比例",
+      "ratioGuidance": "为获得最佳显示效果，请准备符合此比例的广告内容",
+      "projectUrl": "项目网站URL（可选）",
+      "projectUrlRequired": "请输入项目网站URL",
+      "projectUrlInvalid": "请输入有效的URL",
+      "projectUrlExtra": "用户点击广告时将跳转到此链接，如不填写则不会有跳转",
+      "yourLeasePeriod": "您选择的租期",
+      "days": "天",
+      "calculatingPrice": "计算价格中...",
+      "totalPrice": "总价",
+      "priceCalculationFailed": "价格计算失败，请重试",
+      "confirmPurchase": "确认购买",
+      "uploadSuccessAlert": "广告内容已成功上传",
+      "uploadSuccessAlertDesc": "广告内容已成功上传到Walrus存储网络，租期设置已锁定。",
+      "uploadSuccessAlertWithCustomTime": "广告内容已成功上传，将于 {{time}} 开始展示",
+      "externalUrlAlert": "外部URL已设置",
+      "externalUrlAlertDesc": "您已设置外部URL作为广告内容，租期设置可以随时修改。",
+      "externalUrlSuccess": "外部URL已成功设置"
+    },
+    "transaction": {
+      "purchasing": "正在购买广告位...",
+      "submitted": "广告位购买交易已提交",
+      "waitingConfirmation": "等待交易确认...",
+      "success": "广告位购买成功！",
+      "error": "购买广告位失败，请检查输入并重试。",
+      "failed": "广告位购买失败"
+    }
+  },
+  "nftDetail": {
+    "loading": "加载NFT详情...",
+    "error": "错误",
+    "notFound": "未找到NFT详情",
+    "details": "NFT详情",
+    "mediaLoadError": "媒体加载失败",
+    "leasePeriod": "租期",
+    "from": "从",
+    "to": "至",
+    "fields": {
+      "nftId": "NFT ID",
+      "adSpaceId": "广告位ID",
+      "owner": "所有者",
+      "brandName": "品牌名称",
+      "projectUrl": "项目网站URL",
+      "leaseStart": "租约开始",
+      "leaseEnd": "租约结束",
+      "leasePeriod": "租期",
+      "daysRemaining": "剩余天数",
+      "status": "状态",
+      "contentUrl": "广告内容URL"
+    },
+    "status": {
+      "active": "活跃",
+      "expiring": "即将到期",
+      "expired": "已过期",
+      "pending": "待展示"
+    },
+    "buttons": {
+      "viewAdSpace": "查看广告位",
+      "updateContent": "更新内容",
+      "renewLease": "续租"
+    },
+    "modals": {
+      "updateContent": {
+        "title": "更新广告内容",
+        "placeholder": "请输入内容URL",
+        "required": "请输入内容URL",
+        "description": "请输入新的广告内容URL，该URL应指向图片或其他媒体内容。",
+        "storageMode": "选择内容来源",
+        "externalUrl": "外部URL",
+        "walrusUpload": "Walrus上传",
+        "currentContent": "当前广告内容",
+        "source": "来源",
+        "walrusStorage": "Walrus存储",
+        "externalStorage": "外部URL",
+        "newContent": "新广告内容",
+        "externalUrlLabel": "外部URL",
+        "externalUrlHelp": "请输入有效的图片或视频URL",
+        "preview": "新内容预览",
+        "deleteWarning": {
+          "title": "注意",
+          "description": "您正在从Walrus存储切换到外部URL。更新完成后，原Walrus存储的内容将被删除，可能返还部分存储费用。"
+        }
+      },
+      "renewLease": {
+        "title": "续租NFT",
+        "daysLabel": "续租天数",
+        "daysPlaceholder": "请输入续租天数",
+        "daysExtra": "请输入1-365天的整数，续租天数越长折扣越多",
+        "calculatingPrice": "计算价格中...",
+        "priceLabel": "续租价格: ",
+        "walletBalance": "钱包余额:",
+        "walBalance": "WAL余额:",
+        "insufficientBalanceHint": "（余额不足）",
+        "description": "续租将延长NFT的租赁期限，价格由智能合约根据续租天数动态计算。续租天数范围：1-365天。"
+      }
+    },
+    "transaction": {
+      "fetchingDetails": "正在获取NFT详细信息...",
+      "fetchSuccess": "获取NFT详细信息成功",
+      "fetchFailed": "获取NFT详细信息失败，无法确定存储类型。继续执行续租操作。",
+      "extendingWalrus": "正在延长Walrus存储期限...",
+      "extendWalrusFailed": "延长Walrus存储期限失败，续租操作已取消。请稍后再试。",
+      "extendWalrusSuccess": "Walrus存储期限延长成功！",
+      "renewingNft": "正在续租NFT...",
+      "renewSubmitted": "续租交易已提交",
+      "renewSuccess": "NFT续租成功！",
+      "renewPartialSuccess": "交易已提交，但无法立即确认结果。请稍后刷新页面查看更新。",
+      "renewFailed": "续租失败，请检查钱包并重试",
+      "renewFailedInsufficientBalance": "续租失败：钱包余额不足，请确保有足够的SUI支付租金",
+      "renewFailedContractError": "续租失败：合约执行错误",
+      "renewFailedUserCancelled": "您已取消续租操作",
+      "invalidDays": "请选择有效的续租天数",
+      "invalidPrice": "无效的续租价格，请刷新页面重试",
+      "insufficientBalance": "余额不足！需要 {{price}} SUI，但钱包只有 {{balance}} SUI",
+      "insufficientBalanceGeneric": "余额不足！您的钱包余额只有 {{balance}} SUI",
+      "expiredNft": "此NFT已过期，根据合约规定，不能对已过期的NFT进行续租。",
+      "expiredNftWarning": "由于合约限制，当前只能对未过期的NFT进行续租。此NFT已过期，请联系管理员。"
+    },
+    "messages": {
+      "contentUpdateSuccess": "广告内容已成功更新",
+      "contentUpdatePartialSuccess": "广告内容已更新，但无法刷新页面数据。请手动刷新页面。",
+      "invalidDate": "无效日期"
+    },
+    "notOwner": "您不是此NFT的所有者，无法执行此操作"
+  },
+  "manage": {
+    "title": "管理中心",
+    "subtitle": "管理广告位和平台设置",
+    "errors": {
+      "accessDenied": "访问被拒绝",
+      "accessDeniedDesc": "您没有访问管理中心的权限。只有注册的游戏开发者或平台管理员才能访问此页面。"
+    },
+    "tabs": {
+      "createAdSpace": "创建广告位",
+      "myAdSpaces": "我的广告位",
+      "registerDev": "注册开发者",
+      "manageDev": "管理开发者",
+      "platformManage": "平台管理"
+    },
+    "buttons": {
+      "changePrice": "更改价格",
+      "updatePrice": "更新价格",
+      "deleteAdSpace": "删除广告位",
+      "waitingConfirmation": "交易已提交，等待确认..."
+    },
+    "priceModal": {
+      "title": "更新广告位价格",
+      "currentAdSpace": "当前广告位",
+      "currentPrice": "当前价格 (SUI/天)",
+      "newPrice": "新价格 (SUI/天)",
+      "priceUpdateSuccess": "广告位价格更新成功"
+    },
+    "confirmDelete": {
+      "title": "确定要删除此广告位吗?",
+      "description": "删除后无法恢复，如有活跃NFT将无法删除"
+    },
+    "createAdSpace": {
+      "title": "创建新广告位",
+      "loading": "正在创建广告位...",
+      "success": "广告位创建成功！数据已确认",
+      "form": {
+        "name": "广告位名称",
+        "gameId": "游戏ID",
+        "gameIdRequired": "请输入游戏ID",
+        "gameIdPlaceholder": "游戏ID",
+        "location": "广告位位置",
+        "locationRequired": "请输入广告位位置",
+        "locationPlaceholder": "广告位位置，例如: 主菜单、游戏大厅",
+        "description": "描述",
+        "dimension": "广告位比例",
+        "dimensionRequired": "请选择广告位尺寸",
+        "dimensionPlaceholder": "选择尺寸",
+        "dimensionType": "尺寸类型",
+        "standardRatio": "标准比例",
+        "customRatio": "自定义比例",
+        "customDimension": "自定义尺寸比例",
+        "widthRequired": "请输入宽度比例",
+        "heightRequired": "请输入高度比例",
+        "invalidCustomDimension": "请输入有效的自定义尺寸比例",
+        "price": "每天价格 (SUI)",
+        "priceRequired": "请输入每天价格",
+        "pricePlaceholder": "每天价格 (SUI)",
+        "submit": "创建广告位",
+        "allFieldsRequired": "请完整填写所有必填字段",
+        "invalidDimension": "尺寸格式无效，请选择有效的尺寸选项",
+        "priceGreaterThanZero": "价格必须大于0",
+        "txSubmitted": "广告位创建交易已提交",
+        "waitingConfirmation": "等待交易确认...",
+        "delayedDisplay": "新创建的广告位可能需要一段时间才能显示，请稍后手动刷新",
+        "errors": {
+          "notGameDev": "交易执行失败: 您不是注册的游戏开发者",
+          "insufficientGas": "交易执行失败: gas 费不足，请确保您的钱包中有足够的 SUI",
+          "invalidParams": "交易执行失败: 提供给智能合约的参数无效，请检查游戏ID、位置和尺寸格式是否符合要求",
+          "createFailed": "广告位创建失败",
+          "contractConfigIncomplete": "系统配置错误: 合约参数不完整"
+        }
+      }
+    },
+    "myAdSpaces": {
+      "loading": "正在加载您的广告位资产...",
+      "loadingData": "正在加载广告位数据...",
+      "loadSuccess": "广告位数据已加载",
+      "loadFailed": "加载广告位数据失败",
+      "notGameDev": "您不是注册的游戏开发者，无法查看广告位",
+      "empty": "您还没有创建广告位",
+      "emptyDesc": "创建您的第一个广告位，开始赚取SUI代币",
+      "activeNFT": "活跃中",
+      "waitingContent": "等待广告内容",
+      "listTitle": "您创建的广告位列表",
+      "deleteSuccess": "广告位删除成功",
+      "refreshFailed": "刷新广告位列表失败，请手动刷新页面",
+      "deleteFailed": "删除广告位失败",
+      "priceUpdateFailed": "价格更新失败",
+      "invalidPrice": "请输入有效的价格"
+    },
+    "registerDev": {
+      "title": "注册游戏开发者",
+      "form": {
+        "address": "开发者地址",
+        "submit": "注册开发者"
+      }
+    },
+    "platformManage": {
+      "factoryInfo": {
+        "title": "工厂对象信息",
+        "objectId": "工厂对象 ID",
+        "view": "查看",
+        "description": "工厂对象说明",
+        "descriptionText": "工厂对象是平台的核心智能合约，包含平台分成比例、广告位列表和开发者列表等信息"
+      },
+      "platformRatio": {
+        "title": "平台分成设置",
+        "label": "平台分成比例(%)",
+        "required": "请输入平台分成比例",
+        "rangeError": "分成比例必须在0-100之间",
+        "placeholder": "输入0-100之间的数字",
+        "currentRatio": "当前平台分成比例",
+        "currentRatioDesc": "{{ratio}}%（当广告位被购买时，平台将收取总价的{{ratio}}%作为服务费）",
+        "updateButton": "更新分成比例",
+        "updateSuccess": "平台分成比例更新成功！",
+        "updateFailed": "平台分成比例更新失败",
+        "updating": "正在更新平台分成比例...",
+        "waitingConfirmation": "等待交易确认...",
+        "manuallyUpdated": "无法从区块链确认更新，已手动更新UI",
+        "updateUnconfirmed": "交易已提交，但无法确认更新结果。请稍后刷新页面查看最新数据。",
+        "userRejected": "您已取消交易"
+      },
+      "registerDev": {
+        "title": "注册游戏开发者",
+        "addressLabel": "开发者转账地址",
+        "addressPlaceholder": "输入开发者的地址",
+        "registerButton": "注册开发者",
+        "invalidAddress": "开发者地址格式无效，请输入有效的Sui钱包地址",
+        "alreadyRegistered": "该地址已经注册为游戏开发者",
+        "executing": "正在执行交易...",
+        "success": "游戏开发者注册成功！",
+        "refreshing": "正在刷新开发者列表...",
+        "userRejected": "您已取消交易"
+      },
+      "registeredDevs": {
+        "title": "已注册的游戏开发者",
+        "refreshButton": "刷新",
+        "removeButton": "移除",
+        "empty": "暂无注册的游戏开发者",
+        "removeConfirmTitle": "确定要移除此开发者吗?",
+        "removeConfirmDesc": "移除后，该开发者将无法再创建广告位",
+        "notInList": "要移除的开发者不在列表中",
+        "removing": "正在执行移除操作...",
+        "removeSuccess": "游戏开发者移除成功！",
+        "refreshing": "正在刷新开发者列表...",
+        "listUpdated": "开发者列表已更新",
+        "manuallyRemoved": "已手动从列表中移除开发者",
+        "manuallyUpdated": "无法从合约获取最新列表，已手动更新",
+        "removeFailed": "游戏开发者移除失败",
+        "manuallyAdded": "已手动添加开发者到列表",
+        "updateUnconfirmed": "交易已提交，但无法确认更新结果。请稍后刷新页面查看最新数据。",
+        "userRejected": "您已取消交易"
+      }
+    },
+    "manageDev": {
+      "title": "已注册开发者",
+      "empty": "暂无注册的游戏开发者",
+      "remove": "移除"
+    }
+  },
+  "walrusUpload": {
+    "storage": {
+      "walrus": "上传到Walrus",
+      "external": "使用外部URL"
+    },
+    "upload": {
+      "dragText": "点击或拖拽文件到此区域上传",
+      "connectWalletFirst": "请先连接钱包",
+      "hint": "支持单个文件上传，文件将存储在 Walrus 上",
+      "requirements": "支持的格式：PNG、JPG、GIF、WEBP图片或MP4、WEBM、MOV视频",
+      "maxSize": "最大文件大小：10MB",
+      "unsupportedType": "不支持的文件类型，请上传PNG、JPG、GIF、WEBP图片或MP4、WEBM、MOV视频",
+      "fileTooLarge": "文件大小超过限制，最大允许10MB，当前文件大小{{size}}MB",
+      "connectWalletError": "请先连接钱包",
+      "uploadSuccess": "文件上传成功",
+      "uploadFailed": "文件上传失败",
+      "blobUploadFailed": "Blob上传失败",
+      "ratioGuidance": "请使用符合{{ratio}}比例的图片或视频以获得最佳显示效果",
+      "noWalBalance": "您的WAL代币余额为0，无法上传到Walrus存储"
+    },
+    "walrusUpdateWarning": "您正在使用Walrus上传新的广告内容。更新完成后，原Walrus存储的内容将被删除，可能返还部分存储费用。",
+    "externalToWalrusWarning": "您正在从外部URL切换到Walrus上传。上传后的内容将存储在Walrus上，并按租期收取存储费用。",
+    "externalUrlWarning": "您正在使用外部URL。请确保您提供的URL是可访问的，并且内容符合平台规定。",
+    "noticeTitle": "注意",
+    "deleteWalrus": {
+      "notice": "NFT内容已更新成功。现在将删除原Walrus内容以释放存储空间，您可以在钱包中确认或拒绝此操作，不会影响NFT内容更新",
+      "deleting": "正在删除原Walrus内容...",
+      "success": "原Walrus内容已删除",
+      "error": "删除原Walrus内容失败，但更新操作已完成",
+      "userRejected": "您已取消删除原Walrus内容，但NFT内容已成功更新"
+    },
+    "validation": {
+      "invalidUrl": "请输入有效的URL",
+      "uploadFirst": "请先上传文件到Walrus"
+    },
+    "transaction": {
+      "updating": "正在更新广告内容...",
+      "submitted": "更新交易已提交",
+      "waiting": "等待交易确认...",
+      "success": "广告内容更新成功！",
+      "partialSuccess": "交易已提交，但无法立即确认结果。请稍后刷新页面查看更新。"
+    },
+    "progress": {
+      "title": "正在上传",
+      "uploading": "正在上传文件到Walrus存储网络...",
+      "preparing": "准备上传文件...",
+      "signing": "等待钱包签名交易...",
+      "signSuccess": "交易签名成功",
+      "finalizing": "正在完成上传，生成访问链接...",
+      "completed": "上传完成！",
+      "signingHint": "请在钱包中确认交易，请勿关闭此页面"
+    },
+    "external": {
+      "placeholder": "请输入完整的外部媒体URL，包括http://或https://",
+      "note": "请确保您提供的URL是公开可访问的，且文件格式为支持的图片或视频格式",
+      "preview": "预览：",
+      "loadError": "无法加载图片，请检查URL是否正确或可访问",
+      "checkUrl": "无法加载图片，请检查URL是否正确或可公开访问",
+      "ensureImageUrl": "请确保URL指向的是图片文件，而不是网页",
+      "openInNewTab": "在新标签页检查URL",
+      "confirmUrl": "确认URL",
+      "urlConfirmed": "外部URL已确认"
+    },
+    "success": {
+      "title": "广告内容已上传成功",
+      "contentUrl": "内容URL：",
+      "uploadedImage": "上传的图片"
+    }
+  },
+  "common": {
+    "dimensions": {
+      "small": "小",
+      "medium": "中",
+      "large": "大",
+      "extraLarge": "超大",
+      "widescreen": "宽屏",
+      "portrait": "竖屏",
+      "square": "方形",
+      "standard": "标准",
+      "ultrawide": "超宽屏"
+    },
+    "time": {
+      "day": "天",
+      "days": "天"
+    },
+    "price": {
+      "discount": "价格随租期按比例计算，租期越长越划算"
+    },
+    "units": {
+      "pixels": "像素"
+    },
+    "width": "宽",
+    "height": "高",
+    "buttons": {
+      "submit": "提交",
+      "cancel": "取消",
+      "confirm": "确认",
+      "update": "更新",
+      "delete": "删除",
+      "refresh": "刷新",
+      "retry": "重试",
+      "copy": "复制地址",
+      "copied": "已复制!",
+      "viewInExplorer": "在浏览器中查看"
+    },
+    "messages": {
+      "success": "成功",
+      "error": "错误",
+      "warning": "警告",
+      "info": "信息",
+      "loading": "加载中",
+      "invalidDate": "无效日期",
+      "required": "此字段为必填项",
+      "invalidAddress": "请输入有效的SUI地址",
+      "unknown": "未知",
+      "userRejected": "您已取消交易"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+.update-ad-content {
+  padding: 16px;
+  
+  .storage-mode-selector {
+    margin-bottom: 24px;
+    
+    .ant-radio-group {
+      margin-top: 8px;
+    }
+  }
+  
+  .current-content {
+    margin-bottom: 24px;
+    
+    .content-preview {
+      margin-bottom: 12px;
+      border: 1px solid #f0f0f0;
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #fafafa;
+      
+      .media-container {
+        min-height: 200px;
+        max-height: 300px;
+      }
+    }
+  }
+  
+  .content-input {
+    margin-bottom: 24px;
+  }
+  
+  .new-content-preview {
+    margin-bottom: 24px;
+    
+    .content-preview {
+      margin-bottom: 12px;
+      border: 1px solid #f0f0f0;
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #fafafa;
+      
+      .media-container {
+        min-height: 200px;
+        max-height: 300px;
+      }
+    }
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+  }
+}

@@ -1,0 +1,325 @@
+.nft-detail-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+
+  // 粒子背景动画
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100px;
+    right: -100px;
+    height: 300px;
+    background-image:
+      radial-gradient(circle at 50% 50%, rgba(78, 99, 255, 0.03) 0%, transparent 80%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  // 添加装饰元素
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 400px;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(78, 99, 255, 0.03) 1px, transparent 5px),
+      radial-gradient(circle at 45% 30%, rgba(110, 86, 207, 0.03) 1px, transparent 6px),
+      radial-gradient(circle at 75% 20%, rgba(78, 99, 255, 0.03) 1px, transparent 8px),
+      radial-gradient(circle at 85% 45%, rgba(110, 86, 207, 0.02) 1px, transparent 10px);
+    animation: float 20s infinite linear;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .nft-header {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+      font-weight: 700;
+      font-size: 32px;
+      position: relative;
+      margin-bottom: 16px;
+      color: var(--text-dark);
+
+      .anticon {
+        margin-right: 10px;
+        font-size: 28px;
+        color: #4e63ff;
+      }
+
+      &:after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #4e63ff, #6e56cf);
+        margin: 12px 0 0;
+        border-radius: 3px;
+      }
+    }
+
+    .status-tag {
+      .status {
+        font-size: 14px;
+        padding: 4px 12px;
+        font-weight: bold;
+        border-radius: 20px;
+
+        &.active {
+          color: white;
+          background: rgba(82, 196, 26, 0.9);
+          border: none;
+          animation: pulse 2s infinite;
+        }
+
+        &.expired {
+          color: white;
+          background: rgba(245, 34, 45, 0.9);
+          border: none;
+        }
+
+        &.pending {
+          color: white;
+          background: rgba(24, 144, 255, 0.9);
+          border: none;
+        }
+      }
+    }
+  }
+
+  .nft-content {
+    display: flex;
+    flex-direction: column;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      gap: 30px;
+    }
+
+    .nft-image {
+      width: 100%;
+      margin-bottom: 30px;
+
+      @media (min-width: 768px) {
+        width: 50%;
+        margin-bottom: 0;
+      }
+
+      .nft-media {
+        width: 100%;
+        position: relative;
+        border-radius: var(--border-radius-lg);
+        overflow: hidden;
+        box-shadow: var(--box-shadow-md);
+        z-index: 2;
+        background-color: #f5f5f5;
+        min-height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .status-tag {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          z-index: 10;
+
+          .status {
+            font-size: 14px;
+            padding: 4px 12px;
+            font-weight: bold;
+            border-radius: 20px;
+
+            &.active {
+              color: white;
+              background: rgba(82, 196, 26, 0.9);
+              border: none;
+              animation: pulse 2s infinite;
+            }
+
+            &.expired {
+              color: white;
+              background: rgba(245, 34, 45, 0.9);
+              border: none;
+            }
+
+            &.pending {
+              color: white;
+              background: rgba(24, 144, 255, 0.9);
+              border: none;
+            }
+
+            &.expiring {
+              color: white;
+              background: rgba(250, 173, 20, 0.9);
+              border: none;
+            }
+          }
+        }
+
+        img, video {
+          max-width: 100%;
+          max-height: 500px;
+          object-fit: contain;
+          transition: transform 0.5s;
+
+          &:hover {
+            transform: scale(1.05);
+          }
+        }
+      }
+
+      .loading-media {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 300px;
+        color: var(--text-medium);
+        font-size: 16px;
+        background-color: #f0f0f0;
+      }
+
+      .media-error {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        z-index: 3;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    .nft-details {
+      width: 100%;
+
+      @media (min-width: 768px) {
+        width: 50%;
+      }
+
+      .ant-card {
+        width: 100%;
+        border-radius: 16px !important;
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        background: linear-gradient(145deg, #ffffff, #f5f7ff);
+        transition: all 0.3s;
+
+        &:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .ant-card-body {
+          padding: 30px;
+        }
+      }
+
+      .ant-descriptions-title {
+        font-weight: 700;
+        font-size: 24px;
+        color: var(--text-dark);
+        margin-bottom: 24px;
+        position: relative;
+        padding-left: 16px;
+
+        &:before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 4px;
+          bottom: 4px;
+          width: 4px;
+          background: linear-gradient(90deg, #4e63ff, #6e56cf);
+          border-radius: 2px;
+        }
+      }
+
+      .ant-descriptions-item-label {
+        font-weight: 600;
+        color: var(--text-dark);
+      }
+
+      .nft-actions {
+        margin-top: 24px;
+        display: flex;
+        justify-content: flex-end;
+
+        .ant-btn {
+          border-radius: 8px;
+          font-weight: 600;
+          height: 40px;
+
+          &.ant-btn-primary {
+            background: linear-gradient(90deg, #4e63ff, #6e56cf);
+            border: none;
+            box-shadow: 0 4px 10px rgba(78, 99, 255, 0.2);
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 6px 15px rgba(78, 99, 255, 0.3);
+              background: linear-gradient(90deg, #5a6eff, #7a62d9);
+            }
+          }
+
+          .anticon {
+            font-size: 16px;
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+  }
+
+  .loading-container {
+    text-align: center;
+    padding: 80px 0;
+    position: relative;
+    z-index: 1;
+
+    .ant-spin {
+      .ant-spin-dot-item {
+        background-color: #4e63ff;
+      }
+    }
+
+    p {
+      margin-top: 16px;
+      color: var(--text-medium);
+      font-size: 16px;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(82, 196, 26, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(82, 196, 26, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(82, 196, 26, 0);
+  }
+}
+
+@keyframes float {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}

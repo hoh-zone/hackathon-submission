@@ -1,0 +1,826 @@
+.ad-space-detail-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+
+  // 粒子背景动画
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100px;
+    right: -100px;
+    height: 300px;
+    background-image:
+      radial-gradient(circle at 50% 50%, rgba(78, 99, 255, 0.03) 0%, transparent 80%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  // 添加装饰元素
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 400px;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(78, 99, 255, 0.03) 1px, transparent 5px),
+      radial-gradient(circle at 45% 30%, rgba(110, 86, 207, 0.03) 1px, transparent 6px),
+      radial-gradient(circle at 75% 20%, rgba(78, 99, 255, 0.03) 1px, transparent 8px),
+      radial-gradient(circle at 85% 45%, rgba(110, 86, 207, 0.02) 1px, transparent 10px);
+    animation: float 20s infinite linear;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .ad-space-header {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 40px;
+
+    h2 {
+      font-weight: 700;
+      font-size: 32px;
+      position: relative;
+      margin-bottom: 16px;
+      color: var(--text-dark);
+
+      .anticon {
+        margin-right: 10px;
+        font-size: 28px;
+        color: #4e63ff;
+      }
+
+      &:after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #4e63ff, #6e56cf);
+        margin: 12px 0 0;
+        border-radius: 3px;
+      }
+    }
+
+    .subtitle {
+      display: block;
+      margin-bottom: 30px;
+      color: var(--text-medium);
+      font-size: 16px;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+  }
+
+  .loading-container {
+    text-align: center;
+    padding: 80px 0;
+    position: relative;
+    z-index: 1;
+
+    .ant-spin {
+      .ant-spin-dot-item {
+        background-color: #4e63ff;
+      }
+    }
+
+    p {
+      margin-top: 16px;
+      color: var(--text-medium);
+      font-size: 16px;
+    }
+  }
+
+  .error-container {
+    text-align: center;
+    padding: 80px 30px;
+    background: linear-gradient(145deg, #f9faff, #f0f2ff);
+    border-radius: 16px;
+    margin: 40px auto;
+    max-width: 800px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(78, 99, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+
+    &:before {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(78, 99, 255, 0.05) 0%, transparent 70%);
+      top: -150px;
+      right: -150px;
+      z-index: 0;
+    }
+
+    .ant-alert {
+      margin-bottom: 20px;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--box-shadow-sm);
+      position: relative;
+      z-index: 1;
+    }
+
+    .error-actions {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+
+      .ant-btn {
+        height: 44px;
+        padding: 0 24px;
+        font-weight: 600;
+        transition: all var(--animation-speed-normal);
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: var(--box-shadow-md);
+        }
+
+        &.ant-btn-primary {
+          background: linear-gradient(90deg, #4e63ff, #6e56cf);
+          border: none;
+          box-shadow: 0 4px 15px rgba(78, 99, 255, 0.3);
+
+          &:hover {
+            box-shadow: 0 8px 20px rgba(78, 99, 255, 0.4);
+            background: linear-gradient(90deg, #5a6eff, #7a62d9);
+          }
+        }
+      }
+    }
+  }
+
+  .ant-card {
+    width: 100%;
+    border-radius: 16px !important;
+    overflow: hidden;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    background: linear-gradient(145deg, #ffffff, #f5f7ff);
+    transition: all 0.3s;
+    margin-bottom: 30px;
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .ant-card-body {
+      padding: 30px;
+    }
+  }
+
+  .ad-space-content {
+    display: flex;
+    flex-direction: column;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      gap: 30px;
+    }
+
+    .ad-space-image {
+      width: 100%;
+      margin-bottom: 30px;
+
+      @media (min-width: 768px) {
+        width: 50%;
+        margin-bottom: 0;
+      }
+
+      .ad-space-detail-placeholder {
+        width: 100%;
+        min-height: 300px; /* 与active-nft-display保持一致 */
+        background: linear-gradient(135deg, rgba(78, 99, 255, 0.9), rgba(110, 86, 207, 0.85));
+        border-radius: var(--border-radius-lg);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        position: relative;
+
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image:
+            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+          background-size: 20px 20px;
+          z-index: 1;
+          pointer-events: none;
+        }
+
+        &.loading {
+          background: linear-gradient(135deg, rgba(78, 99, 255, 0.8), rgba(110, 86, 207, 0.75));
+        }
+
+        .placeholder-content {
+          text-align: center;
+          padding: 30px;
+          position: relative;
+          z-index: 2;
+          color: white;
+
+          .anticon {
+            font-size: 42px;
+            margin-bottom: 16px;
+            display: block;
+          }
+
+          span, p {
+            color: white;
+            font-size: 16px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+          }
+        }
+      }
+
+      .active-nft-display {
+        width: 100%;
+        position: relative;
+        border-radius: var(--border-radius-lg);
+        overflow: hidden;
+        box-shadow: var(--box-shadow-md);
+        z-index: 2;
+        background-color: #f5f5f5;
+        min-height: 300px; /* 设置最小高度，防止内容过小时容器塌陷 */
+
+        .ad-space-media {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          img, video {
+            max-width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            transition: transform 0.5s;
+
+            &:hover {
+              transform: scale(1.05);
+            }
+          }
+        }
+
+        .carousel-controls {
+          position: absolute;
+          bottom: 10px;
+          right: 10px;
+          z-index: 4;
+          cursor: pointer;
+          transition: transform 0.3s;
+
+          &:hover {
+            transform: scale(1.05);
+          }
+
+          .carousel-info {
+            .ant-tag {
+              font-weight: 600;
+              font-size: 12px;
+              padding: 3px 10px;
+              border-radius: 20px;
+              background: rgba(78, 99, 255, 0.85);
+              border: none;
+              color: white;
+              display: flex;
+              align-items: center;
+
+              .anticon {
+                margin-right: 5px;
+                animation: rotate 2s infinite linear;
+              }
+            }
+          }
+
+          .carousel-nav {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: flex-end;
+
+            .nav-button {
+              width: 36px;
+              height: 36px;
+              border: none;
+              opacity: 0.9;
+              transition: all var(--animation-speed-normal);
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: linear-gradient(90deg, #4e63ff, #6e56cf);
+              color: white;
+
+              &:hover {
+                opacity: 1;
+                transform: translateY(-2px);
+              }
+            }
+          }
+        }
+
+        .active-badge {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          z-index: 3;
+        }
+      }
+    }
+
+    .ad-space-info {
+      width: 100%;
+
+      @media (min-width: 768px) {
+        width: 50%;
+      }
+
+      h4 {
+        margin-bottom: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 700;
+        color: var(--text-dark);
+        font-size: 24px;
+
+        .anticon {
+          margin-right: 10px;
+          font-size: 20px;
+          color: #4e63ff;
+          background: linear-gradient(90deg, #4e63ff, #6e56cf);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: transparent;
+        }
+      }
+
+      .ant-typography {
+        margin-bottom: 16px;
+        color: var(--text-medium);
+        font-size: 16px;
+        line-height: 1.6;
+
+        .anticon {
+          margin-right: 10px;
+          font-size: 16px;
+          color: #4e63ff;
+        }
+      }
+
+      .ad-info {
+        margin-bottom: 24px;
+
+        .info-item {
+          display: flex;
+          align-items: center;
+          margin-bottom: 12px;
+
+          .anticon {
+            margin-right: 10px;
+            font-size: 16px;
+            color: #4e63ff;
+            background: linear-gradient(90deg, #4e63ff, #6e56cf);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+          }
+
+          .price-text {
+            white-space: nowrap;
+            font-weight: 600;
+            color: #4e63ff;
+          }
+        }
+      }
+
+      .price-detail {
+        margin: 24px 0;
+        background: linear-gradient(135deg, rgba(78, 99, 255, 0.03) 0%, rgba(110, 86, 207, 0.02) 100%);
+        padding: 20px;
+        border-radius: var(--border-radius-lg);
+        border-left: 4px solid var(--primary);
+        box-shadow: var(--box-shadow-sm);
+
+        h5 {
+          margin-bottom: 16px;
+          color: var(--primary);
+          font-weight: 700;
+          font-size: 18px;
+        }
+
+        .price-description {
+          color: var(--text-medium);
+          font-style: italic;
+          margin-top: 12px;
+          font-size: 14px;
+        }
+
+        strong {
+          color: var(--text-dark);
+          font-weight: 600;
+        }
+      }
+
+      .ad-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 20px 0;
+
+        .ant-tag {
+          margin: 0;
+          padding: 2px 10px;
+          border-radius: 12px;
+          font-weight: 500;
+          font-size: 12px;
+          border: none;
+
+          &:nth-child(1) {
+            background: rgba(78, 99, 255, 0.1);
+            color: #4e63ff;
+          }
+
+          &:nth-child(2) {
+            background: rgba(110, 86, 207, 0.1);
+            color: #6e56cf;
+          }
+
+          &:nth-child(3) {
+            background: rgba(82, 196, 26, 0.1);
+            color: #52c41a;
+          }
+        }
+      }
+
+      .purchase-section {
+        margin-top: 30px;
+
+        .ant-btn {
+          width: 100%;
+          border-radius: 8px;
+          font-weight: 600;
+          height: 44px;
+          font-size: 16px;
+
+          &.ant-btn-primary {
+            background: linear-gradient(90deg, #4e63ff, #6e56cf);
+            border: none;
+            box-shadow: 0 4px 10px rgba(78, 99, 255, 0.2);
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 6px 15px rgba(78, 99, 255, 0.3);
+              background: linear-gradient(90deg, #5a6eff, #7a62d9);
+            }
+          }
+
+          .anticon {
+            font-size: 18px;
+            margin-right: 8px;
+          }
+        }
+
+        .purchase-note {
+          color: var(--text-medium);
+          font-size: 13px;
+          margin-top: 12px;
+          line-height: 1.5;
+          background: rgba(78, 99, 255, 0.05);
+          padding: 12px;
+          border-radius: var(--border-radius-md);
+          border: 1px solid rgba(78, 99, 255, 0.1);
+        }
+      }
+    }
+  }
+
+  .nft-list-card {
+    margin-top: 50px;
+    animation: fadeIn 0.6s ease-out forwards;
+
+    .ant-card-body {
+      h4 {
+        margin-bottom: 24px;
+        position: relative;
+        padding-left: 16px;
+        font-weight: 700;
+        font-size: 24px;
+        color: var(--text-dark);
+
+        .anticon {
+          margin-right: 10px;
+          font-size: 20px;
+          color: #4e63ff;
+        }
+
+        &:before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 4px;
+          bottom: 4px;
+          width: 4px;
+          background: linear-gradient(90deg, #4e63ff, #6e56cf);
+          border-radius: 2px;
+        }
+      }
+    }
+
+    .loading-nfts {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+
+      .ant-spin {
+        .ant-spin-dot-item {
+          background-color: #4e63ff;
+        }
+      }
+    }
+
+    .ant-row {
+      .ant-col {
+        animation: slideUpFadeIn 0.6s ease-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+
+        @for $i from 1 through 12 {
+          &:nth-child(#{$i}) {
+            animation-delay: $i * 0.05s;
+          }
+        }
+      }
+    }
+
+    .nft-card {
+      width: 100%;
+      margin-bottom: 24px;
+      transition: all 0.3s;
+      border-radius: 16px !important;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      background: linear-gradient(145deg, #ffffff, #f5f7ff);
+      height: 100%;
+
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+      }
+
+      .nft-card-image-container {
+        height: 200px;
+        background: linear-gradient(135deg, rgba(78, 99, 255, 0.9), rgba(110, 86, 207, 0.85));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image:
+            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+          background-size: 20px 20px;
+          z-index: 1;
+          pointer-events: none;
+        }
+
+        img, video {
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+          transition: transform 0.5s;
+          position: relative;
+          z-index: 2;
+
+          &:hover {
+            transform: scale(1.05);
+          }
+        }
+
+        .nft-card-tag {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          z-index: 3;
+          display: flex;
+          gap: 6px;
+
+          .ant-tag {
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: none;
+            font-size: 12px;
+
+            &.ant-tag-green {
+              background: rgba(82, 196, 26, 0.9);
+              color: white;
+            }
+
+            &.ant-tag-orange {
+              background: rgba(250, 173, 20, 0.9);
+              color: white;
+            }
+
+            &.ant-tag-red {
+              background: rgba(245, 34, 45, 0.9);
+              color: white;
+            }
+          }
+        }
+      }
+
+      .ant-card-body {
+        padding: 20px;
+      }
+
+      .ant-card-meta-title {
+        margin-bottom: 16px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 700;
+        color: var(--text-dark);
+        font-size: 18px;
+      }
+
+      .nft-card-description {
+        .nft-lease-time {
+          display: flex;
+          align-items: center;
+          font-size: 13px;
+          color: var(--text-medium);
+          margin-bottom: 10px;
+
+          .anticon {
+            margin-right: 6px;
+            color: #4e63ff;
+          }
+        }
+      }
+
+      .ant-card-actions {
+        background: transparent;
+        border-top: 1px solid rgba(78, 99, 255, 0.1);
+
+        li {
+          margin: 12px 0;
+          border-right: 1px solid rgba(78, 99, 255, 0.1);
+
+          &:last-child {
+            border-right: none;
+          }
+        }
+
+        button {
+          width: 90%;
+          border-radius: 8px;
+          font-weight: 600;
+          height: 36px;
+
+          &.ant-btn-primary {
+            background: linear-gradient(90deg, #4e63ff, #6e56cf);
+            border: none;
+            box-shadow: 0 4px 10px rgba(78, 99, 255, 0.2);
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 6px 15px rgba(78, 99, 255, 0.3);
+              background: linear-gradient(90deg, #5a6eff, #7a62d9);
+            }
+          }
+
+          &.ant-btn-default {
+            border: 1px solid rgba(78, 99, 255, 0.3);
+            color: #4e63ff;
+
+            &:hover {
+              border-color: #4e63ff;
+              color: #4e63ff;
+              transform: translateY(-2px);
+              box-shadow: 0 6px 15px rgba(78, 99, 255, 0.1);
+            }
+          }
+
+          &.ant-btn-link {
+            color: #4e63ff;
+            font-weight: 500;
+            width: auto;
+
+            &:hover {
+              color: #6e7eff;
+              transform: translateY(-2px);
+              text-decoration: none;
+            }
+          }
+
+          a {
+            text-decoration: none;
+            color: inherit;
+          }
+        }
+      }
+    }
+  }
+
+  // 动画定义
+  @keyframes slideUpFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes float {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 50px; }
+  }
+
+  // 添加一些动画元素
+  .animate-pulse {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 0.8;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.8;
+    }
+  }
+
+  // 响应式调整
+  @media (max-width: 768px) {
+    .ad-space-detail-page {
+      .ad-space-content {
+        flex-direction: column;
+
+        .ad-space-image, .ad-space-info {
+          width: 100%;
+        }
+
+        .ad-space-image {
+          margin-bottom: 30px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    .ad-space-detail-page {
+      h2 {
+        font-size: 28px;
+      }
+
+      .error-container {
+        padding: 60px 20px;
+      }
+    }
+  }
+}

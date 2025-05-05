@@ -1,0 +1,176 @@
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 70px;
+  position: relative;
+  
+  // 添加高科技特效
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(78, 99, 255, 0.3) 20%,
+      rgba(78, 99, 255, 0.6) 50%,
+      rgba(78, 99, 255, 0.3) 80%,
+      transparent 100%
+    );
+  }
+
+  .logo {
+    margin-right: 30px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    
+    h3 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(78, 99, 255, 0.5);
+      
+      a {
+        color: #fff;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        position: relative;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+        background: linear-gradient(90deg, #fff, #e0e7ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: all 0.3s ease;
+        
+        .logo-image {
+          width: 52px;
+          height: 52px;
+          margin-right: 12px;
+          filter: drop-shadow(0 0 10px rgba(78, 99, 255, 0.8));
+          border-radius: 8px;
+          background-color: rgba(255, 255, 255, 0.15);
+          padding: 6px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 0 15px rgba(78, 99, 255, 0.5);
+          transition: all 0.3s ease;
+          animation: logo-pulse 3s infinite ease-in-out;
+          
+          &:hover {
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 15px rgba(78, 99, 255, 1));
+            border-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.25);
+            animation-play-state: paused;
+          }
+        }
+        
+        @keyframes logo-pulse {
+          0% { box-shadow: 0 0 15px rgba(78, 99, 255, 0.5); }
+          50% { box-shadow: 0 0 20px rgba(78, 99, 255, 0.8); }
+          100% { box-shadow: 0 0 15px rgba(78, 99, 255, 0.5); }
+        }
+        
+        .anticon {
+          margin-right: 10px;
+          font-size: 24px;
+        }
+      }
+    }
+  }
+  
+  .header-menu {
+    flex: 1;
+    background: transparent;
+    border-bottom: none;
+    line-height: 70px;
+    color: rgba(255, 255, 255, 0.85);
+    
+    .ant-menu-item {
+      padding: 0 20px;
+      
+      a {
+        color: rgba(255, 255, 255, 0.85);
+      }
+      
+      .anticon {
+        margin-right: 8px;
+        font-size: 16px;
+      }
+      
+      &.ant-menu-item-selected {
+        background: transparent;
+        
+        a {
+          color: #fff;
+        }
+        
+        &:after {
+          border-bottom: 2px solid #fff;
+        }
+      }
+      
+      &:hover {
+        a {
+          color: #fff;
+        }
+        
+        &:after {
+          border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+        }
+      }
+    }
+  }
+  
+  .header-right {
+    margin-left: 24px;
+    display: flex;
+    align-items: center;
+  }
+  
+  // 动态科技感效果
+  .header-decoration {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    
+    &:before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      animation: rotate 20s linear infinite;
+    }
+    
+    &:after {
+      content: '';
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      animation: rotate 15s linear infinite reverse;
+    }
+  }
+  
+  @keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}

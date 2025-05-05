@@ -1,0 +1,291 @@
+.ad-space-card {
+  width: 100%;
+  margin-bottom: 24px;
+  transition: all 0.3s;
+  border-radius: 16px !important;
+  overflow: hidden;
+  border: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(145deg, #ffffff, #f5f7ff);
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+  }
+  
+  .card-cover {
+    height: 200px;
+    background: linear-gradient(135deg, rgba(78, 99, 255, 0.9), rgba(110, 86, 207, 0.85));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+      z-index: 1;
+      pointer-events: none;
+    }
+    
+    .loading-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      
+      .ant-spin {
+        .ant-spin-dot-item {
+          background-color: white;
+        }
+      }
+    }
+    
+    .active-nft-cover {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 2;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      .carousel-controls {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        z-index: 4;
+        cursor: pointer;
+        transition: transform 0.3s;
+        
+        &:hover {
+          transform: scale(1.05);
+        }
+        
+        .switch-tag {
+          font-weight: 600;
+          font-size: 12px;
+          padding: 3px 10px;
+          border-radius: 20px;
+          background: rgba(24, 144, 255, 0.85);
+          border: none;
+          color: white;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          display: flex;
+          align-items: center;
+          
+          .anticon {
+            margin-right: 5px;
+            animation: rotate 2s infinite linear;
+          }
+        }
+      }
+      
+      .active-tag {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-weight: 600;
+        font-size: 12px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        background: rgba(82, 196, 26, 0.9);
+        border: none;
+        color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        animation: pulse 2s infinite;
+        z-index: 3;
+      }
+    }
+    
+    .empty-ad-space-placeholder {
+      text-align: center;
+      color: white;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      
+      .anticon {
+        font-size: 42px;
+        margin-bottom: 16px;
+        display: block;
+      }
+      
+      span {
+        color: white;
+        font-size: 16px;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+      
+      .empty-text {
+        margin-top: 16px;
+        font-size: 14px;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 6px 16px;
+        border-radius: 20px;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+  
+  .ant-card-body {
+    padding: 20px;
+  }
+  
+  .ad-title {
+    margin-bottom: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 18px;
+  }
+  
+  .ad-info {
+    margin-bottom: 16px;
+    
+    .info-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      
+      .anticon {
+        margin-right: 10px;
+        font-size: 16px;
+        color: #4e63ff;
+        background: linear-gradient(90deg, #4e63ff, #6e56cf);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      
+      .price-text {
+        white-space: nowrap;
+        font-weight: 600;
+        color: #4e63ff;
+      }
+    }
+  }
+  
+  .ad-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    
+    .ant-tag {
+      margin: 0;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-weight: 500;
+      font-size: 12px;
+      border: none;
+      
+      &:nth-child(1) {
+        background: rgba(78, 99, 255, 0.1);
+        color: #4e63ff;
+      }
+      
+      &:nth-child(2) {
+        background: rgba(110, 86, 207, 0.1);
+        color: #6e56cf;
+      }
+      
+      &:nth-child(3) {
+        background: rgba(82, 196, 26, 0.1);
+        color: #52c41a;
+      }
+    }
+  }
+  
+  .ant-card-actions {
+    background: transparent;
+    border-top: 1px solid rgba(78, 99, 255, 0.1);
+    
+    li {
+      margin: 12px 0;
+      border-right: 1px solid rgba(78, 99, 255, 0.1);
+      
+      &:last-child {
+        border-right: none;
+      }
+    }
+    
+    button {
+      width: 90%;
+      border-radius: 8px;
+      font-weight: 600;
+      height: 36px;
+      
+      &.ant-btn-primary {
+        background: linear-gradient(90deg, #4e63ff, #6e56cf);
+        border: none;
+        box-shadow: 0 4px 10px rgba(78, 99, 255, 0.2);
+        
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 15px rgba(78, 99, 255, 0.3);
+          background: linear-gradient(90deg, #5a6eff, #7a62d9);
+        }
+      }
+      
+      &.ant-btn-default {
+        border: 1px solid rgba(78, 99, 255, 0.3);
+        color: #4e63ff;
+        
+        &:hover {
+          border-color: #4e63ff;
+          color: #4e63ff;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 15px rgba(78, 99, 255, 0.1);
+        }
+      }
+      
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(82, 196, 26, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(82, 196, 26, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(82, 196, 26, 0);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} 

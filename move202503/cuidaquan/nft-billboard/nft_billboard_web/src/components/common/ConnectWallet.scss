@@ -1,0 +1,46 @@
+.wallet-address {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  
+  .ant-typography {
+    max-width: 150px;
+  }
+}
+
+.wallet-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  
+  .wallet-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    border-radius: 4px;
+  }
+}
+
+.ant-dropdown-menu {
+  min-width: 200px;
+  
+  .ant-dropdown-menu-item {
+    padding: 8px 12px;
+  }
+}
+
+// 深色背景下的钱包按钮样式
+.app-header {
+  .ant-btn-primary {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: white;
+    font-weight: 500;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+  }
+} 
