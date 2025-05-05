@@ -1,0 +1,162 @@
+.walrus-upload-container {
+    background: linear-gradient(to bottom, #0A192F, #000000);
+    /* 深蓝到黑渐变 */
+    padding: 24px;
+    border-radius: 16px;
+    /* 更大的圆角 */
+    box-shadow: 0 8px 32px rgba(58, 134, 255, 0.2);
+    /* 蓝色辉光效果 */
+    /* 添加微妙的背景动画 */
+}
+
+.step-section {
+    /* 步骤区域样式 */
+    padding: 16px;
+    background-color: rgba(10, 25, 47, 0.5);
+    /* 半透明深蓝背景 */
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.step-label {
+    color: #64FFDA;
+    /* 青色标签 */
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.label-text,
+.hint-text {
+    color: #CCD6F6;
+    /* 柔和文本色 */
+}
+
+.custom-select {
+    /* 下拉菜单样式 */
+    background-color: #1D2E4A;
+    color: #CCD6F6;
+    border: 1px solid #3A86FF;
+    border-radius: 8px;
+    padding: 8px 12px;
+    /* ... 其他样式 ... */
+}
+
+.custom-file-upload {
+    border: 2px dashed #3A86FF;
+    /* 虚线边框 */
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    background-color: rgba(10, 25, 47, 0.7);
+    transition: background-color 0.3s ease;
+    color: #CCD6F6;
+}
+
+.custom-file-upload:hover {
+    background-color: rgba(58, 134, 255, 0.2);
+    /* 悬停效果 */
+}
+
+.custom-file-upload input[type="file"] {
+    display: none;
+    /* 隐藏原生输入 */
+}
+
+.upload-icon {
+    font-size: 24px;
+    display: block;
+    margin-bottom: 8px;
+    color: #64FFDA;
+}
+
+.action-button {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.primary-button {
+    background-color: #3A86FF;
+    /* 主按钮蓝色 */
+    color: white;
+}
+
+.primary-button:hover {
+    background-color: #64FFDA;
+    /* 悬停变青色 */
+    box-shadow: 0 0 15px rgba(100, 255, 218, 0.5);
+}
+
+.secondary-button {
+    background-color: transparent;
+    border: 1px solid #3A86FF;
+    color: #3A86FF;
+}
+
+.secondary-button:hover {
+    background-color: rgba(58, 134, 255, 0.1);
+    color: #64FFDA;
+    border-color: #64FFDA;
+}
+
+
+.action-button:disabled {
+    background-color: #1D2E4A;
+    /* 禁用颜色 */
+    color: #5A6B8C;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.button-spinner {
+    margin-left: 8px;
+}
+
+.water-spinner {
+    /* 自定义水波纹或漩涡动画 */
+    color: #64FFDA;
+}
+
+.upload-status {
+    color: #CCD6F6;
+}
+
+.divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #3A86FF, transparent);
+    /* 渐变分隔线 */
+    margin: 20px 0;
+}
+
+.upload-details {
+    background-color: rgba(10, 25, 47, 0.5);
+    padding: 16px;
+    border-radius: 12px;
+    color: #CCD6F6;
+}
+
+.info-link {
+    color: #64FFDA;
+    /* 链接颜色 */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.info-link:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.image-preview {
+    max-width: 100px;
+    /* 限制预览图大小 */
+    max-height: 100px;
+    border-radius: 8px;
+    margin-top: 10px;
+    border: 1px solid #3A86FF;
+}
