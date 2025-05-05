@@ -5,7 +5,7 @@
 
 ## Member
 - Joseph Xu  github: https://github.com/0xjosephxu
-> 连续创业者，参与过多次创新 DeFi 项目设计，Qilin(Multicoin 领投)，Midaswap(Foresight Venture 领投)，Bubbly Finance(Mask Network/CoinSummer Labs 投资)
+> 连续创业者，参与过多次创新 DeFi 项目设计，Qilin (Multicoin 领投)，Midaswap (Foresight Venture 领投)，Bubbly Finance (Mask Network/CoinSummer Labs 投资)
 > 协议设计
 
 - 星亦辰  github: https://github.com/v1xingyue
