@@ -3,22 +3,19 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Transaction } from "@mysten/sui/transactions";
-import {
-  useCurrentAccount,
-  useSignAndExecuteTransaction,
-} from "@mysten/dapp-kit";
-import { suiClient, useNetworkVariables } from "@/app/networkconfig";
+import { useNetworkVariables } from "@/app/networkconfig";
 import { IBook, IVaribales } from "@/type";
 import { queryBooks } from "@/contracts";
 import BookCard from "@/components/BookCard";
 import { useWalrusBlob } from "@/hooks/useWalrusBlob";
 import { useToast } from "@/hooks/useToast";
+import { useZkproof } from "@/hooks/useZkproof";
 function Home() {
   const router = useRouter();
-  const account = useCurrentAccount();
+  const account = localStorage.getItem("address");
   const { writeFileToWalrus } = useWalrusBlob();
   const { errorToast } = useToast();
-  const { mutate: signAndExecute } = useSignAndExecuteTransaction();
+  const { zktx } = useZkproof();
   const { packageID, module, stateID } = useNetworkVariables() as IVaribales;
   const [books, setBooks] = useState<IBook[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -35,17 +32,21 @@ function Home() {
   };
   useEffect(() => {
     fetchData();
-  }, [account?.address]);
-  async function fetchData() {
-    if (!account?.address) {
-      errorToast("Account address is undefined");
+  }, [account]);
+  const fetchData = async () => {
+    if (!account) {
+      errorToast("Account is undefined");
       return;
     }
-    const books = await queryBooks(stateID, account.address);
+    const books = await queryBooks(stateID, account);
     setBooks([...books]);
     console.log("books", books);
-  }
-  const deleteBook = (book: IBook) => {
+  };
+  const deleteBook = async (book: IBook) => {
+    if (!account) {
+      errorToast("Account is undefined");
+      return;
+    }
     if (confirm("Are you sure delete this book?")) {
       setShowWattingModal(true);
       const tx = new Transaction();
@@ -55,30 +56,12 @@ function Home() {
         function: "delete_book",
         arguments: [tx.object(stateID), tx.object(book.id)],
       });
-      signAndExecute(
-        {
-          transaction: tx,
-        },
-        {
-          onSuccess: async (res) => {
-            if (res.digest) {
-              const result = await suiClient.waitForTransaction({
-                digest: res.digest,
-                options: { showEffects: true, showEvents: true },
-              });
-              if (result.effects?.status.status === "success") {
-                setShowWattingModal(false);
-                fetchData();
-                console.log("Transaction success:", result);
-              }
-            }
-          },
-          onError: (err) => {
-            console.log(err);
-            setShowWattingModal(false);
-          },
-        }
-      );
+      const executeRes = await zktx(tx, account);
+      console.log("executeRes===", executeRes);
+      if (executeRes?.digest) {
+        fetchData();
+      }
+      setShowWattingModal(false);
     } else {
       // 用户点击"取消"执行的代码
       console.log("操作已取消");
@@ -113,35 +96,18 @@ function Home() {
           tx.pure.string(description),
         ],
       });
-      signAndExecute(
-        {
-          transaction: tx,
-        },
-        {
-          onSuccess: async (res) => {
-            if (res.digest) {
-              const result = await suiClient.waitForTransaction({
-                digest: res.digest,
-                options: { showEffects: true, showEvents: true },
-              });
-              if (result.effects?.status.status === "success") {
-                setShowWattingModal(false);
-                setTitle("");
-                setCoverImage(null);
-                setDescription("");
-                setShowModal(false);
-                fetchData();
-                console.log("Transaction success:", result);
-              }
-            }
-          },
-          onError: (err) => {
-            console.log(err);
-            setShowWattingModal(false);
-          },
-        }
-      );
+      const executeRes = await zktx(tx, account!);
+      console.log("executeRes===", executeRes);
+      if (executeRes?.digest) {
+        setShowWattingModal(false);
+        setTitle("");
+        setCoverImage(null);
+        setDescription("");
+        setShowModal(false);
+        fetchData();
+      }
     } else {
+      errorToast("walrus upload error");
       setShowWattingModal(false);
     }
   };

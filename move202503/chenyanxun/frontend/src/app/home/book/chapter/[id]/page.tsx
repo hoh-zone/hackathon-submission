@@ -1,27 +1,18 @@
 "use client";
-import {
-  sealClient,
-  suiClient,
-  useNetworkVariables,
-} from "@/app/networkconfig";
 import { queryChapterDetail } from "@/contracts";
-import { IChapter, IVaribales } from "@/type";
-import { useCurrentAccount, useSignPersonalMessage } from "@mysten/dapp-kit";
-import { SessionKey } from "@mysten/seal";
-import { Transaction } from "@mysten/sui/transactions";
-import { fromHex } from "@mysten/sui/utils";
+import { useCrypto } from "@/hooks/useCrypto";
+import { useToast } from "@/hooks/useToast";
+import { IChapter } from "@/type";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
 function Chapter() {
   const [isPay, setIsPay] = useState(false);
   const [chapterDetail, setChapterDetail] = useState<IChapter>({} as IChapter);
   const [content, setContent] = useState("");
-  const currentAccount = useCurrentAccount();
   const params = useParams();
   const { id } = params; // 获取动态路由参数
-  const { packageID, module } = useNetworkVariables() as IVaribales;
-  const { mutate: signPersonalMessage } = useSignPersonalMessage();
+  const { decryptFile } = useCrypto();
+  const { errorToast } = useToast();
   useEffect(() => {
     if (typeof id === "string") {
       getChapterDetail(id);
@@ -37,11 +28,18 @@ function Chapter() {
       // 未加密
       fetchData();
       async function fetchData() {
-        const result = await fetch(
-          `https://aggregator.walrus-testnet.walrus.space/v1/blobs/${chapterDetail.content}`
-        );
-        const data = await result.text();
-        setContent(data);
+        try {
+          const result = await fetch(
+            `https://aggregator.walrus-testnet.walrus.space/v1/blobs/${chapterDetail.content}`
+          );
+          const data = await result.text();
+          setContent(data);
+          setIsPay(true);
+        } catch (error) {
+          errorToast(
+            error instanceof Error ? error.message : "readWalrus is error"
+          );
+        }
       }
     } else {
       // 加密
@@ -49,60 +47,25 @@ function Chapter() {
     }
   }, [chapterDetail]);
 
-  const constructTxBytes = async () => {
-    const tx = new Transaction();
-    tx.moveCall({
-      target: `${packageID}::${module}::seal_approve`,
-      arguments: [tx.pure.vector("u8", fromHex(chapterDetail.book))],
-    });
-    return await tx.build({ client: suiClient, onlyTransactionKind: true });
-  };
   // 解密
   const getTxtContent = async () => {
-    const txBytes = await constructTxBytes();
-    const sessionKey = new SessionKey({
-      address: currentAccount?.address ?? "",
-      packageId: packageID,
-      ttlMin: 10,
-    });
-    const result = await fetch(
-      `/api/readBlobWithSeal/${chapterDetail.content}`
-    );
-    if (!result.ok) {
-      throw new Error("Network response was not ok");
+    try {
+      const result = await fetch(
+        `https://aggregator.walrus-testnet.walrus.space/v1/blobs/${chapterDetail.content}`
+      );
+      const dataBuffer = new Uint8Array(await result.arrayBuffer());
+      console.log("Data buffer:", dataBuffer);
+
+      const decryptedFile = await decryptFile(dataBuffer, "123456");
+      console.log("decryptedFile:", decryptedFile);
+      const textContent = new TextDecoder().decode(decryptedFile);
+      setContent(textContent);
+      setIsPay(true);
+    } catch (error) {
+      errorToast(
+        error instanceof Error ? error.message : "readWalrus is error"
+      );
     }
-    const dataBuffer = new Uint8Array(await result.arrayBuffer());
-    console.log("Data buffer:", dataBuffer);
-    signPersonalMessage(
-      {
-        message: sessionKey.getPersonalMessage(),
-      },
-      {
-        onSuccess: async (res) => {
-          sessionKey.setPersonalMessageSignature(res.signature);
-          try {
-            const decryptedFile = await sealClient.decrypt({
-              data: dataBuffer,
-              sessionKey,
-              txBytes,
-            });
-            console.log("decryptedFile:", decryptedFile);
-            const textContent = new TextDecoder().decode(decryptedFile);
-            setContent(textContent);
-            setIsPay(true);
-          } catch (err) {
-            if (
-              err instanceof TypeError &&
-              err.message.includes("Unknown value")
-            ) {
-              console.error("Unsupported encryption type:", err);
-            } else {
-              console.error("Decryption error:", err);
-            }
-          }
-        },
-      }
-    );
   };
   const getContent = () => {
     return (

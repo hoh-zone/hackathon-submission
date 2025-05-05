@@ -1,25 +1,16 @@
 "use client";
-import {
-  sealClient,
-  suiClient,
-  useNetworkVariables,
-} from "@/app/networkconfig";
+import { useNetworkVariables } from "@/app/networkconfig";
 import { Button } from "@/components/ui/button";
 import {
   queryBalance,
   queryChapterAllowlist,
   queryChapterDetail,
 } from "@/contracts";
+import { useCrypto } from "@/hooks/useCrypto";
 import { useToast } from "@/hooks/useToast";
+import { useZkproof } from "@/hooks/useZkproof";
 import { IChapter, IChapterAllowlist, IVaribales } from "@/type";
-import {
-  useCurrentAccount,
-  useSignAndExecuteTransaction,
-  useSignPersonalMessage,
-} from "@mysten/dapp-kit";
-import { SessionKey } from "@mysten/seal";
 import { Transaction } from "@mysten/sui/transactions";
-import { fromHex } from "@mysten/sui/utils";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -30,13 +21,13 @@ function Chapter() {
     {} as IChapterAllowlist
   );
   const [content, setContent] = useState("");
-  const currentAccount = useCurrentAccount();
+  const account = localStorage.getItem("address");
+  const { zktx } = useZkproof();
   const params = useParams();
+  const { decryptFile } = useCrypto();
   const { errorToast } = useToast();
   const { id } = params; // 获取动态路由参数
   const { packageID, module } = useNetworkVariables() as IVaribales;
-  const { mutate: signAndExecute } = useSignAndExecuteTransaction();
-  const { mutate: signPersonalMessage } = useSignPersonalMessage();
   useEffect(() => {
     if (typeof id === "string") {
       getChapterDetail(id);
@@ -58,17 +49,24 @@ function Chapter() {
       setIsPay(true);
       fetchData();
       async function fetchData() {
-        const result = await fetch(
-          `https://aggregator.walrus-testnet.walrus.space/v1/blobs/${chapterDetail.content}`
-        );
-        const data = await result.text();
-        setContent(data);
+        try {
+          const result = await fetch(
+            `https://aggregator.walrus-testnet.walrus.space/v1/blobs/${chapterDetail.content}`
+          );
+          const data = await result.text();
+          setContent(data);
+          setIsPay(true);
+        } catch (error) {
+          errorToast(
+            error instanceof Error ? error.message : "readWalrus is error"
+          );
+        }
       }
     } else {
       // 已支付或者是上传者，直接解密
       if (
-        chapterAllowlist.allowlist?.includes(currentAccount?.address ?? "") ||
-        chapterDetail.owner === currentAccount?.address
+        chapterAllowlist.allowlist?.includes(account ?? "") ||
+        chapterDetail.owner === account
       ) {
         setIsPay(true);
         getTxtContent();
@@ -80,11 +78,11 @@ function Chapter() {
   }, [chapterAllowlist]);
   // 充值
   const payEvent = async () => {
-    if (!currentAccount) {
+    if (!account) {
       errorToast("Current account is null");
       return;
     }
-    const balance = await queryBalance(currentAccount.address);
+    const balance = await queryBalance(account);
     if (Number(balance.totalBalance) < Number(chapterDetail.amount)) {
       errorToast("coin is not enough");
       return;
@@ -99,83 +97,30 @@ function Chapter() {
       function: "add_allowlist",
       arguments: [tx.object(chapterAllowlist.id), splitcoin],
     });
-    signAndExecute(
-      {
-        transaction: tx,
-      },
-      {
-        onSuccess: async (res) => {
-          if (res.digest) {
-            const result = await suiClient.waitForTransaction({
-              digest: res.digest,
-              options: { showEffects: true, showEvents: true },
-            });
-            if (result.effects?.status.status === "success") {
-              getTxtContent();
-              console.log("Transaction success:", result);
-            }
-          }
-        },
-        onError: (err) => {
-          console.log(err);
-        },
-      }
-    );
-  };
-  const constructTxBytes = async () => {
-    const tx = new Transaction();
-    tx.moveCall({
-      target: `${packageID}::${module}::seal_approve`,
-      arguments: [tx.pure.vector("u8", fromHex(chapterDetail.book))],
-    });
-    return await tx.build({ client: suiClient, onlyTransactionKind: true });
+    const result = await zktx(tx, account);
+    if (result?.digest) {
+      getTxtContent();
+    }
   };
   // 解密
   const getTxtContent = async () => {
-    const txBytes = await constructTxBytes();
-    const sessionKey = new SessionKey({
-      address: currentAccount?.address ?? "",
-      packageId: packageID,
-      ttlMin: 10,
-    });
-    const result = await fetch(
-      `/api/readBlobWithSeal/${chapterDetail.content}`
-    );
-    if (!result.ok) {
-      throw new Error("Network response was not ok");
+    try {
+      const result = await fetch(
+        `https://aggregator.walrus-testnet.walrus.space/v1/blobs/${chapterDetail.content}`
+      );
+      const dataBuffer = new Uint8Array(await result.arrayBuffer());
+      console.log("Data buffer:", dataBuffer);
+
+      const decryptedFile = await decryptFile(dataBuffer, "123456");
+      console.log("decryptedFile:", decryptedFile);
+      const textContent = new TextDecoder().decode(decryptedFile);
+      setContent(textContent);
+      setIsPay(true);
+    } catch (error) {
+      errorToast(
+        error instanceof Error ? error.message : "readWalrus is error"
+      );
     }
-    const dataBuffer = new Uint8Array(await result.arrayBuffer());
-    console.log("Data buffer:", dataBuffer);
-    signPersonalMessage(
-      {
-        message: sessionKey.getPersonalMessage(),
-      },
-      {
-        onSuccess: async (res) => {
-          sessionKey.setPersonalMessageSignature(res.signature);
-          try {
-            const decryptedFile = await sealClient.decrypt({
-              data: dataBuffer,
-              sessionKey,
-              txBytes,
-            });
-            console.log("decryptedFile:", decryptedFile);
-            const textContent = new TextDecoder().decode(decryptedFile);
-            setContent(textContent);
-            setIsPay(true);
-          } catch (err) {
-            if (
-              err instanceof TypeError &&
-              err.message.includes("Unknown value")
-            ) {
-              console.error("Unsupported encryption type:", err);
-            } else {
-              console.error("Decryption error:", err);
-            }
-          }
-        },
-      }
-    );
   };
   const getContent = () => {
     return (
@@ -202,7 +147,7 @@ function Chapter() {
       {isPay ? (
         getContent()
       ) : (
-        <Button variant="default" onClick={payEvent}>
+        <Button variant="default" className="cursor-pointer" onClick={payEvent}>
           充值 {chapterDetail.amount}MIST
         </Button>
       )}
