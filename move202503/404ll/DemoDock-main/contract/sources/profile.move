@@ -1,10 +1,12 @@
-module contract::profile {
-    
-    use std::string::String;
-    use sui::event::emit;
+module contract::profile;
 
-const ERROR_PROFILE_EXISTS :u64 = 4;
-const ERROR_PROFILE_NOT_EXISTS :u64 = 5;
+use std::option;
+use std::string::String;
+use sui::event::emit;
+use sui::table::{Self, Table};
+
+const ERROR_PROFILE_EXISTS: u64 = 4;
+const ERROR_PROFILE_NOT_EXISTS: u64 = 5;
 
 public struct Profile has key {
     id: UID,
@@ -14,25 +16,28 @@ public struct Profile has key {
 
 public struct State has key {
     id: UID,
-    profiles: vector<ID>,
+    profiles: Table<address, ID>,
 }
-    
-public struct ProfileCreated has copy,drop{
-    id: ID,
-    name: String
+
+public struct ProfileCreated has copy, drop {
+    owner: address,
+    id: ID
 }
+// public struct ProfileCreated has copy, drop {    
+//     id: ID,
+//     name: string,
+// }
 
 fun init(ctx: &mut TxContext) {
     let state = State {
         id: object::new(ctx),
-        profiles: vector::empty(),
+        profiles: table::new(ctx),
     };
-    
-    transfer::share_object(state)   
+
+    transfer::share_object(state)
 }
 
-public fun create_profile( name: String,state:&mut State, ctx: &mut TxContext,) {
-    
+public fun create_profile(name: String, state: &mut State, ctx: &mut TxContext) {
     let profile = Profile {
         id: object::new(ctx),
         name: name,
@@ -40,20 +45,35 @@ public fun create_profile( name: String,state:&mut State, ctx: &mut TxContext,) 
     };
 
     let profile_id = profile.id.to_inner();
-    assert!(!vector::contains(&state.profiles, &profile_id), ERROR_PROFILE_EXISTS);
-    vector::push_back(&mut state.profiles, profile_id);
-    
+    let owner = ctx.sender();
+    assert!(!table::contains(&state.profiles, owner), ERROR_PROFILE_EXISTS);
+    table::add(&mut state.profiles, owner, profile_id);
+
     emit(ProfileCreated {
-        id: profile_id,
-        name: profile.name,
+        owner: owner,
+        id: profile_id
     });
 
-    transfer::transfer(profile,ctx.sender());
+    transfer::transfer(profile, ctx.sender());
 }
 
-public fun add_demo_to_profile(profile: &mut Profile, demo: ID,) {
+public fun add_demo_to_profile(profile: &mut Profile, demo: ID, _ctx: &mut TxContext) {
     assert!(!vector::contains(&profile.demos, &demo), ERROR_PROFILE_NOT_EXISTS);
     vector::push_back(&mut profile.demos, demo);
 }
 
+public fun get_profile_by_addresss(state: &State, ctx: &TxContext): Option<ID> {
+    let address = ctx.sender();
+    if (table::contains(&state.profiles, address)) {
+        let profile_id = table::borrow(&state.profiles, address);
+        option::some(*profile_id)
+    } else {
+        option::none()
+    }
+}
+
+//helper fun
+#[test_only]
+public fun init_testing(ctx: &mut TxContext) {
+    init(ctx);
 }

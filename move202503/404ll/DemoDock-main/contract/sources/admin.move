@@ -50,3 +50,8 @@ public fun check_admin(admin_set:&AdminList, ctx: &TxContext) {
 public fun get_admin_addresses(admin_list: &AdminList): vector<address> {
     vec_set::into_keys(admin_list.admin)
 }
+
+#[test_only]
+public fun init_testing(ctx: &mut TxContext) {
+    init(ctx);
+}
