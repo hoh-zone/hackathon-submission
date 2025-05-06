@@ -78,7 +78,8 @@ export const getTodayLeaderboard = async (): Promise<DailyLeaderboardEvent[]> =>
     limit: 100, // 可调整
   });
 
-  const todayEvents: DailyLeaderboardEvent[] = [];
+  // 用于按地址分组的Map
+  const addressMap: Map<string, DailyLeaderboardEvent> = new Map();
 
   for (const event of response.data) {
     const parsed = event.parsedJson as DailyLeaderboardEvent;
@@ -86,12 +87,21 @@ export const getTodayLeaderboard = async (): Promise<DailyLeaderboardEvent[]> =>
 
     const tsSec = Math.floor(timestampMs / 1000);
     if (tsSec >= startOfDay && tsSec <= endOfDay) {
-      todayEvents.push(parsed);
+      // 检查该地址是否已存在于Map中
+      const existingEvent = addressMap.get(parsed.player);
+      
+      // 如果地址不存在或当前事件的card_count更大，则更新Map
+      if (!existingEvent || BigInt(parsed.card_count) > BigInt(existingEvent.card_count)) {
+        addressMap.set(parsed.player, parsed);
+      }
     }
   }
 
-  // 可排序
-  return todayEvents.sort((a, b) => Number(BigInt(b.card_count) - BigInt(a.card_count)));
+  // 将Map中的值转换为数组
+  const groupedEvents = Array.from(addressMap.values());
+
+  // 按card_count排序
+  return groupedEvents.sort((a, b) => Number(BigInt(b.card_count) - BigInt(a.card_count)));
 };
 
 export const getTodayFirstSubmitter = async (): Promise<string | null> => {

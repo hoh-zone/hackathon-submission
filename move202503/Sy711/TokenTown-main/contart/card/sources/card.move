@@ -84,19 +84,26 @@ public fun payment(mut amount: Coin<SUI>, vault: &mut Vault, ctx: &mut TxContext
 // 提交，增加 current_day 参数
 public fun submit(card_count: u64, current_day: u64, vault: &mut Vault, ctx: &mut TxContext) {
     assert!(card_count > 0, ECountNotEnough);
-assert!(current_day > vault.last_settled_day, ECountNotEnough);
+    assert!(current_day > vault.last_settled_day, ECountNotEnough);
     let sender = tx_context::sender(ctx);
-    assert!(!vault.leaderboard.contains(&sender), EPlayerAlreadySubmitted);
-
     assert!(vault.today_submit_count < MAX_PLAYERS_PER_DAY, EPlayerLimitReached);
 
     if (vault.first_player == @0x0 && vector::contains(&vault.paid_players, &sender)) {
         vault.first_player = sender;
         event::emit(FirstEvent { player: sender });
     };
-
-    vault.leaderboard.insert(sender, card_count);
-    vault.today_submit_count = vault.today_submit_count + 1;
+    if (vault.leaderboard.contains(&sender)) {
+        let old_value = vec_map::get(&vault.leaderboard, &sender);
+        if(card_count > *old_value) {
+           let (_,_ )= vec_map::remove(&mut vault.leaderboard, &sender);
+                   vault.leaderboard.insert(sender, card_count);
+        }else{
+            return
+        }
+    } else {
+        vault.leaderboard.insert(sender, card_count);
+        vault.today_submit_count = vault.today_submit_count + 1;
+    };
 
     event::emit(DailyLeaderboardEvent { player: sender, card_count });
 
