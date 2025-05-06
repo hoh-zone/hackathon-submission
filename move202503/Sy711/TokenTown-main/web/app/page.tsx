@@ -55,7 +55,7 @@ export default function HomeScreen() {
 
       {/* 顶部导航 */}
       <div className="relative z-10 flex items-center justify-between p-4">
-        <div className="text-xl font-bold text-white">TokenTown</div>
+        <div className="w-20"></div> {/* 为固定的 Logo 预留空间 */}
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowRules(true)}
