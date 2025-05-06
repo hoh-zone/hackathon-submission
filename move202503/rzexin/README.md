@@ -9,6 +9,6 @@
 ## Demo
 
 - github: https://github.com/rzexin/Mandy
-- [PPT](./PPT/SecureFileShare-PPT.pdf)
-- testnet：https://securefilesharelab.vercel.app/
-- video：https://www.youtube.com/watch?v=70WoEe64Suo
+- PPT: https://github.com/rzexin/Mandy/blob/main/PPT/Mandy-PPT.pdf
+- testnet: https://mandylab.vercel.app
+- video: https://www.youtube.com/watch?v=9VD1sHJm9RA
