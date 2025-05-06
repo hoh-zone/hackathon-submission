@@ -1,0 +1,293 @@
+/* 整体应用容器 */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  font-family: Krub, sans-serif;
+}
+
+/* 头部导航 */
+.app-header {
+  /* background-color: #ffffff; */
+  background-color: transparent;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+.logo a {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #646cff;
+  text-decoration: none;
+}
+
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+.main-nav button {
+  background: linear-gradient(90deg, #4361ee, #3a0ca3, #e98bb5);
+  color: #fff !important;
+}
+.main-nav div {
+  color: #fff !important;
+}
+
+.main-nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem 0;
+  transition: color 0.3s;
+}
+
+.main-nav a:hover {
+  color: #646cff;
+}
+
+/* 主内容区域 */
+.app-main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* 页脚 */
+.app-footer {
+  background-color: #1a1a1a;
+  color: #888;
+  padding: 1rem 2rem;
+  text-align: center;
+}
+
+/* 页面组件通用样式 */
+.home-page,
+.about-page,
+.courses-page,
+.dashboard-page,
+.not-found-page {
+  margin-bottom: 2rem;
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+  color: #213547;
+}
+
+.navigation-links,
+.back-link {
+  margin-top: 2rem;
+}
+
+.navigation-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-link,
+.home-link,
+.course-link {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #646cff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.nav-link:hover,
+.home-link:hover,
+.course-link:hover {
+  background-color: #535bf2;
+}
+
+/* 课程列表样式 */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.course-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.course-level {
+  display: inline-block;
+  margin: 0.5rem 0;
+  padding: 0.25rem 0.5rem;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+/* 仪表板样式 */
+.user-info,
+.enrolled-courses,
+.certificates {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.course-item,
+.certificate-item {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.progress-bar {
+  height: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  margin: 0.5rem 0;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: #646cff;
+}
+
+/* 媒体查询 - 响应式设计 */
+@media (max-width: 768px) {
+  .app-header {
+    /* flex-direction: column; */
+    padding: 1rem;
+  }
+
+  .main-nav ul {
+    margin-top: 1rem;
+    gap: 1rem;
+  }
+
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(0); /* 从下往上 */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(100px); /* 最终位置 */
+  }
+}
+/* 渐变色背景标题 */
+.gradient-bg-title {
+  margin: 0 auto;
+  animation: slideUp 1s ease-out forwards; /* 动画效果 */
+}
+.gradient-bg-title h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  width: fit-content;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(90deg, #4361ee, #3a0ca3, #e98bb5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-align: center;
+  margin: 0 auto;
+}
+.gradient-bg-title p {
+  width: 70%;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin: 10px auto;
+}
+@media (max-width: 768px) {
+  .gradient-bg-title h2 {
+    font-size: 2.3rem;
+  }
+  .gradient-bg-title p {
+    width: 75%;
+    font-size: 1rem;
+  }
+}
+.lignt-zk-btn {
+  position: relative;
+  display: inline-block;
+  /* width: 220px;
+  height: 80px; */
+  padding: 14px 22px;
+  color: rgb(255, 255, 255);
+  font-size: 1rem;
+  margin-right: 10px;
+  font-family: sans-serif;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-align: center;
+  border-radius: 12px;
+  background: linear-gradient(
+    90deg,
+    rgb(226, 20, 233),
+    rgb(39, 122, 218),
+    rgb(74, 230, 121),
+    rgb(201, 214, 13),
+    rgb(16, 172, 219)
+  );
+  background-size: 400%;
+  z-index: 1;
+  text-shadow: 0 0 5px white, 0 0 2px white;
+}
+.lignt-zk-btn:hover {
+  animation: ligntMove 5s linear alternate infinite;
+}
+
+@keyframes ligntMove {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 100%;
+  }
+}
+.lignt-zk-btn::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  /* width: 240px;
+  height: 100px; */
+  padding: 16px 24px;
+  background: linear-gradient(
+    90deg,
+    rgb(226, 20, 233),
+    rgb(39, 122, 218),
+    rgb(74, 230, 121),
+    rgb(243, 169, 10),
+    rgb(16, 172, 219)
+  );
+  background-size: 400%;
+  opacity: 0;
+  z-index: -1;
+  border-radius: 45px;
+  transition: 0.6s;
+}
+
