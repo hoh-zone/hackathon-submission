@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "sui-sse": {
+      "command": "/home/krli/dreams/go-sui-mcp/go-sui-mcp",
+      "args": ["server", "--sse"]
+    },
+    "sui-dev": {
+      "url": "http://localhost:8080/sse"
+    },
+    "sui": {
+      "command": "/home/krli/dreams/go-sui-mcp/go-sui-mcp",
+      "args": ["server"]
+    }
+  }
+}

@@ -1,0 +1,14 @@
+# Example configuration file for go-sui-mcp
+# Copy this file to ~/.go-sui-mcp.yaml and modify as needed
+
+# Server configuration
+server:
+  # The port to listen on
+  port: 8080
+  # The host to bind to (0.0.0.0 for all interfaces)
+  host: "0.0.0.0"
+
+# Sui client configuration
+sui:
+  # Path to the sui executable
+  executable_path: "sui" 
