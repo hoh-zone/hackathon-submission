@@ -52,15 +52,36 @@ func (c *Client) GetVersion() (string, error) {
 	return strings.TrimSpace(output), nil
 }
 
+func (c *Client) GetSuiPath() (string, error) {
+
+	output, err := exec.Command("which", "sui").Output()
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(string(output)), nil
+}
+
 // GetBalance gets the balance for a specific address
 func (c *Client) GetBalance(address string) (string, error) {
-	args := []string{"client", "gas", "--address", address}
+	args := []string{"client", "balance"}
+	if address != "" {
+		args = append(args, address)
+	}
 	return c.ExecuteCommand(args...)
 }
 
 // GetObjects gets objects owned by an address
 func (c *Client) GetObjects(address string) (string, error) {
-	args := []string{"client", "objects", "--address", address}
+	args := []string{"client", "objects"}
+	if address != "" {
+		args = append(args, address)
+	}
+	args = append(args, "--json")
+	return c.ExecuteCommand(args...)
+}
+
+func (c *Client) GetObject(objectID string) (string, error) {
+	args := []string{"client", "object", objectID, "--json"}
 	return c.ExecuteCommand(args...)
 }
 
@@ -78,16 +99,19 @@ func (c *Client) GetNetwork() (string, error) {
 
 // GetTransaction retrieves information about a specific transaction
 func (c *Client) GetTransaction(txID string) (string, error) {
-	args := []string{"client", "transaction", txID}
+	args := []string{"client", "tx-block", txID}
 	return c.ExecuteCommand(args...)
 }
 
-// TransferSUI transfers SUI tokens to a recipient
-func (c *Client) TransferSUI(recipient string, amount uint64, gasOption string) (string, error) {
-	args := []string{"client", "transfer-sui", "--to", recipient, "--amount", fmt.Sprintf("%d", amount)}
+// PaySUI transfers SUI tokens to a recipient
+func (c *Client) PaySUI(recipients string, inputCoins string, amounts uint64, gasBudget string) (string, error) {
+	args := []string{"client", "pay-sui",
+		"--recipients", recipients,
+		"--input-coins", inputCoins,
+		"--amounts", fmt.Sprintf("%d", amounts)}
 
-	if gasOption != "" {
-		args = append(args, "--gas-budget", gasOption)
+	if gasBudget != "" {
+		args = append(args, "--gas-budget", gasBudget)
 	}
 
 	return c.ExecuteCommand(args...)

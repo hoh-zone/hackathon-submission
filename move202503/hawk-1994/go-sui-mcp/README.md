@@ -1,17 +1,19 @@
 # Go Sui MCP (Management Control Plane)
 
-A Go-based management control plane server for Sui blockchain, providing REST APIs to interact with local Sui client commands.
+A Go-based management control plane server for Sui blockchain, providing MCP (Management Control Plane) tools to interact with local Sui client commands. This project integrates with Cursor IDE for enhanced development experience.
 
 ## Features
 
-- RESTful API for Sui client operations
-- Command-line interface for server control
+- MCP tools for Sui client operations
+- Support for both stdio and SSE (Server-Sent Events) modes
+- Integration with Cursor IDE
 - Configuration via config file, environment variables, or command-line flags
 
 ## Prerequisites
 
 - Go 1.20 or higher
 - Sui client installed and available in PATH
+- Cursor IDE (for development)
 
 ## Installation
 
@@ -22,9 +24,6 @@ cd go-sui-mcp
 
 # Build the application
 go build -o go-sui-mcp
-
-# Run the server
-./go-sui-mcp server
 ```
 
 ## Configuration
@@ -40,7 +39,7 @@ Example config file:
 ```yaml
 server:
   port: 8080
-  host: "0.0.0.0"
+  sse: false
 sui:
   executable_path: "sui"
 ```
@@ -49,53 +48,89 @@ Environment variables:
 
 ```bash
 GOSUI_SERVER_PORT=8080
-GOSUI_SERVER_HOST=0.0.0.0
+GOSUI_SERVER_SSE=false
 GOSUI_SUI_EXECUTABLE_PATH=sui
 ```
 
-## API Endpoints
+## Running the Server
 
-### Health Check
+The server can be run in two modes:
 
-```
-GET /health
-```
-
-### Sui Client APIs
-
-```
-GET /api/sui/version                 # Get Sui client version
-GET /api/sui/balance/:address        # Get balance for an address
-GET /api/sui/objects/:address        # Get objects owned by an address
-GET /api/sui/validators              # Get active validators
-GET /api/sui/network                 # Get network info
-GET /api/sui/transaction/:txid       # Get transaction information
-POST /api/sui/transfer               # Transfer SUI tokens
+1. stdio mode (default):
+```bash
+./go-sui-mcp server
 ```
 
-### POST /api/sui/transfer
-Request body:
+2. SSE mode:
+```bash
+./go-sui-mcp server --sse --port 8080
+```
+
+## Cursor IDE Integration
+
+To integrate with Cursor IDE, create a `.cursor/mcp.json` file in your project root:
+
 ```json
 {
-  "recipient": "0x123456789abcdef",
-  "amount": "1000000000",
-  "gas_budget": "10000"
+  "mcpServers": {
+    "sui-sse": {
+      "command": "/path/to/go-sui-mcp",
+      "args": ["server", "--sse"]
+    },
+    "sui-dev": {
+      "url": "http://localhost:8080/sse"
+    },
+    "sui": {
+      "command": "/path/to/go-sui-mcp",
+      "args": ["server"]
+    }
+  }
 }
 ```
 
-## Examples
+## Available MCP Tools
 
-Get Sui version:
+The following MCP tools are available:
 
-```bash
-curl http://localhost:8080/api/sui/version
+### Version and Path
+- `sui-formatted-version`: Get the formatted version of the Sui client
+- `sui-path`: Get the path of the local sui binary
+
+### Balance and Objects
+- `sui-balance-summary`: Get the balance summary of an address
+- `sui-objects-summary`: Get the objects summary of an address
+- `sui-object`: Get details of a specific object
+
+### Transactions
+- `sui-process-transaction`: Process and get details of a transaction
+- `sui-pay-sui`: Transfer SUI tokens to a recipient
+
+### Example Tool Usage (in Cursor)
+
+Transfer SUI tokens:
+```typescript
+await mcp.invoke("sui-pay-sui", {
+  recipient: "0x...",
+  amounts: 1000000000, // 1 SUI
+  "gas-budget": "2000000",
+  "input-coins": "0x..."
+});
 ```
 
-Get balance for address:
-
-```bash
-curl http://localhost:8080/api/sui/balance/0x123456789abcdef
+Get balance summary:
+```typescript
+await mcp.invoke("sui-balance-summary", {
+  address: "0x..." // optional, uses current address if not provided
+});
 ```
+
+## Development
+
+The project uses the following key components:
+
+- `internal/sui`: Core Sui client implementation
+- `internal/services`: MCP tools and service implementations
+- `cmd`: Command-line interface implementation
 
 ## License
 
