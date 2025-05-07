@@ -12,9 +12,10 @@ import { AlertDialog, Button, Card, Dialog, Flex, Grid, Heading, Text, Box, Link
 import { coinWithBalance, Transaction } from '@mysten/sui/transactions';
 import { fromHex, SUI_CLOCK_OBJECT_ID } from '@mysten/sui/utils';
 import { SealClient, SessionKey, getAllowlistedKeyServers } from '@mysten/seal';
-import { useParams } from 'react-router-dom';
-import { downloadAndDecrypt, getObjectExplorerLink, MoveCallConstructor } from './utils';
+import { useParams, useNavigate } from 'react-router-dom';
+import { downloadAndDecrypt, MoveCallConstructor } from './utils';
 import { ExternalLinkIcon, GitHubLogoIcon, TwitterLogoIcon, GlobeIcon, InfoCircledIcon, LockClosedIcon, DownloadIcon } from '@radix-ui/react-icons';
+import { SuiTransactionBlockResponse } from '@mysten/sui/client';
 
 const TTL_MIN = 10;
 export interface FeedData {
@@ -53,6 +54,7 @@ const FileDisplay: React.FC<{ url: string; index: number }> = ({ url, index }) =
   const [fileType, setFileType] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFile = async () => {
@@ -97,6 +99,11 @@ const FileDisplay: React.FC<{ url: string; index: number }> = ({ url, index }) =
 
   const extension = getFileExtension();
 
+  const handleChatWithJson = () => {
+    localStorage.setItem('CHAT_DATA', JSON.stringify(fileData));
+    navigate('/chat');
+  }
+
   return (
     <Box my="1" p="3" style={{ border: '1px solid var(--border-color)', borderRadius: '8px', background: 'var(--deep-ocean-bg-secondary)' }}>
       <Flex direction="column" gap="2">
@@ -104,7 +111,7 @@ const FileDisplay: React.FC<{ url: string; index: number }> = ({ url, index }) =
           <Text weight="medium" style={{ color: 'var(--primary-text-color)' }}>File {index + 1}</Text>
           <Flex gap="2">
             <Button
-              size="1"
+              size="2"
               variant="soft"
               asChild
               style={{ cursor: 'pointer' }}
@@ -116,15 +123,20 @@ const FileDisplay: React.FC<{ url: string; index: number }> = ({ url, index }) =
             </Button>
             {extension === 'json' && (
               <Button
-                size="1"
-                variant="soft"
+                size="2"
+                variant="solid"
                 asChild
-                style={{ cursor: 'pointer' }}
-                className="water-button-soft"
+                style={{
+                  cursor: 'pointer',
+                  background: 'var(--interactive-blue)',
+                  color: 'white',
+                }}
+                className="water-button-primary"
+                onClick={handleChatWithJson}
               >
-                <a href="https://www.brainsdance.com/" target="_blank" rel="noopener noreferrer">
-                  chat with JSON
-                </a>
+                <div>
+                  Chat with Memory
+                </div>
               </Button>
             )}
           </Flex>
@@ -195,6 +207,7 @@ const FileDisplay: React.FC<{ url: string; index: number }> = ({ url, index }) =
 const SpaceInfo: React.FC<{ suiAddress: string }> = ({ suiAddress }) => {
   const suiClient = useSuiClient();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const client = new SealClient({
     suiClient,
@@ -318,47 +331,61 @@ const SpaceInfo: React.FC<{ suiAddress: string }> = ({ suiAddress }) => {
   async function handleSubscribe(serviceId: string, fee: number) {
     setIsLoadingAction(true);
     setError(null);
-    const address = currentAccount?.address!;
-    if (!address) {
-      setError("Please connect your wallet first.");
-      setIsLoadingAction(false);
-      return;
-    }
-    const tx = new Transaction();
-    tx.setGasBudget(10000000);
-    tx.setSender(address);
-    const subscription = tx.moveCall({
-      target: `${packageId}::subscription::subscribe`,
-      arguments: [
-        coinWithBalance({
-          balance: BigInt(fee),
-        }),
-        tx.object(serviceId),
-        tx.object(SUI_CLOCK_OBJECT_ID),
-      ],
-    });
-    tx.moveCall({
-      target: `${packageId}::subscription::transfer`,
-      arguments: [tx.object(subscription), tx.pure.address(address)],
-    });
 
-    signAndExecute(
-      {
-        transaction: tx,
-      },
-      {
-        onSuccess: async (result) => {
-          console.log('Subscription successful:', result);
-          await getFeed();
-          setIsLoadingAction(false);
-        },
-        onError: (err) => {
-          console.error("Subscription failed:", err);
-          setError("Subscription transaction failed. Please check console and try again.");
-          setIsLoadingAction(false);
-        },
-      },
-    );
+    try {
+      const address = currentAccount?.address!;
+      if (!address) {
+        throw new Error("Wallet not connected, Please connect your wallet first.");
+      }
+      const tx = new Transaction();
+      tx.setGasBudget(10000000);
+      tx.setSender(address);
+      const subscription = tx.moveCall({
+        target: `${packageId}::subscription::subscribe`,
+        arguments: [
+          coinWithBalance({
+            balance: BigInt(fee),
+          }),
+          tx.object(serviceId),
+          tx.object(SUI_CLOCK_OBJECT_ID),
+        ],
+      });
+      tx.moveCall({
+        target: `${packageId}::subscription::transfer`,
+        arguments: [tx.object(subscription), tx.pure.address(address)],
+      });
+
+      const result = await new Promise<SuiTransactionBlockResponse>((resolve, reject) => {
+        signAndExecute(
+          {
+            transaction: tx,
+          },
+          {
+            onSuccess: async (result) => {
+              resolve(result);
+            },
+            onError: (err) => {
+              reject(err);
+            },
+          },
+        );
+      });
+
+      await getFeed();
+      console.log('Subscription successful:', result);
+      setIsDialogOpen(false);
+    } catch (error) {
+      console.error("Error during subscription:", error);
+      setError(error instanceof Error ? error.message : "An unexpected error occurred during subscription.");
+    } finally {
+      setIsLoadingAction(false);
+    }
+  }
+
+  const updateDecryptedData = (data: { type: string, data: string }[]) => {
+    localStorage.setItem(`space_${id}`, JSON.stringify(data));
+    const urls = data.map((item) => URL.createObjectURL(new Blob([item.data], { type: item.type })));
+    setDecryptedFileUrls(urls);
   }
 
   const onView = async (
@@ -367,6 +394,16 @@ const SpaceInfo: React.FC<{ suiAddress: string }> = ({ suiAddress }) => {
     fee: number,
     subscriptionId?: string,
   ) => {
+    const cachedFileList = localStorage.getItem(`space_${id}`);
+    if (cachedFileList) {
+      setIsDialogOpen(true);
+      const data = JSON.parse(cachedFileList);
+      console.log("Cached data:", data);
+      // @ts-ignore
+      setDecryptedFileUrls(data.map((item) => URL.createObjectURL(new Blob([item.data], { type: item.type }))));
+      setIsLoadingAction(false);
+      return;
+    }
     setError(null);
     if (!currentAccount?.address) {
       setError("Please connect your wallet first.");
@@ -399,7 +436,7 @@ const SpaceInfo: React.FC<{ suiAddress: string }> = ({ suiAddress }) => {
           client,
           moveCallConstructor,
           setError,
-          setDecryptedFileUrls,
+          updateDecryptedData,
           setIsDialogOpen,
           setReloadKey,
         );
@@ -430,16 +467,18 @@ const SpaceInfo: React.FC<{ suiAddress: string }> = ({ suiAddress }) => {
                 client,
                 moveCallConstructor,
                 setError,
-                setDecryptedFileUrls,
+                updateDecryptedData,
                 setIsDialogOpen,
                 setReloadKey,
               );
+              setIsLoadingAction(false);
               setCurrentSessionKey(sessionKey);
             },
             onError: (err) => {
               console.error("Personal message signing failed:", err);
               setError("Failed to sign message. Please try again.");
               setIsDialogOpen(false);
+              setIsLoadingAction(false);
             },
           },
         );
@@ -459,11 +498,11 @@ const SpaceInfo: React.FC<{ suiAddress: string }> = ({ suiAddress }) => {
   const renderTopSection = () => (
     <Box mb="6">
       <Grid columns={{ initial: '1', md: '2' }} gap="6" width="auto">
-        <Card className="water-card" p="5">
+        <Card className="water-card">
           <Flex direction="column" gap="3">
-            <Heading size="7" style={{ color: 'var(--primary-text-color)' }}>{feed!.name}</Heading>
+            <Text size="7" weight="bold" style={{ color: 'var(--primary-text-color)' }}>{feed!.name}</Text>
             <RadixLink
-              href={getObjectExplorerLink(feed!.id)}
+              href={`https://testnet.suivision.xyz/object/${feed!.id}`}
               target="_blank"
               rel="noopener noreferrer"
               size="2"
@@ -484,7 +523,7 @@ const SpaceInfo: React.FC<{ suiAddress: string }> = ({ suiAddress }) => {
             <Flex justify="between" align="center">
               <Text size="3" style={{ color: 'var(--secondary-text-color)' }}>Owner:</Text>
               <RadixLink
-                href={getObjectExplorerLink(feed!.owner)}
+                href={`https://testnet.suivision.xyz/object/${feed!.owner}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 size="2"
@@ -496,7 +535,7 @@ const SpaceInfo: React.FC<{ suiAddress: string }> = ({ suiAddress }) => {
             </Flex>
           </Flex>
         </Card>
-        <Card className="water-card" p="5">
+        <Card className="water-card">
           <Flex direction="column" gap="4">
             <Heading size="5" style={{ color: 'var(--primary-text-color)' }}>Connect</Heading>
             <Separator size="4" my="2" style={{ background: 'var(--border-color)' }} />
@@ -522,7 +561,7 @@ const SpaceInfo: React.FC<{ suiAddress: string }> = ({ suiAddress }) => {
   );
 
   const renderFilesSection = () => (
-    <Card className="water-card" p="5" key={feed!.id}>
+    <Card className="water-card" key={feed!.id}>
       <Heading size="5" mb="4" style={{ color: 'var(--primary-text-color)' }}>
         Space Content
       </Heading>
@@ -577,10 +616,10 @@ const SpaceInfo: React.FC<{ suiAddress: string }> = ({ suiAddress }) => {
               }}
               key={reloadKey}
             >
-              <Dialog.Title asChild>
-                <Heading size="5" style={{ color: 'var(--primary-text-color)', flexShrink: 0 }}>
+              <Dialog.Title>
+                <Text size="5" weight="bold" style={{ color: 'var(--primary-text-color)', flexShrink: 0 }}>
                   {error ? "Error" : (decryptedFileUrls.length > 0 ? "Retrieved Files" : "Processing...")}
-                </Heading>
+                </Text>
               </Dialog.Title>
               <Separator size="4" my="3" style={{ background: 'var(--border-color)', flexShrink: 0 }} />
               <Box style={{ overflowY: 'auto', flexGrow: 1 }}>
@@ -620,38 +659,72 @@ const SpaceInfo: React.FC<{ suiAddress: string }> = ({ suiAddress }) => {
   );
 
   return (
-    <Box p={{ initial: '3', sm: '4', md: '6' }} style={{ background: 'var(--deep-ocean-bg)', minHeight: '100vh' }}>
-      {feed === undefined && !error ? (
-        <Card className="water-card" p="5">
-          <Flex align="center" justify="center" gap="3" minHeight="200px">
-            <Spinner size="3" />
-            <Text size="4" style={{ color: 'var(--secondary-text-color)' }}>Loading space details...</Text>
+    <Box>
+      {/* 顶部导航栏 */}
+      <Flex
+        px="5"
+        py="3"
+        justify="between"
+        align="center"
+        style={{
+          background: 'rgba(26, 26, 46, 0.7)',
+          backdropFilter: 'blur(15px)',
+          borderBottom: '1px solid rgba(144, 224, 239, 0.3)',
+          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+        }}
+      >
+        <Button
+          variant="ghost"
+          onClick={() => navigate('/')}
+          style={{ color: '#ade8f4' }}
+        >
+          Back to Home
+        </Button>
+        <Text size="5" weight="bold" style={{ color: '#ade8f4' }}>
+          Space Details
+        </Text>
+        <div style={{ width: '100px' }} />
+      </Flex>
+
+      {/* 主要内容区域 */}
+      <Box p={{ initial: '3', sm: '4', md: '6' }} style={{ background: 'var(--deep-ocean-bg)', minHeight: '100vh', marginTop: '80px' }}>
+        {feed === undefined && !error ? (
+          <Card className="water-card">
+            <Flex align="center" justify="center" gap="3" minHeight="200px">
+              <Spinner size="3" />
+              <Text size="4" style={{ color: 'var(--secondary-text-color)' }}>Loading space details...</Text>
+            </Flex>
+          </Card>
+        ) : feed ? (
+          <Flex direction="column" gap="6">
+            {renderTopSection()}
+            {renderFilesSection()}
           </Flex>
-        </Card>
-      ) : feed ? (
-        <Flex direction="column" gap="6">
-          {renderTopSection()}
-          {renderFilesSection()}
-        </Flex>
-      ) : null}
-      <AlertDialog.Root open={!!error && !isDialogOpen} onOpenChange={() => setError(null)}>
-        <AlertDialog.Content style={{ background: 'var(--midnight-blue-bg)', borderRadius: 'var(--apple-border-radius)', border: '1px solid var(--border-color)' }}>
-          <AlertDialog.Title asChild>
-            <Heading size="5" style={{ color: 'var(--tomato-11)' }}>Error</Heading>
-          </AlertDialog.Title>
-          <Separator size="4" my="3" style={{ background: 'var(--border-color)' }} />
-          <AlertDialog.Description size="3" style={{ color: 'var(--primary-text-color)' }}>
-            {error}
-          </AlertDialog.Description>
-          <Flex gap="3" mt="4" justify="end">
-            <AlertDialog.Action>
-              <Button variant="soft" className="water-button-soft" onClick={() => setError(null)}>
-                Close
-              </Button>
-            </AlertDialog.Action>
-          </Flex>
-        </AlertDialog.Content>
-      </AlertDialog.Root>
+        ) : null}
+        <AlertDialog.Root open={!!error && !isDialogOpen} onOpenChange={() => setError(null)}>
+          <AlertDialog.Content style={{ background: 'var(--midnight-blue-bg)', borderRadius: 'var(--apple-border-radius)', border: '1px solid var(--border-color)' }}>
+            <AlertDialog.Title>
+              <Text size="5" weight="bold" style={{ color: 'var(--tomato-11)' }}>Error</Text>
+            </AlertDialog.Title>
+            <Separator size="4" my="3" style={{ background: 'var(--border-color)' }} />
+            <AlertDialog.Description size="3" style={{ color: 'var(--primary-text-color)' }}>
+              {error}
+            </AlertDialog.Description>
+            <Flex gap="3" mt="4" justify="end">
+              <AlertDialog.Action>
+                <Button variant="soft" className="water-button-soft" onClick={() => setError(null)}>
+                  Close
+                </Button>
+              </AlertDialog.Action>
+            </Flex>
+          </AlertDialog.Content>
+        </AlertDialog.Root>
+      </Box>
     </Box>
   );
 };

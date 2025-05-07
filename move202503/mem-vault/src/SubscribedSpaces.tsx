@@ -6,7 +6,7 @@ import { getObjectExplorerLink } from './utils'; // Assuming you have this utili
 import { ExternalLinkIcon } from '@radix-ui/react-icons';
 import './global.css'; // Ensure global styles are imported
 import { SUI_CLOCK_OBJECT_ID } from '@mysten/sui/utils';
-import { Link } from 'react-router-dom'; // <-- 添加此行
+import { Link, useNavigate } from 'react-router-dom'; // <-- 添加此行
 
 // Interface for the detailed service information we want to display
 interface SubscribedSpaceItem {
@@ -29,6 +29,7 @@ export function SubscribedSpaces() {
     const packageId = useNetworkVariable('packageId');
     const currentAccount = useCurrentAccount();
     const suiClient = useSuiClient();
+    const navigate = useNavigate();
 
     const [subscribedSpaces, setSubscribedSpaces] = useState<SubscribedSpaceItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -118,88 +119,117 @@ export function SubscribedSpaces() {
 
     // --- UI Rendering ---
     return (
-        <Box style={{
-            background: `linear-gradient(180deg, var(--deep-ocean-bg) 0%, var(--midnight-blue-bg) 100%)`,
-            padding: 'var(--space-6) var(--space-7)',
-            minHeight: 'calc(100vh - 80px)',
-            color: 'var(--primary-text-color)',
-        }}>
-            <Heading size="8" mb="2" style={{ fontWeight: 700, color: 'var(--primary-text-color)' }}>
-                My Subscriptions
-            </Heading>
-            <Text size="4" mb="7" style={{ color: 'var(--secondary-text-color)' }}>
-                Spaces you have active subscriptions for.
-            </Text>
+        <Box>
+            {/* 顶部导航栏 */}
+            <Flex
+                px="5"
+                py="3"
+                justify="between"
+                align="center"
+                style={{
+                    background: 'rgba(26, 26, 46, 0.7)',
+                    backdropFilter: 'blur(15px)',
+                    borderBottom: '1px solid rgba(144, 224, 239, 0.3)',
+                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    zIndex: 100,
+                }}
+            >
+                <Button
+                    variant="ghost"
+                    onClick={() => navigate('/')}
+                    style={{ color: '#ade8f4' }}
+                >
+                    Back to Home
+                </Button>
+                <Text size="5" weight="bold" style={{ color: '#ade8f4' }}>
+                    My Subscriptions
+                </Text>
+                <div style={{ width: '100px' }} />
+            </Flex>
 
-            {isLoading ? (
-                <Flex justify="center" align="center" minHeight="300px">
-                    <Spinner size="3" />
-                    <Text ml="3" size="3" style={{ color: 'var(--secondary-text-color)' }}>Loading subscriptions...</Text>
-                </Flex>
-            ) : subscribedSpaces.length > 0 ? (
-                <Grid columns={{ initial: '1', sm: '2', md: '3' }} gap="6">
-                    {subscribedSpaces.map((item) => (
-                        <Card key={item.id} className="water-card">
-                            <Flex direction="column" gap="3">
-                                <Heading size="5" style={{ color: 'var(--primary-text-color)', fontWeight: 600 }}>
-                                    {item.name || 'Unnamed Space'}
-                                </Heading>
-                                <Flex align="center" gap="2">
-                                    <Text size="2" style={{ color: 'var(--secondary-text-color)' }}>ID:</Text>
-                                    <RadixLink
-                                        href={getObjectExplorerLink(item.id)}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
+            {/* 主要内容区域 */}
+            <Box style={{ marginTop: '80px', padding: '20px' }}>
+                <Heading size="8" mb="2" style={{ fontWeight: 700, color: 'var(--primary-text-color)' }}>
+                    My Subscriptions
+                </Heading>
+                <Text size="4" mb="7" style={{ color: 'var(--secondary-text-color)' }}>
+                    Spaces you have active subscriptions for.
+                </Text>
+
+                {isLoading ? (
+                    <Flex justify="center" align="center" minHeight="300px">
+                        <Spinner size="3" />
+                        <Text ml="3" size="3" style={{ color: 'var(--secondary-text-color)' }}>Loading subscriptions...</Text>
+                    </Flex>
+                ) : subscribedSpaces.length > 0 ? (
+                    <Grid columns={{ initial: '1', sm: '2', md: '3' }} gap="6">
+                        {subscribedSpaces.map((item) => (
+                            <Card key={item.id} className="water-card">
+                                <Flex direction="column" gap="3">
+                                    <Heading size="5" style={{ color: 'var(--primary-text-color)', fontWeight: 600 }}>
+                                        {item.name || 'Unnamed Space'}
+                                    </Heading>
+                                    <Flex align="center" gap="2">
+                                        <Text size="2" style={{ color: 'var(--secondary-text-color)' }}>ID:</Text>
+                                        <RadixLink
+                                            href={`https://testnet.suivision.xyz/object/${item.id}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            size="2"
+                                            style={{ color: 'var(--interactive-blue)', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'color 0.3s ease' }}
+                                            onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-aqua)'}
+                                            onMouseOut={(e) => e.currentTarget.style.color = 'var(--interactive-blue)'}
+                                        >
+                                            {`${item.id.substring(0, 6)}...${item.id.substring(item.id.length - 4)}`}
+                                            <ExternalLinkIcon width="14" height="14" />
+                                        </RadixLink>
+                                    </Flex>
+                                    <Separator size="4" my="3" style={{ background: 'var(--border-color)' }} />
+                                    <Flex justify="between" align="center">
+                                        <Text size="2" style={{ color: 'var(--secondary-text-color)' }}>Fee:</Text>
+                                        <Text size="2" weight="medium" style={{ color: 'var(--primary-text-color)' }}>
+                                            {item.fee ? `${parseInt(item.fee) / 1_000_000_000} SUI` : 'N/A'}
+                                        </Text>
+                                    </Flex>
+                                    <Flex justify="between" align="center">
+                                        <Text size="2" style={{ color: 'var(--secondary-text-color)' }}>Duration:</Text>
+                                        <Text size="2" weight="medium" style={{ color: 'var(--primary-text-color)' }}>
+                                            {item.ttl ? `${Math.round(parseInt(item.ttl) / 60000)} min` : 'N/A'}
+                                        </Text>
+                                    </Flex>
+                                    {/* You might want a button to view the space */}
+                                    <Button
+                                        mt="4"
+                                        className="water-button-primary"
                                         size="2"
-                                        style={{ color: 'var(--interactive-blue)', display: 'inline-flex', alignItems: 'center', gap: '4px', transition: 'color 0.3s ease' }}
-                                        onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-aqua)'}
-                                        onMouseOut={(e) => e.currentTarget.style.color = 'var(--interactive-blue)'}
+                                        asChild // Use asChild to make the button act like a link
                                     >
-                                        {`${item.id.substring(0, 6)}...${item.id.substring(item.id.length - 4)}`}
-                                        <ExternalLinkIcon width="14" height="14" />
-                                    </RadixLink>
+                                        <Link to={`/view/space/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                            View Space
+                                        </Link>
+                                    </Button>
                                 </Flex>
-                                <Separator size="4" my="3" style={{ background: 'var(--border-color)' }} />
-                                <Flex justify="between" align="center">
-                                    <Text size="2" style={{ color: 'var(--secondary-text-color)' }}>Fee:</Text>
-                                    <Text size="2" weight="medium" style={{ color: 'var(--primary-text-color)' }}>
-                                        {item.fee ? `${parseInt(item.fee) / 1_000_000_000} SUI` : 'N/A'}
-                                    </Text>
-                                </Flex>
-                                <Flex justify="between" align="center">
-                                    <Text size="2" style={{ color: 'var(--secondary-text-color)' }}>Duration:</Text>
-                                    <Text size="2" weight="medium" style={{ color: 'var(--primary-text-color)' }}>
-                                        {item.ttl ? `${Math.round(parseInt(item.ttl) / 60000)} min` : 'N/A'}
-                                    </Text>
-                                </Flex>
-                                {/* You might want a button to view the space */}
-                                <Button
-                                    mt="4"
-                                    className="water-button-primary"
-                                    size="2"
-                                    asChild // Use asChild to make the button act like a link
-                                >
-                                    <Link to={`/subscription-example/view/service/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                        View Space
-                                    </Link>
-                                </Button>
-                            </Flex>
-                        </Card>
-                    ))}
-                </Grid>
-            ) : (
-                <Flex justify="center" align="center" style={{
-                    minHeight: '300px',
-                    border: `2px dashed var(--border-color)`,
-                    borderRadius: 'var(--apple-border-radius)',
-                    background: 'rgba(15, 23, 42, 0.5)',
-                    backdropFilter: 'blur(5px)',
-                }}>
-                    <Text size="3" style={{ color: 'var(--secondary-text-color)' }}>
-                        You haven't subscribed to any spaces yet. Explore some!
-                    </Text>
-                </Flex>
-            )}
+                            </Card>
+                        ))}
+                    </Grid>
+                ) : (
+                    <Flex justify="center" align="center" style={{
+                        minHeight: '300px',
+                        border: `2px dashed var(--border-color)`,
+                        borderRadius: 'var(--apple-border-radius)',
+                        background: 'rgba(15, 23, 42, 0.5)',
+                        backdropFilter: 'blur(5px)',
+                    }}>
+                        <Text size="3" style={{ color: 'var(--secondary-text-color)' }}>
+                            You haven't subscribed to any spaces yet. Explore some!
+                        </Text>
+                    </Flex>
+                )}
+            </Box>
         </Box>
     );
 }

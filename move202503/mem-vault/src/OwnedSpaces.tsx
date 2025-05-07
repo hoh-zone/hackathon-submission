@@ -10,6 +10,8 @@ import { Button, Card, Flex, Text, Heading, Box, Link as RadixLink, Grid, Separa
 import { getObjectExplorerLink } from './utils';
 import { ExternalLinkIcon } from '@radix-ui/react-icons'; // 导入图标
 import './global.css'; // 确保全局样式已导入
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export interface Cap {
   id: string;
@@ -26,10 +28,11 @@ export interface CardItem {
 
 // --- 移除局部调色板，将依赖全局 CSS 变量 ---
 
-export function OwnedSpaces() {
+export const OwnedSpaces = () => {
   const packageId = useNetworkVariable('packageId');
   const currentAccount = useCurrentAccount();
   const suiClient = useSuiClient();
+  const navigate = useNavigate();
 
   const [cardItems, setCardItems] = useState<CardItem[]>([]);
 
@@ -100,100 +103,128 @@ export function OwnedSpaces() {
 
   // --- UI 渲染 (Apple + Water Theme) ---
   return (
-    <Box style={{
-      // 使用全局变量定义深邃的背景
-      background: `linear-gradient(180deg, var(--deep-ocean-bg) 0%, var(--midnight-blue-bg) 100%)`,
-      padding: 'var(--space-6) var(--space-7)', // 增加内边距以获得更宽松的感觉
-      minHeight: 'calc(100vh - 80px)', // 假设顶部导航栏高度
-      color: 'var(--primary-text-color)', // 使用全局主要文本颜色
-    }}>
-      <Heading size="8" mb="2" style={{ fontWeight: 700, color: 'var(--primary-text-color)' }}>
-        My Spaces
-      </Heading>
-      <Text size="4" mb="7" style={{ color: 'var(--secondary-text-color)' }}>
-        Dive into your digital realms. Manage content and oversee your creations.
-      </Text>
+    <Box>
+      {/* 顶部导航栏 */}
+      <Flex
+        px="5"
+        py="3"
+        justify="between"
+        align="center"
+        style={{
+          background: 'rgba(26, 26, 46, 0.7)',
+          backdropFilter: 'blur(15px)',
+          borderBottom: '1px solid rgba(144, 224, 239, 0.3)',
+          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+        }}
+      >
+        <Button
+          variant="ghost"
+          onClick={() => navigate('/')}
+          style={{ color: '#ade8f4' }}
+        >
+          Back to Home
+        </Button>
+        <Text size="5" weight="bold" style={{ color: '#ade8f4' }}>
+          My Spaces
+        </Text>
+        <div style={{ width: '100px' }} />
+      </Flex>
 
-      {cardItems.length > 0 ? (
-        <Grid columns={{ initial: '1', sm: '2', md: '3' }} gap="6"> {/* 增加卡片间距 */}
-          {cardItems.map((item) => (
-            // 应用全局 .water-card 样式，它包含了背景、边框、圆角、阴影和悬停效果
-            <Card key={item.id} className="water-card">
-              <Flex direction="column" gap="3"> {/* 调整内部间距 */}
-                <Heading size="5" style={{ color: 'var(--primary-text-color)', fontWeight: 600 }}>
-                  {item.name || 'Unnamed Space'}
-                </Heading>
+      {/* 主要内容区域 */}
+      <Box style={{ marginTop: '80px', padding: '20px' }}>
+        <Heading size="8" mb="2" style={{ fontWeight: 700, color: 'var(--primary-text-color)' }}>
+          My Spaces
+        </Heading>
+        <Text size="4" mb="7" style={{ color: 'var(--secondary-text-color)' }}>
+          Dive into your digital realms. Manage content and oversee your creations.
+        </Text>
 
-                <Flex align="center" gap="2">
-                  <Text size="2" style={{ color: 'var(--secondary-text-color)' }}>ID:</Text>
-                  <RadixLink
-                    href={getObjectExplorerLink(item.id)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    size="2"
-                    // 使用全局交互蓝色，悬停时变为水蓝色
-                    style={{
-                      color: 'var(--interactive-blue)',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      transition: 'color 0.3s ease',
+        {cardItems.length > 0 ? (
+          <Grid columns={{ initial: '1', sm: '2', md: '3' }} gap="6"> {/* 增加卡片间距 */}
+            {cardItems.map((item) => (
+              // 应用全局 .water-card 样式，它包含了背景、边框、圆角、阴影和悬停效果
+              <Card key={item.id} className="water-card">
+                <Flex direction="column" gap="3"> {/* 调整内部间距 */}
+                  <Heading size="5" style={{ color: 'var(--primary-text-color)', fontWeight: 600 }}>
+                    {item.name || 'Unnamed Space'}
+                  </Heading>
+
+                  <Flex align="center" gap="2">
+                    <Text size="2" style={{ color: 'var(--secondary-text-color)' }}>ID:</Text>
+                    <RadixLink
+                      href={`https://testnet.suivision.xyz/object/${item.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      size="2"
+                      // 使用全局交互蓝色，悬停时变为水蓝色
+                      style={{
+                        color: 'var(--interactive-blue)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        transition: 'color 0.3s ease',
+                      }}
+                      onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-aqua)'}
+                      onMouseOut={(e) => e.currentTarget.style.color = 'var(--interactive-blue)'}
+                    >
+                      {`${item.id.substring(0, 6)}...${item.id.substring(item.id.length - 4)}`}
+                      <ExternalLinkIcon width="14" height="14" />
+                    </RadixLink>
+                  </Flex>
+
+                  {/* 使用更精细的分隔线 */}
+                  <Separator size="4" my="3" style={{ background: 'var(--border-color)' }} />
+
+                  <Flex justify="between" align="center">
+                    <Text size="2" style={{ color: 'var(--secondary-text-color)' }}>Fee:</Text>
+                    <Text size="2" weight="medium" style={{ color: 'var(--primary-text-color)' }}>
+                      {item.fee ? `${parseInt(item.fee) / 1_000_000_000} SUI` : 'N/A'}
+                    </Text>
+                  </Flex>
+                  <Flex justify="between" align="center">
+                    <Text size="2" style={{ color: 'var(--secondary-text-color)' }}>Duration:</Text>
+                    <Text size="2" weight="medium" style={{ color: 'var(--primary-text-color)' }}>
+                      {item.ttl ? `${Math.round(parseInt(item.ttl) / 60000)} min` : 'N/A'}
+                    </Text>
+                  </Flex>
+
+                  {/* 应用全局主按钮样式 */}
+                  <Button
+                    mt="4" // 增加按钮与上方内容的间距
+                    className="water-button-primary" // 使用全局样式
+                    size="2" // 调整按钮大小
+                    onClick={() => {
+                      window.open(
+                        `${window.location.origin}/admin/space/${item.id}`,
+                        '_blank',
+                      );
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-aqua)'}
-                    onMouseOut={(e) => e.currentTarget.style.color = 'var(--interactive-blue)'}
                   >
-                    {`${item.id.substring(0, 6)}...${item.id.substring(item.id.length - 4)}`}
-                    <ExternalLinkIcon width="14" height="14" />
-                  </RadixLink>
+                    Manage Space
+                  </Button>
                 </Flex>
-
-                {/* 使用更精细的分隔线 */}
-                <Separator size="4" my="3" style={{ background: 'var(--border-color)' }} />
-
-                <Flex justify="between" align="center">
-                  <Text size="2" style={{ color: 'var(--secondary-text-color)' }}>Fee:</Text>
-                  <Text size="2" weight="medium" style={{ color: 'var(--primary-text-color)' }}>
-                    {item.fee ? `${parseInt(item.fee) / 1_000_000_000} SUI` : 'N/A'}
-                  </Text>
-                </Flex>
-                <Flex justify="between" align="center">
-                  <Text size="2" style={{ color: 'var(--secondary-text-color)' }}>Duration:</Text>
-                  <Text size="2" weight="medium" style={{ color: 'var(--primary-text-color)' }}>
-                    {item.ttl ? `${Math.round(parseInt(item.ttl) / 60000)} min` : 'N/A'}
-                  </Text>
-                </Flex>
-
-                {/* 应用全局主按钮样式 */}
-                <Button
-                  mt="4" // 增加按钮与上方内容的间距
-                  className="water-button-primary" // 使用全局样式
-                  size="2" // 调整按钮大小
-                  onClick={() => {
-                    window.open(
-                      `${window.location.origin}/subscription-example/admin/service/${item.id}`,
-                      '_blank',
-                    );
-                  }}
-                >
-                  Manage Space
-                </Button>
-              </Flex>
-            </Card>
-          ))}
-        </Grid>
-      ) : (
-        <Flex justify="center" align="center" style={{
-          minHeight: '300px',
-          border: `2px dashed var(--border-color)`, // 使用虚线边框和全局边框色
-          borderRadius: 'var(--apple-border-radius)', // 使用全局圆角
-          background: 'rgba(15, 23, 42, 0.5)', // 半透明背景
-          backdropFilter: 'blur(5px)', // 添加轻微模糊效果
-        }}>
-          <Text size="3" style={{ color: 'var(--secondary-text-color)' }}>
-            You haven't created any spaces yet. Start your journey!
-          </Text>
-        </Flex>
-      )}
+              </Card>
+            ))}
+          </Grid>
+        ) : (
+          <Flex justify="center" align="center" style={{
+            minHeight: '300px',
+            border: `2px dashed var(--border-color)`, // 使用虚线边框和全局边框色
+            borderRadius: 'var(--apple-border-radius)', // 使用全局圆角
+            background: 'rgba(15, 23, 42, 0.5)', // 半透明背景
+            backdropFilter: 'blur(5px)', // 添加轻微模糊效果
+          }}>
+            <Text size="3" style={{ color: 'var(--secondary-text-color)' }}>
+              You haven't created any spaces yet. Start your journey!
+            </Text>
+          </Flex>
+        )}
+      </Box>
     </Box>
   );
-}
+};

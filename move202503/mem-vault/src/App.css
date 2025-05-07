@@ -1,0 +1,44 @@
+.scrolling-wrapper {
+    width: 100%;
+    overflow: hidden;
+    /* Hide the parts of the content that overflow */
+}
+
+.scrolling-content {
+    display: flex;
+    width: fit-content;
+    /* Make the container width fit its content */
+    animation: scroll 30s linear infinite;
+    /* Adjust duration as needed */
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        /* Move left by half the width (since we duplicated the items) */
+        transform: translateX(-50%);
+    }
+}
+
+/* Optional: Pause animation on hover */
+.scrolling-wrapper:hover .scrolling-content {
+    animation-play-state: paused;
+}
+
+/* Add styles for the wave separator if you haven't already */
+.wave-separator {
+    height: 50px;
+    /* Adjust height as needed */
+    background-image: linear-gradient(to right, transparent 50%, #ade8f4 50%), linear-gradient(to right, #ade8f4 50%, transparent 50%), linear-gradient(to bottom, #fff 50%, #ade8f4 50%);
+    background-position: 0 0, 10px 10px, 0 10px;
+    /* Adjust spacing */
+    background-size: 20px 20px;
+    /* Adjust size */
+    background-repeat: repeat-x;
+    margin: 2rem 0;
+    /* Add some space around it */
+    opacity: 0.6;
+}

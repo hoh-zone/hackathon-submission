@@ -12,7 +12,7 @@ export const downloadAndDecrypt = async (
   sealClient: SealClient,
   moveCallConstructor: (tx: Transaction, id: string) => void,
   setError: (error: string | null) => void,
-  setDecryptedFileUrls: (urls: string[]) => void,
+  setDecryptedData: (dataList: { type: string, data: string }[]) => void,
   setIsDialogOpen: (open: boolean) => void,
   setReloadKey: (updater: (prev: number) => number) => void,
 ) => {
@@ -22,7 +22,7 @@ export const downloadAndDecrypt = async (
     blobIds.map(async (blobId) => {
       try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 10000);
+        const timeout = setTimeout(() => controller.abort(), 30000);
         const randomAggregator = aggregators[Math.floor(Math.random() * aggregators.length)];
         const aggregatorUrl = `/${randomAggregator}/v1/blobs/${blobId}`;
         const response = await fetch(aggregatorUrl, { signal: controller.signal });
@@ -72,7 +72,8 @@ export const downloadAndDecrypt = async (
   }
 
   // Then, decrypt files sequentially
-  const decryptedFileUrls: string[] = [];
+  // const decryptedFileUrls: string[] = [];
+  let decryptedDataList: { type: string, data: string }[] = [];
   for (const encryptedData of validDownloads) {
     const fullId = EncryptedObject.parse(new Uint8Array(encryptedData)).id;
     const tx = new Transaction();
@@ -94,15 +95,17 @@ export const downloadAndDecrypt = async (
         // 提取文件类型和内容
         const { type, content } = parsedData;
         const contentArray = new Uint8Array(content);
+        decryptedDataList.push({ type: type || 'application/json', data: new TextDecoder().decode(contentArray) });
 
         // 创建正确类型的Blob
-        const blob = new Blob([contentArray], { type: type || 'application/json' });
-        decryptedFileUrls.push(URL.createObjectURL(blob));
+        // const blob = new Blob([contentArray], { type: type || 'application/json' });
+        // decryptedFileUrls.push(URL.createObjectURL(blob));
       } catch (parseErr) {
         // 如果解析失败，回退到原来的处理方式
         console.error("Error parsing decrypted data:", parseErr);
-        const blob = new Blob([decryptedData], { type: 'application/json' });
-        decryptedFileUrls.push(URL.createObjectURL(blob));
+        decryptedDataList.push({ type: 'application/json', data: new TextDecoder().decode(decryptedData) });
+        // const blob = new Blob([decryptedData], { type: 'application/json' });
+        // decryptedFileUrls.push(URL.createObjectURL(blob));
       }
     } catch (err) {
       console.log(err);
@@ -116,8 +119,8 @@ export const downloadAndDecrypt = async (
     }
   }
 
-  if (decryptedFileUrls.length > 0) {
-    setDecryptedFileUrls(decryptedFileUrls);
+  if (decryptedDataList.length > 0) {
+    setDecryptedData(decryptedDataList);
     setIsDialogOpen(true);
     setReloadKey((prev) => prev + 1);
   }
