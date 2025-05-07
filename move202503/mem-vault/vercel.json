@@ -1,0 +1,56 @@
+{
+  "rewrites": [
+    {
+      "source": "/aggregator1/:path*",
+      "destination": "https://aggregator.walrus-testnet.walrus.space/:path*"
+    },
+    {
+      "source": "/aggregator2/:path*",
+      "destination": "https://wal-aggregator-testnet.staketab.org/:path*"
+    },
+    {
+      "source": "/aggregator3/:path*",
+      "destination": "https://walrus-testnet-aggregator.redundex.com/:path*"
+    },
+    {
+      "source": "/aggregator4/:path*",
+      "destination": "https://walrus-testnet-aggregator.nodes.guru/:path*"
+    },
+    {
+      "source": "/aggregator5/:path*",
+      "destination": "https://aggregator.walrus.banansen.dev/:path*"
+    },
+    {
+      "source": "/aggregator6/:path*",
+      "destination": "https://walrus-testnet-aggregator.everstake.one/:path*"
+    },
+    {
+      "source": "/publisher1/:path*",
+      "destination": "https://publisher.walrus-testnet.walrus.space/:path*"
+    },
+    {
+      "source": "/publisher2/:path*",
+      "destination": "https://wal-publisher-testnet.staketab.org/:path*"
+    },
+    {
+      "source": "/publisher3/:path*",
+      "destination": "https://walrus-testnet-publisher.redundex.com/:path*"
+    },
+    {
+      "source": "/publisher4/:path*",
+      "destination": "https://walrus-testnet-publisher.nodes.guru/:path*"
+    },
+    {
+      "source": "/publisher5/:path*",
+      "destination": "https://publisher.walrus.banansen.dev/:path*"
+    },
+    {
+      "source": "/publisher6/:path*",
+      "destination": "https://walrus-testnet-publisher.everstake.one/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
