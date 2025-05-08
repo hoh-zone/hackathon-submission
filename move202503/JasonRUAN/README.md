@@ -3,7 +3,7 @@
 > 简介: AI-GOAL（AI目标规划师）：是一个集质押机制、社交见证、AI规划于一体的目标管理平台，帮助每个人更加科学、高效的实现自己的目标。
 
 - github: https://github.com/JasonRUAN/AI-GOAL https://github.com/JasonRUAN/AI-GOAL-MCP
-- PPT: https://github.com/JasonRUAN/AI-GOAL-MCP/blob/ai-goal-mcp/PPT/AI-GOAL-MCP.pdf
+- PPT: https://github.com/JasonRUAN/AI-GOAL/blob/master/PPT/AI-GOAL-PPT.pdf
 - testnet：https://ai-goal.vercel.app/
 - AI-GOAL video: https://www.youtube.com/watch?v=3UBD__PL800
 - AI-GOAL-MCP video: https://www.youtube.com/watch?v=54Jqut9JGhI
