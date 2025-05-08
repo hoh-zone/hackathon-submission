@@ -1,0 +1,14 @@
+[package]
+name = "hashcat_insurance"
+version = "0.1.0"
+
+[dependencies]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet" }
+hashcat_coin = { local = "../coin" }
+hashcat_fund = { local = "../fund" }
+
+
+[addresses]
+hashcat_insurance = "0x0" 
+
+sui = "0x2" 
