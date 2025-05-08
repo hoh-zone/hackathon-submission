@@ -5,7 +5,8 @@
 - github: https://github.com/JasonRUAN/AI-GOAL https://github.com/JasonRUAN/AI-GOAL-MCP
 - PPT: https://github.com/JasonRUAN/AI-GOAL-MCP/blob/ai-goal-mcp/PPT/AI-GOAL-MCP.pdf
 - testnet：https://ai-goal.vercel.app/
-- video：https://drive.google.com/file/d/18eX4pTlW9yaUU_o__C4B6lcXjqdVbuCK/view?usp=sharing
+- AI-GOAL video: https://www.youtube.com/watch?v=3UBD__PL800
+- AI-GOAL-MCP video: https://www.youtube.com/watch?v=54Jqut9JGhI
 
 ### 项目2名称: **SecureFileShare**
 > 简介: 安全文件分享是一个基于`Walrus`的去中心化的文件存储和分享平台，使用`Seal`进行端到端加密技术确保文件隐私，基于`Sui Move`区块链智能合约实现精确的权限控制。
