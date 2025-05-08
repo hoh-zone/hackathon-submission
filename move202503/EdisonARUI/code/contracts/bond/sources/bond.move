@@ -80,6 +80,7 @@ module hashcat_bond::bond_pkg {
         finance_pool: &mut FinancePool,
         bond_cap: &BondCapability,
         payment: Coin<TEST_BTC>,
+        maturity: u64,
         clock: &Clock,
         ctx: &mut TxContext
     ) {
@@ -88,9 +89,8 @@ module hashcat_bond::bond_pkg {
         let bond_value = (amount * 10000) / price;
 
         // 存入资金到共享资金池
-        fund::deposit_bond(
+        fund::deposit_shared_fund(
             finance_pool,
-            bond_cap,
             payment,
             clock::timestamp_ms(clock) / 1000
         );
@@ -102,7 +102,6 @@ module hashcat_bond::bond_pkg {
         let id_inner = object::uid_to_inner(&note_id);
         let owner = tx_context::sender(ctx);
         let purchase_time = clock::timestamp_ms(clock) / 1000;
-        let maturity = 31536000; // 1年
         
         let note_info = BondNoteInfo {
             face_value: bond_value,
@@ -208,7 +207,7 @@ module hashcat_bond::bond_pkg {
     // 定价模型
     //===========
     fun calculate_bond_price(pool: &BondPool, finance_pool: &FinancePool): u64 {
-        let reserve = fund::bond_balance(finance_pool);
+        let reserve = fund::total_balance(finance_pool);
         let adjusted = reserve * (100 - pool.insurance_factor) / 100;
         let price = 10000 + (adjusted / 1000000);
         
@@ -230,7 +229,7 @@ module hashcat_bond::bond_pkg {
             pool.last_update = current_time;
         } else {
             let time_elapsed = current_time - pool.last_update;
-            let reserve = fund::bond_balance(finance_pool);
+            let reserve = fund::total_balance(finance_pool);
     
             // APY衰减模型
             let decay = (time_elapsed * reserve) / 1000000;

@@ -11,12 +11,10 @@ module hashcat_fund::fund {
     const EInsufficientFunds: u64 = 1;
     const EUnauthorized: u64 = 2;
     
-    // 资金池对象
+    // 资金池对象（共用一个reserve）
     struct FinancePool has key {
         id: UID,
         reserve: Balance<TEST_BTC>,
-        insurance_balance: u64,  // 保险业务使用的资金
-        bond_balance: u64,       // 债券业务使用的资金
         admin: address           // 管理员地址
     }
     
@@ -48,8 +46,6 @@ module hashcat_fund::fund {
         let finance_pool = FinancePool {
             id: object::new(ctx),
             reserve: balance::zero<TEST_BTC>(),
-            insurance_balance: 0,
-            bond_balance: 0,
             admin: tx_context::sender(ctx)
         };
         
@@ -70,25 +66,21 @@ module hashcat_fund::fund {
         transfer::transfer(bond_cap, tx_context::sender(ctx));
     }
 
-    // 存入资金 - 保险模块使用
-    public fun deposit_insurance(
+    // 存入资金 - 保险模块/债券模块共用
+    public fun deposit_shared_fund(
         pool: &mut FinancePool,
-        _cap: &InsuranceCapability,
         payment: Coin<TEST_BTC>,
         timestamp: u64
     ) {
         let amount = coin::value(&payment);
         balance::join(&mut pool.reserve, coin::into_balance(payment));
-        pool.insurance_balance = pool.insurance_balance + amount;
-        
         event::emit(FundDepositEvent {
             amount,
             service: 0,
             timestamp
         });
     }
-    
-    // 取出资金 - 保险模块使用
+    // 取出资金 - 保险模块/债券模块共用
     public fun withdraw_insurance(
         pool: &mut FinancePool,
         _cap: &InsuranceCapability,
@@ -96,45 +88,16 @@ module hashcat_fund::fund {
         timestamp: u64,
         ctx: &mut TxContext
     ) {
-        // 确保有足够的资金
-        assert!(pool.insurance_balance >= amount, EInsufficientFunds);
-        
-        // 更新余额
-        pool.insurance_balance = pool.insurance_balance - amount;
-        
-        // 提取资金
+        assert!(balance::value(&pool.reserve) >= amount, EInsufficientFunds);
         let coin_balance = balance::split(&mut pool.reserve, amount);
         let coin = coin::from_balance(coin_balance, ctx);
-        
         event::emit(FundWithdrawEvent {
             amount,
             service: 0,
             timestamp
         });
-        
-        // 直接转移代币给调用者
         transfer::public_transfer(coin, tx_context::sender(ctx));
     }
-    
-    // 存入资金 - 债券模块使用
-    public fun deposit_bond(
-        pool: &mut FinancePool,
-        _cap: &BondCapability,
-        payment: Coin<TEST_BTC>,
-        timestamp: u64
-    ) {
-        let amount = coin::value(&payment);
-        balance::join(&mut pool.reserve, coin::into_balance(payment));
-        pool.bond_balance = pool.bond_balance + amount;
-        
-        event::emit(FundDepositEvent {
-            amount,
-            service: 1,
-            timestamp
-        });
-    }
-    
-    // 取出资金 - 债券模块使用
     public fun withdraw_bond(
         pool: &mut FinancePool,
         _cap: &BondCapability,
@@ -142,38 +105,18 @@ module hashcat_fund::fund {
         timestamp: u64,
         ctx: &mut TxContext
     ) {
-        // 确保有足够的资金
-        assert!(pool.bond_balance >= amount, EInsufficientFunds);
-        
-        // 更新余额
-        pool.bond_balance = pool.bond_balance - amount;
-        
-        // 提取资金
+        assert!(balance::value(&pool.reserve) >= amount, EInsufficientFunds);
         let coin_balance = balance::split(&mut pool.reserve, amount);
         let coin = coin::from_balance(coin_balance, ctx);
-        
         event::emit(FundWithdrawEvent {
             amount,
             service: 1,
             timestamp
         });
-        
-        // 直接转移代币给调用者
         transfer::public_transfer(coin, tx_context::sender(ctx));
     }
-    
     // 查询总资金量
     public fun total_balance(pool: &FinancePool): u64 {
         balance::value(&pool.reserve)
-    }
-    
-    // 查询保险资金量
-    public fun insurance_balance(pool: &FinancePool): u64 {
-        pool.insurance_balance
-    }
-    
-    // 查询债券资金量
-    public fun bond_balance(pool: &FinancePool): u64 {
-        pool.bond_balance
     }
 }

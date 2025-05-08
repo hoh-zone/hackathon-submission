@@ -16,6 +16,7 @@ module hashcat_insurance::insurance_nft {
         url: Url,                   // NFT 图片 URL（GitHub 头像）
         creator: address,           // 创建者地址
         created_at: u64,            // 创建时间戳
+        policy_id: ID,              // 保单ID
     }
 
     // 定义事件类型
@@ -36,6 +37,7 @@ module hashcat_insurance::insurance_nft {
     // 铸造 NFT 函数
     // 可以指定接收者地址
     public fun mint(
+        policy_id: ID,              // 保单ID
         name: vector<u8>,           // NFT 名称（字节数组）
         description: vector<u8>,    // NFT 描述（字节数组）
         recipient: address,         // 接收者地址
@@ -49,6 +51,7 @@ module hashcat_insurance::insurance_nft {
             url: url::new_unsafe_from_bytes(b"https://avatars.githubusercontent.com/u/93503087"), // 创建 URL 对象
             creator: tx_context::sender(ctx), // 设置创建者地址
             created_at: tx_context::epoch(ctx), // 设置创建时间
+            policy_id: policy_id
         };
 
         let nft_id = object::id(&nft);

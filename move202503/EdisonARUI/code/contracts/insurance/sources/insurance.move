@@ -27,6 +27,7 @@ module hashcat_insurance::insurance {
     const EInsuranceExpired: u64 = 5;
     const EInsuranceNotExpired: u64 = 6;
     const EUnauthorized: u64 = 7;
+    const ENotFound: u64 = 8;
     
     // 保单管理对象 - 移除内部资金池
     struct PolicyManager has key {
@@ -73,7 +74,6 @@ module hashcat_insurance::insurance {
     // 保险赔付事件
     struct InsuranceClaimEvent has copy, drop {
         policy_id: ID,
-        nft_id: ID,
         owner: address,
         amount: u64,
     }
@@ -115,9 +115,8 @@ module hashcat_insurance::insurance {
         assert!(premium_value >= required_premium, EInsufficientPremium);
         
         // 存入资金到共享资金池
-        fund::deposit_insurance(
+        fund::deposit_shared_fund(
             finance_pool,
-            insurance_cap,
             premium,
             clock::timestamp_ms(clock)
         );
@@ -152,6 +151,7 @@ module hashcat_insurance::insurance {
         
         // 铸造NFT并转移给用户
         let nft_id = insurance_nft::mint(
+            id_copy,
             name,
             description_text,
             tx_context::sender(ctx),
@@ -177,16 +177,16 @@ module hashcat_insurance::insurance {
         policy_manager: &mut PolicyManager,
         finance_pool: &mut FinancePool,
         insurance_cap: &InsuranceCapability,
-        nft_id: ID,
+        policy_id: ID,
         proof: vector<u8>,
         clock: &Clock,
         ctx: &mut TxContext
     ) {
         // 验证保单存在
-        assert!(table::contains(&policy_manager.policies, nft_id), EUnauthorized);
+        assert!(table::contains(&policy_manager.policies, policy_id), EUnauthorized);
         
-        // 获取保单
-        let policy = table::borrow_mut(&mut policy_manager.policies, nft_id);
+        // 获取保单的可变引用
+        let policy = table::borrow_mut(&mut policy_manager.policies, policy_id);
         
         // 验证保单属于调用者
         assert!(policy.owner == tx_context::sender(ctx), EUnauthorized);
@@ -213,8 +213,7 @@ module hashcat_insurance::insurance {
         
         // 发出赔付事件
         event::emit(InsuranceClaimEvent {
-            policy_id: nft_id,
-            nft_id,
+            policy_id: policy_id,
             owner: tx_context::sender(ctx),
             amount: policy.amount,
         });
@@ -297,5 +296,14 @@ module hashcat_insurance::insurance {
             i = i + 1;
         };
         result
+    }
+    
+    // 根据保单ID获取保单信息
+    public fun get_policy_by_id(
+        policy_manager: &PolicyManager,
+        policy_id: ID
+    ): &Policy {
+        assert!(table::contains(&policy_manager.policies, policy_id), ENotFound);
+        table::borrow(&policy_manager.policies, policy_id)
     }
 }
